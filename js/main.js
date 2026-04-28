@@ -135,3 +135,211 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+/* ── Order / Cart ── */
+(function () {
+  if (!document.querySelector('.menu-section')) return;
+
+  let cart = {};
+  try { cart = JSON.parse(localStorage.getItem('aroraCart') || '{}'); } catch (e) {}
+
+  function saveCart() { localStorage.setItem('aroraCart', JSON.stringify(cart)); }
+
+  function parsePrice(str) {
+    if (!str) return 0;
+    const m = str.match(/[\d,]+/);
+    return m ? parseInt(m[0].replace(',', ''), 10) : 0;
+  }
+
+  function addToCart(name, price, btn) {
+    if (cart[name]) cart[name].qty++;
+    else cart[name] = { name, price, qty: 1 };
+    saveCart();
+    const isSmall = btn.classList.contains('gcat-add-btn');
+    btn.textContent = isSmall ? '✓' : '✓ Added';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = isSmall ? '+' : '+ Add';
+      btn.classList.remove('added');
+    }, 900);
+    renderCart();
+    cartBar.classList.add('visible');
+  }
+
+  function removeFromCart(name) {
+    delete cart[name];
+    saveCart();
+    renderCart();
+    if (!Object.keys(cart).length) {
+      cartBar.classList.remove('visible');
+      closePanel();
+    }
+  }
+
+  function updateQty(name, delta) {
+    if (!cart[name]) return;
+    cart[name].qty += delta;
+    if (cart[name].qty <= 0) removeFromCart(name);
+    else { saveCart(); renderCart(); }
+  }
+
+  function getTotal() {
+    return Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
+  }
+
+  function getTotalItems() {
+    return Object.values(cart).reduce((s, i) => s + i.qty, 0);
+  }
+
+  /* ── Inject Add buttons on menu cards ── */
+  document.querySelectorAll('.menu-card').forEach(card => {
+    const name  = card.querySelector('h3')?.textContent.trim();
+    const price = parsePrice(card.querySelector('.price')?.textContent);
+    if (!name) return;
+    const btn = document.createElement('button');
+    btn.className   = 'menu-add-btn';
+    btn.textContent = '+ Add';
+    btn.addEventListener('click', () => addToCart(name, price, btn));
+    card.querySelector('.menu-card-body').appendChild(btn);
+  });
+
+  /* ── Inject Add buttons on Gupshup list rows ── */
+  document.querySelectorAll('.gcat-list li').forEach(li => {
+    let name, price;
+    const thali = li.querySelector('.gcat-thali-item');
+    if (thali) {
+      name  = thali.querySelector('.gcat-thali-name')?.textContent.trim();
+      price = parsePrice(thali.querySelector('.gcat-thali-price')?.textContent);
+    } else {
+      const spans = li.querySelectorAll('span');
+      name  = spans[0]?.textContent.trim();
+      price = parsePrice(spans[1]?.textContent);
+    }
+    if (!name || !price) return;
+    const btn = document.createElement('button');
+    btn.className   = 'gcat-add-btn';
+    btn.textContent = '+';
+    btn.title       = 'Add to order';
+    btn.addEventListener('click', () => addToCart(name, price, btn));
+    li.appendChild(btn);
+  });
+
+  /* ── Cart bar ── */
+  const cartBar = document.createElement('div');
+  cartBar.className = 'cart-bar';
+  cartBar.innerHTML = `
+    <div class="cart-bar-left">
+      <span class="cart-bar-count" id="cartBarCount">0</span>
+      <span class="cart-bar-label">items &nbsp;·&nbsp; Ready in <strong>~20 min</strong></span>
+    </div>
+    <div class="cart-bar-right">
+      <span class="cart-bar-total" id="cartBarTotal">₹0</span>
+      <button class="cart-bar-btn" id="cartViewBtn">View Order</button>
+    </div>`;
+  document.body.appendChild(cartBar);
+
+  /* ── Cart panel ── */
+  const cartPanel = document.createElement('div');
+  cartPanel.className = 'cart-panel';
+  cartPanel.innerHTML = `
+    <div class="cart-panel-header">
+      <h3>Your Order</h3>
+      <button class="cart-panel-close" id="cartPanelClose">✕</button>
+    </div>
+    <div class="cart-notice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      Food is freshly prepared — ready in <strong>~20 minutes</strong>
+    </div>
+    <div class="cart-items-list" id="cartItemsList">
+      <p class="cart-empty">No items added yet.</p>
+    </div>
+    <div class="cart-panel-footer">
+      <div class="cart-total-row">
+        <span>Estimated Total</span>
+        <span id="cartPanelTotal">₹0</span>
+      </div>
+      <button class="cart-checkout-btn" id="cartCheckoutBtn">
+        Proceed to Checkout &rarr;
+      </button>
+      <button class="cart-clear-btn" id="cartClearBtn">Clear Order</button>
+    </div>`;
+  document.body.appendChild(cartPanel);
+
+  const cartOverlay = document.createElement('div');
+  cartOverlay.className = 'cart-overlay';
+  document.body.appendChild(cartOverlay);
+
+  /* ── Panel open / close ── */
+  function openPanel() {
+    cartPanel.classList.add('open');
+    cartOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    cartPanel.classList.remove('open');
+    cartOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('cartViewBtn').addEventListener('click', openPanel);
+  document.getElementById('cartPanelClose').addEventListener('click', closePanel);
+  cartOverlay.addEventListener('click', closePanel);
+  document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
+    window.location.href = 'checkout.html';
+  });
+  document.getElementById('cartClearBtn').addEventListener('click', () => {
+    Object.keys(cart).forEach(k => delete cart[k]);
+    saveCart();
+    renderCart();
+    cartBar.classList.remove('visible');
+    closePanel();
+  });
+
+  /* ── Render cart contents ── */
+  function renderCart() {
+    const total      = getTotal();
+    const totalItems = getTotalItems();
+
+    document.getElementById('cartBarCount').textContent   = totalItems;
+    document.getElementById('cartBarTotal').textContent   = '₹' + total;
+    document.getElementById('cartPanelTotal').textContent = '₹' + total;
+
+    const list  = document.getElementById('cartItemsList');
+    const items = Object.values(cart);
+
+    if (!items.length) {
+      list.innerHTML = '<p class="cart-empty">No items added yet.</p>';
+      return;
+    }
+
+    list.innerHTML = items.map(item => `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <span class="cart-item-name">${item.name}</span>
+          <span class="cart-item-price">₹${item.price} × ${item.qty} = ₹${item.price * item.qty}</span>
+        </div>
+        <div class="cart-item-controls">
+          <button class="cart-qty-btn" data-name="${item.name}" data-delta="-1">−</button>
+          <span class="cart-item-qty">${item.qty}</span>
+          <button class="cart-qty-btn" data-name="${item.name}" data-delta="1">+</button>
+          <button class="cart-remove-btn" data-name="${item.name}">✕</button>
+        </div>
+      </div>`).join('');
+
+    list.querySelectorAll('.cart-qty-btn').forEach(btn =>
+      btn.addEventListener('click', () => updateQty(btn.dataset.name, parseInt(btn.dataset.delta, 10)))
+    );
+    list.querySelectorAll('.cart-remove-btn').forEach(btn =>
+      btn.addEventListener('click', () => removeFromCart(btn.dataset.name))
+    );
+  }
+
+  /* ── Init: show cart bar if items already in localStorage ── */
+  if (Object.keys(cart).length) {
+    renderCart();
+    cartBar.classList.add('visible');
+  }
+}());

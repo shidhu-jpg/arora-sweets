@@ -201,6 +201,14 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   transition: var(--transition);
 }
 .nav-logo:hover { color: var(--gold-light); }
+.nav-logo-img {
+  height: 48px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: contrast(1.1);
+}
 
 .nav-links {
   display: flex;

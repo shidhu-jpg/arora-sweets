@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu — Aurora Sweets</title>
+  <title>Menu — Arora Sweets</title>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/pages.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
 <body>
 
   <nav class="navbar scrolled" id="navbar">
-    <a href="index.html" class="nav-logo">Aurora Sweets</a>
+    <a href="index.html" class="nav-logo">Arora Sweets</a>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -45,6 +45,9 @@
       <!-- Filter bar -->
       <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="breakfast">Breakfast</button>
+        <button class="filter-btn" data-filter="chaat">Chaat</button>
+        <button class="filter-btn" data-filter="snacks">Snacks</button>
         <button class="filter-btn" data-filter="sweets">Sweets</button>
         <button class="filter-btn" data-filter="mains">Mains</button>
         <button class="filter-btn" data-filter="beverages">Beverages</button>
@@ -53,6 +56,294 @@
 
       <!-- Grid -->
       <div class="menu-grid">
+
+        <!-- BREAKFAST -->
+        <div class="menu-card" data-category="breakfast">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80" alt="Chhole Bhaure" loading="lazy" />
+            <div class="menu-card-badge">Best Seller</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Chhole Bhaure</h3>
+            <p>Spiced chickpeas with fluffy puffed bread</p>
+            <span class="price">₹ 120</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" alt="Puri Sabzi" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Puri Sabzi</h3>
+            <p>Crispy deep-fried puri with spiced potato curry</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80" alt="Ghee Jalebi" loading="lazy" />
+            <div class="menu-card-badge">Signature</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Ghee Jalebi</h3>
+            <p>Crispy spirals soaked in pure desi ghee syrup</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600&q=80" alt="Extra Bhature" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Extra Bhature</h3>
+            <p>Add-on fluffy bhatura, golden and crisp</p>
+            <span class="price">₹ 40</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="breakfast">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Samosa" loading="lazy" />
+            <div class="menu-card-badge">Must Try</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Samosa</h3>
+            <p>Crispy pastry filled with spiced potato & peas</p>
+            <span class="price">₹ 17</span>
+          </div>
+        </div>
+
+        <!-- CHAAT -->
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Special Matar Kulcha" loading="lazy" />
+            <div class="menu-card-badge">Special</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Special Matar Kulcha</h3>
+            <p>Soft kulcha with tangy white peas curry</p>
+            <span class="price">₹ 100</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Pav Bhaji" loading="lazy" />
+            <div class="menu-card-badge">Best Seller</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Pav Bhaji</h3>
+            <p>Buttery spiced vegetable mash with toasted pav</p>
+            <span class="price">₹ 100</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Raj Kachori" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Raj Kachori</h3>
+            <p>Giant crisp shell loaded with chaat fillings</p>
+            <span class="price">₹ 110</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Dahi Bhalle Chaat" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Dahi Bhalle Chaat</h3>
+            <p>Soft lentil dumplings in chilled sweet yoghurt</p>
+            <span class="price">₹ 90</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=600&q=80" alt="Dahi Bhalle Papdi Chaat" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Dahi Bhalle Papdi Chaat</h3>
+            <p>Crispy papdi with dahi bhalle, chutneys & sev</p>
+            <span class="price">₹ 90</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Tikki Chaat" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Tikki Chaat</h3>
+            <p>Crispy aloo tikki with chutneys and yoghurt</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Special Tikki Chaat" loading="lazy" />
+            <div class="menu-card-badge">Special</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Special Tikki Chaat</h3>
+            <p>Loaded tikki chaat with extra toppings</p>
+            <span class="price">₹ 70</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Samosa Chaat" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Samosa Chaat</h3>
+            <p>Crushed samosa with chutneys, yoghurt & sev</p>
+            <span class="price">₹ 70</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Papdi Chaat" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Papdi Chaat</h3>
+            <p>Crispy papdi with tangy toppings and sev</p>
+            <span class="price">₹ 70</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Special Mix Chaat" loading="lazy" />
+            <div class="menu-card-badge">Special</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Special Mix Chaat</h3>
+            <p>Our chef's signature mixed chaat platter</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Paani Golgappe" loading="lazy" />
+            <div class="menu-card-badge">Must Try</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Paani Golgappe</h3>
+            <p>Hollow puris with spiced tangy mint water</p>
+            <span class="price">₹ 40</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Suji Golgappe" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Suji Golgappe</h3>
+            <p>Semolina puris with flavoured water fillings</p>
+            <span class="price">₹ 50</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Dahi Golgappe" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Dahi Golgappe</h3>
+            <p>Golgappe filled with sweetened yoghurt</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Veg Burger" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Veg Burger</h3>
+            <p>Crispy veggie patty with fresh veggies & sauce</p>
+            <span class="price">₹ 60</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chaat">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Cheese Burger" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Cheese Burger</h3>
+            <p>Veggie patty loaded with melted cheese</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
+
+        <!-- SNACKS -->
+        <div class="menu-card" data-category="snacks">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600&q=80" alt="Aloo Patties" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Aloo Patties</h3>
+            <p>Golden spiced potato patty, crispy outside</p>
+            <span class="price">₹ 25</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="snacks">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" alt="Paneer Patties" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Paneer Patties</h3>
+            <p>Cottage cheese stuffed patty, lightly spiced</p>
+            <span class="price">₹ 30</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="snacks">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Paneer Makhni Pizza" loading="lazy" />
+            <div class="menu-card-badge">New</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Paneer Makhni Pizza</h3>
+            <p>Rich makhni sauce base with tender paneer</p>
+            <span class="price">₹ 100</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="snacks">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Paneer Harbi Pizza" loading="lazy" />
+            <div class="menu-card-badge">New</div>
+          </div>
+          <div class="menu-card-body">
+            <h3>Paneer Harbi Pizza</h3>
+            <p>Herb-loaded pizza topped with fresh paneer</p>
+            <span class="price">₹ 100</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="snacks">
+          <div class="menu-card-img">
+            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Hot Dog" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <h3>Hot Dog</h3>
+            <p>Soft bun with veggie sausage and sauces</p>
+            <span class="price">₹ 80</span>
+          </div>
+        </div>
 
         <!-- SWEETS -->
         <div class="menu-card" data-category="sweets">
@@ -220,7 +511,7 @@
             <div class="menu-card-badge">Chef's Pick</div>
           </div>
           <div class="menu-card-body">
-            <h3>Aurora Grand Thali</h3>
+            <h3>Arora Grand Thali</h3>
             <p>7-course royal meal with dessert</p>
             <span class="price">₹ 580 / plate</span>
           </div>
@@ -299,7 +590,7 @@
       <!-- GUPSHUP RESTAURANT MENU -->
       <div class="gupshup-section" id="gupshupSection">
         <div class="gupshup-header">
-          <p class="section-eyebrow">Part of Aurora Sweets</p>
+          <p class="section-eyebrow">Part of Arora Sweets</p>
           <h2 class="section-title">Gupshup <em>Restaurant</em></h2>
           <div class="gold-rule"></div>
           <p class="gupshup-tagline">All-vegetarian · Full-service restaurant · Dine-in &amp; takeaway</p>
@@ -316,8 +607,13 @@
           </div>
 
           <div class="gupshup-notes">
-            <p class="gupshup-notes-title">Please Note</p>
+            <p class="gupshup-notes-title">Timings &amp; Notes</p>
             <ul class="gupshup-notes-list">
+              <li>Chaat items available: <strong>11:30 AM – 9:00 PM</strong></li>
+              <li>South Indian items available: <strong>10:00 AM – 7:30 PM</strong></li>
+              <li>Tea &amp; Coffee available: <strong>12:30 PM – 9:00 PM</strong></li>
+              <li>Minimum 2 plates for Paani Golgappe parcel orders</li>
+              <li>Home delivery minimum order: <strong>₹500</strong> — order on Swiggy</li>
               <li>All items will be served as per Standard &amp; Quality</li>
               <li>Please give us <strong>20 minutes</strong> to serve you — food is freshly prepared when you order</li>
               <li>Right to Admission reserved</li>
@@ -335,9 +631,9 @@
           <div class="gcat-block">
             <h3 class="gcat-title">Hot Beverages</h3>
             <ul class="gcat-list">
-              <li><span>Tea</span><span>₹35</span></li>
-              <li><span>Coffee</span><span>₹60</span></li>
-              <li><span>Hot Chocolate Milk</span><span>₹100</span></li>
+              <li><span>Tea</span><span>₹37</span></li>
+              <li><span>Coffee</span><span>₹63</span></li>
+              <li><span>Hot Chocolate Milk</span><span>₹105</span></li>
               <li><span>Horlicks</span><span>₹60</span></li>
               <li><span>Bournvita Milk</span><span>₹60</span></li>
             </ul>
@@ -348,7 +644,7 @@
             <h3 class="gcat-title">Shakes</h3>
             <ul class="gcat-list">
               <li><span>Vanilla Shake With Icecream</span><span>₹150</span></li>
-              <li><span>Cold Coffee</span><span>₹130</span></li>
+              <li><span>Cold Coffee</span><span>₹158</span></li>
               <li><span>Cold Coffee With Icecream</span><span>₹150</span></li>
               <li><span>Strawberry Shake</span><span>₹130</span></li>
               <li><span>Mango Shake</span><span>₹130</span></li>
@@ -476,14 +772,14 @@
               <li><span>Idli Sambhar</span><span>₹110</span></li>
               <li><span>Fried Idli</span><span>₹130</span></li>
               <li><span>Sambhar Vada</span><span>₹110</span></li>
-              <li><span>Plain Dosa</span><span>₹125</span></li>
-              <li><span>Masala Dosa</span><span>₹150</span></li>
+              <li><span>Plain Dosa</span><span>₹131</span></li>
+              <li><span>Masala Dosa</span><span>₹158</span></li>
               <li><span>Butter Masala Dosa</span><span>₹170</span></li>
               <li><span>Onion Masala Dosa</span><span>₹160</span></li>
               <li><span>Schezwan Masala Dosa</span><span>₹190</span></li>
               <li><span>Mysore Masala Dosa</span><span>₹190</span></li>
-              <li><span>Paneer Masala Dosa</span><span>₹200</span></li>
-              <li><span>Gupshup SPL Dosa</span><span>₹220</span></li>
+              <li><span>Paneer Masala Dosa</span><span>₹210</span></li>
+              <li><span>Gupshup SPL Dosa</span><span>₹231</span></li>
               <li><span>Rawa Plain Dosa</span><span>₹140</span></li>
               <li><span>Onion Rawa Plain Dosa</span><span>₹150</span></li>
               <li><span>Rawa Masala Dosa</span><span>₹160</span></li>
@@ -512,11 +808,11 @@
               <li><span>Paneer Lemon Grass</span><span>₹285</span></li>
               <li><span>Soya Chaap Chilli</span><span>₹250</span></li>
               <li><span>Cheese Ball</span><span>₹220</span></li>
-              <li><span>Veg Noodles</span><span>₹180</span></li>
+              <li><span>Veg Noodles</span><span>₹189</span></li>
               <li><span>Chilli Garlic Noodles</span><span>₹220</span></li>
               <li><span>Veg Hakka Noodles</span><span>₹200</span></li>
               <li><span>Schezwan Noodles</span><span>₹180</span></li>
-              <li><span>Veg Paneer Noodles</span><span>₹200</span></li>
+              <li><span>Veg Paneer Noodles</span><span>₹210</span></li>
               <li><span>Veg Fried Rice</span><span>₹160</span></li>
               <li><span>Chilli Garlic Fried Rice</span><span>₹200</span></li>
               <li><span>Shanghai Rice 🌶</span><span>₹200</span></li>
@@ -649,7 +945,7 @@
       <blockquote>
         <span class="quote-mark">"</span>
         Every recipe is a heirloom. Every plate, a promise.
-        <cite>— Aurora Sweets Kitchen</cite>
+        <cite>— Arora Sweets Kitchen</cite>
       </blockquote>
     </div>
   </div>
@@ -658,7 +954,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="footer-logo">Aurora Sweets</span>
+        <span class="footer-logo">Arora Sweets</span>
         <p>Crafted with Love. Served with Pride.</p>
         <div class="social-icons">
           <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
@@ -680,9 +976,7 @@
       <div class="footer-links">
         <h4>Our Outlets</h4>
         <ul>
-          <li><a href="outlets.html">Main Market</a></li>
-          <li><a href="outlets.html">Station Road</a></li>
-          <li><a href="outlets.html">Gandhi Chowk</a></li>
+          <li><a href="outlets.html">Supriya Road</a></li>
         </ul>
       </div>
       <div class="footer-contact">
@@ -705,7 +999,7 @@
     </div>
     <div class="footer-bottom">
       <div class="container footer-bottom-inner">
-        <p>© 2026 Aurora Sweets. All rights reserved.</p>
+        <p>© 2026 Arora Sweets. All rights reserved.</p>
         <div class="footer-legal-bar">
           <a href="privacy.html">Privacy Policy</a>
           <span>|</span>

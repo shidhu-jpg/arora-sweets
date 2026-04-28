@@ -11,6 +11,7 @@
 /* Filter tabs */
 .filter-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 0;
   justify-content: center;
   margin-bottom: 64px;
@@ -460,6 +461,24 @@
 }
 
 .cart-call-btn:hover { background: var(--gold-light); }
+
+.cart-checkout-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: var(--black);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cart-checkout-btn:hover { background: var(--gold-light); }
 
 .cart-clear-btn {
   background: none;

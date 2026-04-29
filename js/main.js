@@ -286,6 +286,8 @@ document.head.appendChild(style);
 
   document.getElementById('cartViewBtn').addEventListener('click', openPanel);
   document.getElementById('cartPanelClose').addEventListener('click', closePanel);
+  const navCartBtn = document.getElementById('navCartBtn');
+  if (navCartBtn) navCartBtn.addEventListener('click', openPanel);
   cartOverlay.addEventListener('click', closePanel);
   document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
     window.location.href = 'checkout.html';
@@ -306,6 +308,16 @@ document.head.appendChild(style);
     document.getElementById('cartBarCount').textContent   = totalItems;
     document.getElementById('cartBarTotal').textContent   = '₹' + total;
     document.getElementById('cartPanelTotal').textContent = '₹' + total;
+
+    const badge = document.getElementById('navCartBadge');
+    if (badge) {
+      if (totalItems > 0) {
+        badge.textContent = totalItems;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
 
     const list  = document.getElementById('cartItemsList');
     const items = Object.values(cart);
@@ -337,9 +349,115 @@ document.head.appendChild(style);
     );
   }
 
-  /* ── Init: show cart bar if items already in localStorage ── */
+  /* ── Init: restore cart state from localStorage ── */
   if (Object.keys(cart).length) {
     renderCart();
     cartBar.classList.add('visible');
   }
+
+  window._aroraCartAdd     = addToCart;
+  window._aroraCartBar     = cartBar;
+  window._aroraRenderCart  = renderCart;
+}());
+
+/* ── Menu Category Navigation ── */
+(function () {
+  const landing     = document.getElementById('menuCatLanding');
+  const backRow     = document.getElementById('menuCatBackRow');
+  const backBtn     = document.getElementById('menuCatBackBtn');
+  const activeTitle = document.getElementById('menuCatActiveTitle');
+  const itemsDiv    = document.getElementById('menuCatItems');
+  const gupshupDiv  = document.getElementById('gupshupSection');
+
+  if (!landing) return;
+
+  /* Count items per category from hidden data source */
+  const dataCounts = {};
+  document.querySelectorAll('#menuDataSource .menu-card').forEach(card => {
+    const cat = card.dataset.category;
+    dataCounts[cat] = (dataCounts[cat] || 0) + 1;
+  });
+
+  /* Fill item-count labels on category cards */
+  document.querySelectorAll('.menu-cat-count[data-cat]').forEach(el => {
+    const n = dataCounts[el.dataset.cat] || 0;
+    el.textContent = n + ' item' + (n !== 1 ? 's' : '');
+  });
+
+  function showLanding() {
+    landing.style.display  = '';
+    backRow.style.display  = 'none';
+    itemsDiv.style.display = 'none';
+    if (gupshupDiv) gupshupDiv.style.display = 'none';
+    window.scrollTo({ top: document.querySelector('.menu-section')?.offsetTop - 80 || 0, behavior: 'smooth' });
+  }
+
+  function parsePrice(str) {
+    if (!str) return 0;
+    const m = str.match(/[\d,]+/);
+    return m ? parseInt(m[0].replace(',', ''), 10) : 0;
+  }
+
+  function renderItems(catKey) {
+    itemsDiv.innerHTML = '';
+    const cards = document.querySelectorAll(`#menuDataSource .menu-card[data-category="${catKey}"]`);
+    cards.forEach(card => {
+      const name  = card.querySelector('h3')?.textContent.trim()    || '';
+      const desc  = card.querySelector('p')?.textContent.trim()     || '';
+      const price = card.querySelector('.price')?.textContent.trim() || '';
+      const badge = card.querySelector('.menu-card-badge')?.textContent.trim() || '';
+
+      const row = document.createElement('div');
+      row.className = 'menu-item-row';
+      row.innerHTML = `
+        <div class="menu-item-info">
+          <div class="menu-item-name-row">
+            <h3 class="menu-item-name">${name}</h3>
+            ${badge ? `<span class="menu-item-badge">${badge}</span>` : ''}
+          </div>
+          <p class="menu-item-desc">${desc}</p>
+        </div>
+        <div class="menu-item-right">
+          <span class="menu-item-price">${price}</span>
+          <button class="menu-item-add-btn" data-name="${name}" data-price="${parsePrice(price)}">+ Add</button>
+        </div>`;
+      itemsDiv.appendChild(row);
+    });
+
+    itemsDiv.querySelectorAll('.menu-item-add-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const name  = btn.dataset.name;
+        const price = parseInt(btn.dataset.price, 10);
+        if (window._aroraCartAdd) {
+          window._aroraCartAdd(name, price, btn);
+        }
+      });
+    });
+  }
+
+  function showCategory(catKey, catLabel) {
+    landing.style.display = 'none';
+    backRow.style.display = 'flex';
+    activeTitle.textContent = catLabel;
+
+    if (catKey === 'gupshup') {
+      itemsDiv.style.display = 'none';
+      if (gupshupDiv) gupshupDiv.style.display = 'block';
+    } else {
+      if (gupshupDiv) gupshupDiv.style.display = 'none';
+      renderItems(catKey);
+      itemsDiv.style.display = 'block';
+    }
+    window.scrollTo({ top: document.querySelector('.menu-section')?.offsetTop - 80 || 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.menu-cat-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const cat   = card.dataset.cat;
+      const label = card.querySelector('h3')?.textContent.trim() || cat;
+      showCategory(cat, label);
+    });
+  });
+
+  if (backBtn) backBtn.addEventListener('click', showLanding);
 }());

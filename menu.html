@@ -25,6 +25,14 @@
       <li><a href="gallery.html">Gallery</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
+    <button class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="nav-cart-badge" id="navCartBadge" style="display:none">0</span>
+    </button>
   </nav>
 
   <!-- PAGE HERO -->
@@ -42,38 +50,125 @@
   <section class="menu-section">
     <div class="container">
 
-      <!-- Filter bar -->
-      <div class="filter-bar">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="breakfast">Breakfast</button>
-        <button class="filter-btn" data-filter="chaat">Chaat</button>
-        <button class="filter-btn" data-filter="snacks">Snacks</button>
-        <button class="filter-btn" data-filter="sweets">Sweets</button>
-        <button class="filter-btn" data-filter="mains">Mains</button>
-        <button class="filter-btn" data-filter="beverages">Beverages</button>
-        <button class="filter-btn" data-filter="gupshup">Gupshup Restaurant</button>
+      <!-- CATEGORY LANDING (default view) -->
+      <div id="menuCatLanding" class="menu-cat-landing">
+        <div class="menu-cat-intro">
+          <p class="section-eyebrow">What We Offer</p>
+          <h2 class="section-title">Choose a <em>Category</em></h2>
+          <div class="gold-rule"></div>
+        </div>
+        <div class="menu-cat-grid">
+
+          <div class="menu-cat-card" data-cat="breakfast">
+            <img src="images/breakfast.png" alt =""/>
+            <div class="menu-cat-overlay">
+              <h3>Breakfast</h3>
+              <span class="menu-cat-count" data-cat="breakfast"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="chaat">
+            <img src="images/chaat.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Chaat</h3>
+              <span class="menu-cat-count" data-cat="chaat"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="starters">
+            <img src="images/starters.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Starters</h3>
+              <span class="menu-cat-count" data-cat="starters"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="south-indian">
+             <img src="images/southindian.jpeg" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>South Indian</h3>
+              <span class="menu-cat-count" data-cat="south-indian"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="continental-snacks">
+             <img src="images/burger.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Continental Snacks</h3>
+              <span class="menu-cat-count" data-cat="continental-snacks"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="pizza">
+             <img src="images/pizza.jpeg" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Pizza</h3>
+              <span class="menu-cat-count" data-cat="pizza"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="sweets">
+             <img src="images/kajukatli.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Sweets</h3>
+              <span class="menu-cat-count" data-cat="sweets"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="mains">
+             <img src="images/thali.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Mains</h3>
+              <span class="menu-cat-count" data-cat="mains"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="beverages">
+             <img src="images/beverages.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Beverages</h3>
+              <span class="menu-cat-count" data-cat="beverages"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="bread">
+             <img src="images/bread.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Bread</h3>
+              <span class="menu-cat-count" data-cat="bread"></span>
+            </div>
+          </div>
+
+        </div>
       </div>
 
-      <!-- Grid -->
+      <!-- BACK ROW (visible when inside a category) -->
+      <div id="menuCatBackRow" class="menu-cat-back-row" style="display:none">
+        <button class="menu-cat-back-btn" id="menuCatBackBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="15 18 9 12 15 6"/></svg>
+          All Categories
+        </button>
+        <h2 class="menu-cat-active-title" id="menuCatActiveTitle"></h2>
+      </div>
+
+      <!-- ITEMS LIST (shown for regular categories) -->
+      <div id="menuCatItems" class="menu-cat-items" style="display:none"></div>
+
+      <!-- HIDDEN DATA SOURCE — menu cards used only as data by JS -->
+      <div id="menuDataSource" style="display:none">
       <div class="menu-grid">
 
         <!-- BREAKFAST -->
         <div class="menu-card" data-category="breakfast">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80" alt="Chhole Bhaure" loading="lazy" />
-            <div class="menu-card-badge">Best Seller</div>
-          </div>
           <div class="menu-card-body">
             <h3>Chhole Bhaure</h3>
             <p>Spiced chickpeas with fluffy puffed bread</p>
             <span class="price">₹ 120</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
         </div>
 
         <div class="menu-card" data-category="breakfast">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" alt="Puri Sabzi" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Puri Sabzi</h3>
             <p>Crispy deep-fried puri with spiced potato curry</p>
@@ -81,70 +176,52 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="breakfast">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80" alt="Ghee Jalebi" loading="lazy" />
-            <div class="menu-card-badge">Signature</div>
-          </div>
+        <div class="menu-card" data-category="sweets">
           <div class="menu-card-body">
             <h3>Ghee Jalebi</h3>
             <p>Crispy spirals soaked in pure desi ghee syrup</p>
             <span class="price">₹ 450 / kg</span>
           </div>
+          <div class="menu-card-badge">Signature</div>
         </div>
 
-        <div class="menu-card" data-category="breakfast">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600&q=80" alt="Extra Bhature" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="bread">
           <div class="menu-card-body">
-            <h3>Extra Bhature</h3>
-            <p>Add-on fluffy bhatura, golden and crisp</p>
+            <h3>Bhatura</h3>
+            <p>Fluffy deep-fried leavened bread, golden and crisp</p>
             <span class="price">₹ 40</span>
           </div>
         </div>
 
         <div class="menu-card" data-category="breakfast">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Samosa" loading="lazy" />
-            <div class="menu-card-badge">Must Try</div>
-          </div>
           <div class="menu-card-body">
             <h3>Samosa</h3>
             <p>Crispy pastry filled with spiced potato & peas</p>
             <span class="price">₹ 17</span>
           </div>
+          <div class="menu-card-badge">Must Try</div>
         </div>
 
         <!-- CHAAT -->
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Special Matar Kulcha" loading="lazy" />
-            <div class="menu-card-badge">Special</div>
-          </div>
           <div class="menu-card-body">
             <h3>Special Matar Kulcha</h3>
             <p>Soft kulcha with tangy white peas curry</p>
             <span class="price">₹ 100</span>
           </div>
+          <div class="menu-card-badge">Special</div>
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Pav Bhaji" loading="lazy" />
-            <div class="menu-card-badge">Best Seller</div>
-          </div>
           <div class="menu-card-body">
             <h3>Pav Bhaji</h3>
             <p>Buttery spiced vegetable mash with toasted pav</p>
             <span class="price">₹ 100</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Raj Kachori" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Raj Kachori</h3>
             <p>Giant crisp shell loaded with chaat fillings</p>
@@ -153,9 +230,6 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Dahi Bhalle Chaat" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Dahi Bhalle Chaat</h3>
             <p>Soft lentil dumplings in chilled sweet yoghurt</p>
@@ -164,9 +238,6 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=600&q=80" alt="Dahi Bhalle Papdi Chaat" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Dahi Bhalle Papdi Chaat</h3>
             <p>Crispy papdi with dahi bhalle, chutneys & sev</p>
@@ -175,9 +246,6 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Tikki Chaat" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Tikki Chaat</h3>
             <p>Crispy aloo tikki with chutneys and yoghurt</p>
@@ -186,21 +254,15 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Special Tikki Chaat" loading="lazy" />
-            <div class="menu-card-badge">Special</div>
-          </div>
           <div class="menu-card-body">
             <h3>Special Tikki Chaat</h3>
             <p>Loaded tikki chaat with extra toppings</p>
             <span class="price">₹ 70</span>
           </div>
+          <div class="menu-card-badge">Special</div>
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Samosa Chaat" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Samosa Chaat</h3>
             <p>Crushed samosa with chutneys, yoghurt & sev</p>
@@ -209,9 +271,6 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Papdi Chaat" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Papdi Chaat</h3>
             <p>Crispy papdi with tangy toppings and sev</p>
@@ -220,33 +279,24 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Special Mix Chaat" loading="lazy" />
-            <div class="menu-card-badge">Special</div>
-          </div>
           <div class="menu-card-body">
             <h3>Special Mix Chaat</h3>
             <p>Our chef's signature mixed chaat platter</p>
             <span class="price">₹ 80</span>
           </div>
+          <div class="menu-card-badge">Special</div>
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Paani Golgappe" loading="lazy" />
-            <div class="menu-card-badge">Must Try</div>
-          </div>
           <div class="menu-card-body">
             <h3>Paani Golgappe</h3>
             <p>Hollow puris with spiced tangy mint water</p>
             <span class="price">₹ 40</span>
           </div>
+          <div class="menu-card-badge">Must Try</div>
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Suji Golgappe" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Suji Golgappe</h3>
             <p>Semolina puris with flavoured water fillings</p>
@@ -255,9 +305,6 @@
         </div>
 
         <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Dahi Golgappe" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Dahi Golgappe</h3>
             <p>Golgappe filled with sweetened yoghurt</p>
@@ -265,10 +312,7 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Veg Burger" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="continental-snacks">
           <div class="menu-card-body">
             <h3>Veg Burger</h3>
             <p>Crispy veggie patty with fresh veggies & sauce</p>
@@ -276,10 +320,7 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="chaat">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Cheese Burger" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="continental-snacks">
           <div class="menu-card-body">
             <h3>Cheese Burger</h3>
             <p>Veggie patty loaded with melted cheese</p>
@@ -287,11 +328,8 @@
           </div>
         </div>
 
-        <!-- SNACKS -->
-        <div class="menu-card" data-category="snacks">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600&q=80" alt="Aloo Patties" loading="lazy" />
-          </div>
+        <!-- CONTINENTAL SNACKS -->
+        <div class="menu-card" data-category="continental-snacks">
           <div class="menu-card-body">
             <h3>Aloo Patties</h3>
             <p>Golden spiced potato patty, crispy outside</p>
@@ -299,10 +337,7 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="snacks">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" alt="Paneer Patties" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="continental-snacks">
           <div class="menu-card-body">
             <h3>Paneer Patties</h3>
             <p>Cottage cheese stuffed patty, lightly spiced</p>
@@ -310,34 +345,7 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="snacks">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Paneer Makhni Pizza" loading="lazy" />
-            <div class="menu-card-badge">New</div>
-          </div>
-          <div class="menu-card-body">
-            <h3>Paneer Makhni Pizza</h3>
-            <p>Rich makhni sauce base with tender paneer</p>
-            <span class="price">₹ 100</span>
-          </div>
-        </div>
-
-        <div class="menu-card" data-category="snacks">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Paneer Harbi Pizza" loading="lazy" />
-            <div class="menu-card-badge">New</div>
-          </div>
-          <div class="menu-card-body">
-            <h3>Paneer Harbi Pizza</h3>
-            <p>Herb-loaded pizza topped with fresh paneer</p>
-            <span class="price">₹ 100</span>
-          </div>
-        </div>
-
-        <div class="menu-card" data-category="snacks">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Hot Dog" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="continental-snacks">
           <div class="menu-card-body">
             <h3>Hot Dog</h3>
             <p>Soft bun with veggie sausage and sauces</p>
@@ -345,23 +353,223 @@
           </div>
         </div>
 
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Veg Pakoda</h3>
+            <p>Crispy battered vegetables, golden fried</p>
+            <span class="price">₹ 140</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Paneer Pakoda</h3>
+            <p>Cottage cheese fritters, spiced batter</p>
+            <span class="price">₹ 190</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Veg Sandwich</h3>
+            <p>Fresh vegetables, chutneys in toasted bread</p>
+            <span class="price">₹ 90</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Cheese Sandwich</h3>
+            <p>Loaded with melted cheese and veggies</p>
+            <span class="price">₹ 110</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Veg Grilled Sandwich</h3>
+            <p>Grilled to perfection with fresh vegetables</p>
+            <span class="price">₹ 130</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Paneer Grilled Sandwich</h3>
+            <p>Cottage cheese with herbs, grilled crispy</p>
+            <span class="price">₹ 150</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Peri Peri French Fries</h3>
+            <p>Crispy fries tossed in spicy peri peri masala</p>
+            <span class="price">₹ 100</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>French Fries</h3>
+            <p>Classic golden fries, light and crispy</p>
+            <span class="price">₹ 90</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Veg Cutlet</h3>
+            <p>Spiced vegetable patty, pan-fried golden</p>
+            <span class="price">₹ 140</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Veg Cheese Burger</h3>
+            <p>Veggie patty with generous cheese slice</p>
+            <span class="price">₹ 130</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Junglee Burger 🌶</h3>
+            <p>Loaded, spicy, and wildly delicious</p>
+            <span class="price">₹ 160</span>
+          </div>
+          <div class="menu-card-badge">Spicy</div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Red Sauce Pasta</h3>
+            <p>Classic tomato-based pasta, Italian herbs</p>
+            <span class="price">₹ 220</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>White Sauce Pasta</h3>
+            <p>Creamy béchamel with vegetables</p>
+            <span class="price">₹ 220</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Pink Sauce Pasta</h3>
+            <p>Creamy tomato blend, the best of both</p>
+            <span class="price">₹ 220</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="continental-snacks">
+          <div class="menu-card-body">
+            <h3>Mix Sauce Pasta</h3>
+            <p>Red and white sauce combined, full flavour</p>
+            <span class="price">₹ 220</span>
+          </div>
+        </div>
+
+        <!-- PIZZA -->
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Paneer Makhni Pizza</h3>
+            <p>Rich makhni sauce base with tender paneer</p>
+            <span class="price">₹ 100</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Paneer Harbi Pizza</h3>
+            <p>Herb-loaded pizza topped with fresh paneer</p>
+            <span class="price">₹ 100</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Veg Pizza</h3>
+            <p>Garden fresh vegetables on classic base</p>
+            <span class="price">₹ 170</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Margherita Pizza</h3>
+            <p>Tomato sauce, mozzarella, fresh basil</p>
+            <span class="price">₹ 200</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Onion Capsicum Pizza</h3>
+            <p>Caramelised onion and crispy capsicum</p>
+            <span class="price">₹ 180</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Paneer Tikka Pizza</h3>
+            <p>Tandoori paneer on a spiced pizza base</p>
+            <span class="price">₹ 210</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Mushroom Pizza</h3>
+            <p>Sautéed mushrooms with herbs and cheese</p>
+            <span class="price">₹ 170</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Corn Pizza</h3>
+            <p>Sweet corn with cheese and tomato sauce</p>
+            <span class="price">₹ 180</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Paneer Chilli Pizza</h3>
+            <p>Spicy paneer chilli with bell peppers</p>
+            <span class="price">₹ 240</span>
+          </div>
+          <div class="menu-card-badge">Spicy</div>
+        </div>
+
+        <div class="menu-card" data-category="pizza">
+          <div class="menu-card-body">
+            <h3>Chef Special Pizza</h3>
+            <p>Loaded with chef's secret toppings and sauce</p>
+            <span class="price">₹ 240</span>
+          </div>
+          <div class="menu-card-badge">Chef's Pick</div>
+        </div>
+
         <!-- SWEETS -->
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=80" alt="Kaju Katli" loading="lazy" />
-            <div class="menu-card-badge">Best Seller</div>
-          </div>
           <div class="menu-card-body">
             <h3>Kaju Katli</h3>
             <p>Premium cashew fudge with edible silver leaf</p>
             <span class="price">₹ 800 / kg</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80" alt="Gulab Jamun" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Gulab Jamun</h3>
             <p>Rose-infused syrup, saffron, served warm</p>
@@ -370,21 +578,15 @@
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Rasgulla" loading="lazy" />
-            <div class="menu-card-badge">New</div>
-          </div>
           <div class="menu-card-body">
             <h3>Rasgulla</h3>
             <p>Soft cottage cheese dumplings in light syrup</p>
             <span class="price">₹ 280 / kg</span>
           </div>
+          <div class="menu-card-badge">New</div>
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?w=600&q=80" alt="Motichoor Ladoo" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Motichoor Ladoo</h3>
             <p>Fine-gram pearls, ghee-roasted with saffron</p>
@@ -393,9 +595,6 @@
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Pista Barfi" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Pista Barfi</h3>
             <p>Pistachio, cardamom, silver leaf garnish</p>
@@ -404,9 +603,6 @@
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1574484284002-952d92456975?w=600&q=80" alt="Jalebi" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Fresh Jalebi</h3>
             <p>Crispy spirals, pure ghee, spiced syrup</p>
@@ -415,9 +611,6 @@
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&q=80" alt="Besan Halwa" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Besan Halwa</h3>
             <p>Slow-roasted gram flour, desi ghee, dry fruits</p>
@@ -426,21 +619,15 @@
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=600&q=80" alt="Rasmalai" loading="lazy" />
-            <div class="menu-card-badge">Chef's Pick</div>
-          </div>
           <div class="menu-card-body">
             <h3>Rasmalai</h3>
             <p>Chenna discs in saffron-infused rabri</p>
             <span class="price">₹ 320 / kg</span>
           </div>
+          <div class="menu-card-badge">Chef's Pick</div>
         </div>
 
         <div class="menu-card" data-category="sweets">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Chum Chum" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Chum Chum</h3>
             <p>Stuffed with coconut and dry fruits</p>
@@ -450,21 +637,15 @@
 
         <!-- MAINS -->
         <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=80" alt="Dal Makhani" loading="lazy" />
-            <div class="menu-card-badge">Signature</div>
-          </div>
           <div class="menu-card-body">
             <h3>Dal Makhani</h3>
             <p>Black lentils, slow-cooked overnight</p>
             <span class="price">₹ 280 / plate</span>
           </div>
+          <div class="menu-card-badge">Signature</div>
         </div>
 
         <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1596797038530-2c107229654b?w=600&q=80" alt="Paneer Butter Masala" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Paneer Butter Masala</h3>
             <p>Fresh cottage cheese in rich tomato gravy</p>
@@ -473,9 +654,6 @@
         </div>
 
         <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1574653853027-5382a3d23a15?w=600&q=80" alt="Chole Bhature" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Chole Bhature</h3>
             <p>Spiced chickpeas with puffed fried bread</p>
@@ -483,21 +661,16 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80" alt="Aloo Paratha" loading="lazy" />
-          </div>
+        <div class="menu-card" data-category="bread">
           <div class="menu-card-body">
             <h3>Aloo Paratha</h3>
             <p>Whole-wheat, stuffed, served with dahi & pickle</p>
             <span class="price">₹ 80 / piece</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
         </div>
 
         <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Rajma Chawal" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Rajma Chawal</h3>
             <p>Kidney beans curry with steamed basmati rice</p>
@@ -506,34 +679,25 @@
         </div>
 
         <div class="menu-card" data-category="mains">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?w=600&q=80" alt="Thali" loading="lazy" />
-            <div class="menu-card-badge">Chef's Pick</div>
-          </div>
           <div class="menu-card-body">
             <h3>Arora Grand Thali</h3>
             <p>7-course royal meal with dessert</p>
             <span class="price">₹ 580 / plate</span>
           </div>
+          <div class="menu-card-badge">Chef's Pick</div>
         </div>
 
         <!-- BEVERAGES -->
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80" alt="Rose Lassi" loading="lazy" />
-            <div class="menu-card-badge">Best Seller</div>
-          </div>
           <div class="menu-card-body">
             <h3>Rose Lassi</h3>
             <p>Chilled yoghurt, gulkand, rose petals</p>
             <span class="price">₹ 120 / glass</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
         </div>
 
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?w=600&q=80" alt="Masala Chai" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Masala Chai</h3>
             <p>Ginger, cardamom, full-fat milk, Assam tea</p>
@@ -542,9 +706,6 @@
         </div>
 
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1625135808014-77a95e2f24ef?w=600&q=80" alt="Mango Shrikhand Shake" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Mango Shrikhand Shake</h3>
             <p>Seasonal Alphonso mango blended thick</p>
@@ -553,9 +714,6 @@
         </div>
 
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80" alt="Thandai" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Thandai</h3>
             <p>Nuts, spices, chilled milk — a festive classic</p>
@@ -564,9 +722,6 @@
         </div>
 
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=80" alt="Filter Coffee" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Filter Coffee</h3>
             <p>South Indian chicory blend, frothy milk</p>
@@ -575,9 +730,6 @@
         </div>
 
         <div class="menu-card" data-category="beverages">
-          <div class="menu-card-img">
-            <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?w=600&q=80" alt="Aam Panna" loading="lazy" />
-          </div>
           <div class="menu-card-body">
             <h3>Aam Panna</h3>
             <p>Raw mango, cumin, black salt — summer cooler</p>
@@ -585,356 +737,391 @@
           </div>
         </div>
 
-      </div><!-- /menu-grid -->
-
-      <!-- GUPSHUP RESTAURANT MENU -->
-      <div class="gupshup-section" id="gupshupSection">
-        <div class="gupshup-header">
-          <p class="section-eyebrow">Part of Arora Sweets</p>
-          <h2 class="section-title">Gupshup <em>Restaurant</em></h2>
-          <div class="gold-rule"></div>
-          <p class="gupshup-tagline">All-vegetarian · Full-service restaurant · Dine-in &amp; takeaway</p>
-
-          <div class="gupshup-contact-row">
-            <a href="tel:+919934492744" class="gupshup-contact-item">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.24 1.01l-2.21 2.21z"/></svg>
-              9934492744
-            </a>
-            <span class="gupshup-contact-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Supriya road, In front of Sameer Honda, Bettiah, Bihar, 845438
-            </span>
+        <!-- SOUTH INDIAN -->
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Idli Sambhar</h3>
+            <p>Soft steamed rice cakes with tangy lentil curry</p>
+            <span class="price">₹ 110</span>
           </div>
+          <div class="menu-card-badge">Classic</div>
+        </div>
 
-          <div class="gupshup-notes">
-            <p class="gupshup-notes-title">Timings &amp; Notes</p>
-            <ul class="gupshup-notes-list">
-              <li>Chaat items available: <strong>11:30 AM – 9:00 PM</strong></li>
-              <li>South Indian items available: <strong>10:00 AM – 7:30 PM</strong></li>
-              <li>Tea &amp; Coffee available: <strong>12:30 PM – 9:00 PM</strong></li>
-              <li>Minimum 2 plates for Paani Golgappe parcel orders</li>
-              <li>Home delivery minimum order: <strong>₹500</strong> — order on Swiggy</li>
-              <li>All items will be served as per Standard &amp; Quality</li>
-              <li>Please give us <strong>20 minutes</strong> to serve you — food is freshly prepared when you order</li>
-              <li>Right to Admission reserved</li>
-              <li>Outside food &amp; beverages are not allowed</li>
-              <li>Any special suggestions or complaints are welcome</li>
-              <li>Contact us for Group Booking &amp; Party Orders</li>
-              <li>All digital payments are accepted</li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Fried Idli</h3>
+            <p>Golden crispy idli tossed in spices</p>
+            <span class="price">₹ 130</span>
           </div>
         </div>
 
-        <div class="gupshup-menu-grid">
-
-          <!-- Hot Beverages -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Hot Beverages</h3>
-            <ul class="gcat-list">
-              <li><span>Tea</span><span>₹37</span></li>
-              <li><span>Coffee</span><span>₹63</span></li>
-              <li><span>Hot Chocolate Milk</span><span>₹105</span></li>
-              <li><span>Horlicks</span><span>₹60</span></li>
-              <li><span>Bournvita Milk</span><span>₹60</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Sambhar Vada</h3>
+            <p>Crispy lentil doughnuts dunked in hot sambhar</p>
+            <span class="price">₹ 110</span>
           </div>
+        </div>
 
-          <!-- Shakes -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Shakes</h3>
-            <ul class="gcat-list">
-              <li><span>Vanilla Shake With Icecream</span><span>₹150</span></li>
-              <li><span>Cold Coffee</span><span>₹158</span></li>
-              <li><span>Cold Coffee With Icecream</span><span>₹150</span></li>
-              <li><span>Strawberry Shake</span><span>₹130</span></li>
-              <li><span>Mango Shake</span><span>₹130</span></li>
-              <li><span>Pineapple Shake</span><span>₹130</span></li>
-              <li><span>Butterscotch Shake</span><span>₹130</span></li>
-              <li><span>Chocolate Shake</span><span>₹150</span></li>
-              <li><span>Brownee Shake</span><span>₹180</span></li>
-              <li><span>Oreo Shake</span><span>₹150</span></li>
-              <li><span>Kitkat Shake</span><span>₹180</span></li>
-              <li><span>Nutella Shake</span><span>₹180</span></li>
-              <li><span>Badam Milk</span><span>₹140</span></li>
-              <li><span>Masala Colddrink</span><span>₹60</span></li>
-              <li><span>Lassi (Sweet / Salt)</span><span>₹80</span></li>
-              <li><span>Fresh Lime Water / Soda / Jaljeera</span><span>₹70</span></li>
-              <li><span>Soft Drink</span><span>₹40</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Plain Dosa</h3>
+            <p>Thin crispy rice crepe served with chutneys</p>
+            <span class="price">₹ 131</span>
           </div>
+        </div>
 
-          <!-- Mocktails -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Mocktails</h3>
-            <ul class="gcat-list">
-              <li><span>Virgin Mojito</span><span>₹120</span></li>
-              <li><span>Lemon Mint Ice Tea</span><span>₹130</span></li>
-              <li><span>Blue Lagoon</span><span>₹120</span></li>
-              <li><span>Green Apple Mojito</span><span>₹130</span></li>
-              <li><span>Virgin Pina Colada</span><span>₹130</span></li>
-              <li><span>Green Apple Iceberg</span><span>₹130</span></li>
-              <li><span>Strawberry Mojito</span><span>₹130</span></li>
-              <li><span>Mango Mojito</span><span>₹130</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Masala Dosa</h3>
+            <p>Crispy dosa stuffed with spiced potato filling</p>
+            <span class="price">₹ 158</span>
           </div>
+          <div class="menu-card-badge">Best Seller</div>
+        </div>
 
-          <!-- Soup -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Soup</h3>
-            <ul class="gcat-list">
-              <li><span>Veg Sweet Corn Soup</span><span>₹110</span></li>
-              <li><span>Veg Manchow Soup</span><span>₹120</span></li>
-              <li><span>Veg Cream Of Mushroom Soup</span><span>₹110</span></li>
-              <li><span>Veg Tomato Soup</span><span>₹120</span></li>
-              <li><span>Veg Lemon Coriander Soup</span><span>₹110</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Butter Masala Dosa</h3>
+            <p>Masala dosa generously lathered with butter</p>
+            <span class="price">₹ 170</span>
           </div>
+        </div>
 
-          <!-- Continental Snacks -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Continental Snacks</h3>
-            <ul class="gcat-list">
-              <li><span>Veg Pakoda</span><span>₹140</span></li>
-              <li><span>Paneer Pakoda</span><span>₹190</span></li>
-              <li><span>Veg Sandwich</span><span>₹90</span></li>
-              <li><span>Cheese Sandwich</span><span>₹110</span></li>
-              <li><span>Veg Grilled Sandwich</span><span>₹130</span></li>
-              <li><span>Paneer Grilled Sandwich</span><span>₹150</span></li>
-              <li><span>Peri Peri French Fries</span><span>₹100</span></li>
-              <li><span>French Fries</span><span>₹90</span></li>
-              <li><span>Veg Cutlet</span><span>₹140</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Onion Masala Dosa</h3>
+            <p>Dosa topped with crispy fried onions and masala</p>
+            <span class="price">₹ 160</span>
           </div>
+        </div>
 
-          <!-- Burger -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Burger</h3>
-            <ul class="gcat-list">
-              <li><span>Veg Burger</span><span>₹110</span></li>
-              <li><span>Veg Cheese Burger</span><span>₹130</span></li>
-              <li><span>Junglee Burger 🌶</span><span>₹160</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Schezwan Masala Dosa</h3>
+            <p>Fusion dosa with fiery schezwan chutney</p>
+            <span class="price">₹ 190</span>
           </div>
+          <div class="menu-card-badge">Spicy</div>
+        </div>
 
-          <!-- Pasta -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Pasta</h3>
-            <ul class="gcat-list">
-              <li><span>Red Sauce Pasta</span><span>₹220</span></li>
-              <li><span>White Sauce Pasta</span><span>₹220</span></li>
-              <li><span>Mix Sauce Pasta</span><span>₹220</span></li>
-              <li><span>Pink Sauce Pasta</span><span>₹220</span></li>
-              <li><span>Extra Vegetable</span><span>₹30</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Mysore Masala Dosa</h3>
+            <p>Spiced red chutney spread with potato stuffing</p>
+            <span class="price">₹ 190</span>
           </div>
+        </div>
 
-          <!-- Pizza -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Pizza</h3>
-            <ul class="gcat-list">
-              <li><span>Veg Pizza</span><span>₹170</span></li>
-              <li><span>Onion Capsicum Pizza</span><span>₹180</span></li>
-              <li><span>Paneer Tikka Pizza</span><span>₹210</span></li>
-              <li><span>Mushroom Pizza</span><span>₹170</span></li>
-              <li><span>Corn Pizza</span><span>₹180</span></li>
-              <li><span>Margherita Pizza</span><span>₹200</span></li>
-              <li><span>Paneer Chilli Pizza</span><span>₹240</span></li>
-              <li><span>Chef Special Pizza</span><span>₹240</span></li>
-              <li><span>Extra Cheese</span><span>₹40</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Paneer Masala Dosa</h3>
+            <p>Dosa filled with spiced paneer and vegetables</p>
+            <span class="price">₹ 210</span>
           </div>
+        </div>
 
-          <!-- Mitti Ki Bhatti Se -->
-          <div class="gcat-block gcat-block--wide">
-            <h3 class="gcat-title">Mitti Ki Bhatti Se <span class="gcat-subtitle">(Tandoor Starters)</span></h3>
-            <ul class="gcat-list gcat-list--two-col">
-              <li><span>Paneer Tikka</span><span>₹285</span></li>
-              <li><span>Paneer Achari Tikka</span><span>₹285</span></li>
-              <li><span>Paneer Malai Tikka</span><span>₹300</span></li>
-              <li><span>Paneer Irani Tikka</span><span>₹300</span></li>
-              <li><span>Paneer Jafrani Tikka</span><span>₹300</span></li>
-              <li><span>Paneer Kali Mirch Tikka</span><span>₹285</span></li>
-              <li><span>Mushroom Tikka</span><span>₹285</span></li>
-              <li><span>Stuffed Mushroom Tikka</span><span>₹320</span></li>
-              <li><span>Veg Seekh Kabab</span><span>₹250</span></li>
-              <li><span>Hara Bhara Kabab</span><span>₹250</span></li>
-              <li><span>Dahi Ke Kabab</span><span>₹275</span></li>
-              <li><span>Tandoori Soya Chaap</span><span>₹240</span></li>
-              <li><span>Malai Soya Chaap</span><span>₹270</span></li>
-              <li><span>Chef Special Platter <em>(5 starters · 2 pcs each)</em></span><span>₹400</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Gupshup SPL Dosa</h3>
+            <p>Our signature loaded special dosa, the showstopper</p>
+            <span class="price">₹ 231</span>
           </div>
+          <div class="menu-card-badge">Special</div>
+        </div>
 
-          <!-- South Indian -->
-          <div class="gcat-block gcat-block--wide">
-            <h3 class="gcat-title">South Indian</h3>
-            <ul class="gcat-list gcat-list--two-col">
-              <li><span>Idli Sambhar</span><span>₹110</span></li>
-              <li><span>Fried Idli</span><span>₹130</span></li>
-              <li><span>Sambhar Vada</span><span>₹110</span></li>
-              <li><span>Plain Dosa</span><span>₹131</span></li>
-              <li><span>Masala Dosa</span><span>₹158</span></li>
-              <li><span>Butter Masala Dosa</span><span>₹170</span></li>
-              <li><span>Onion Masala Dosa</span><span>₹160</span></li>
-              <li><span>Schezwan Masala Dosa</span><span>₹190</span></li>
-              <li><span>Mysore Masala Dosa</span><span>₹190</span></li>
-              <li><span>Paneer Masala Dosa</span><span>₹210</span></li>
-              <li><span>Gupshup SPL Dosa</span><span>₹231</span></li>
-              <li><span>Rawa Plain Dosa</span><span>₹140</span></li>
-              <li><span>Onion Rawa Plain Dosa</span><span>₹150</span></li>
-              <li><span>Rawa Masala Dosa</span><span>₹160</span></li>
-              <li><span>Mix Veg Uttapam</span><span>₹190</span></li>
-              <li><span>Onion Uttapam</span><span>₹170</span></li>
-              <li><span>Tomato Uttapam</span><span>₹170</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Rawa Plain Dosa</h3>
+            <p>Thin semolina dosa, light and lacey</p>
+            <span class="price">₹ 140</span>
           </div>
+        </div>
 
-          <!-- Chinese -->
-          <div class="gcat-block gcat-block--wide">
-            <h3 class="gcat-title">Chinese</h3>
-            <ul class="gcat-list gcat-list--two-col">
-              <li><span>Paneer Chilli</span><span>₹260</span></li>
-              <li><span>Paneer 65</span><span>₹260</span></li>
-              <li><span>Veg Manchurian</span><span>₹240</span></li>
-              <li><span>Paneer Manchurian</span><span>₹260</span></li>
-              <li><span>Mushroom Chilli</span><span>₹250</span></li>
-              <li><span>Honey Chilli Potato</span><span>₹200</span></li>
-              <li><span>Chilli Potato</span><span>₹200</span></li>
-              <li><span>Crispy Mushroom</span><span>₹250</span></li>
-              <li><span>Crispy Babycorn</span><span>₹260</span></li>
-              <li><span>Crispy American Corn</span><span>₹240</span></li>
-              <li><span>Baby Corn Chilli</span><span>₹260</span></li>
-              <li><span>Basil Paneer</span><span>₹285</span></li>
-              <li><span>Paneer Lemon Grass</span><span>₹285</span></li>
-              <li><span>Soya Chaap Chilli</span><span>₹250</span></li>
-              <li><span>Cheese Ball</span><span>₹220</span></li>
-              <li><span>Veg Noodles</span><span>₹189</span></li>
-              <li><span>Chilli Garlic Noodles</span><span>₹220</span></li>
-              <li><span>Veg Hakka Noodles</span><span>₹200</span></li>
-              <li><span>Schezwan Noodles</span><span>₹180</span></li>
-              <li><span>Veg Paneer Noodles</span><span>₹210</span></li>
-              <li><span>Veg Fried Rice</span><span>₹160</span></li>
-              <li><span>Chilli Garlic Fried Rice</span><span>₹200</span></li>
-              <li><span>Shanghai Rice 🌶</span><span>₹200</span></li>
-              <li><span>Schezwan Fried Rice</span><span>₹180</span></li>
-              <li><span>Veg Sizzler <em>(Fried Rice, Paneer Chilli, Veg Manchurian, Noodles, French Fries — any 3)</em></span><span>₹400</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Rawa Masala Dosa</h3>
+            <p>Semolina dosa with spiced potato filling</p>
+            <span class="price">₹ 160</span>
           </div>
+        </div>
 
-          <!-- Momos -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Momos</h3>
-            <ul class="gcat-list">
-              <li><span>Veg Momo (Steam)</span><span>₹125</span></li>
-              <li><span>Paneer Momo (Steam)</span><span>₹140</span></li>
-              <li><span>Veg Momo (Fried)</span><span>₹140</span></li>
-              <li><span>Paneer Momo (Fried)</span><span>₹160</span></li>
-              <li><span>Veg Chilli Momo</span><span>₹190</span></li>
-              <li><span>Chilli Paneer Momo</span><span>₹200</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Mix Veg Uttapam</h3>
+            <p>Thick rice pancake topped with mixed vegetables</p>
+            <span class="price">₹ 190</span>
           </div>
+        </div>
 
-          <!-- Rice & Biryani -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Rice &amp; Biryani</h3>
-            <ul class="gcat-list">
-              <li><span>Steamed Rice</span><span>₹85</span></li>
-              <li><span>Jeera Rice</span><span>₹140</span></li>
-              <li><span>Veg Pulav</span><span>₹160</span></li>
-              <li><span>Kasmiri Pulav</span><span>₹180</span></li>
-              <li><span>Veg Biryani</span><span>₹220</span></li>
-              <li><span>Veg Paneer Biryani</span><span>₹250</span></li>
-              <li><span>Veg Hyderabadi Biryani</span><span>₹260</span></li>
-              <li><span>Peas Pulav</span><span>₹160</span></li>
-              <li><span>Navratan Pulav</span><span>₹200</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Onion Uttapam</h3>
+            <p>Soft rice pancake topped with crispy onions</p>
+            <span class="price">₹ 170</span>
           </div>
+        </div>
 
-          <!-- Breads -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Breads</h3>
-            <ul class="gcat-list">
-              <li><span>Tandoori Roti</span><span>₹20</span></li>
-              <li><span>Tandoori Butter Roti</span><span>₹25</span></li>
-              <li><span>Missi Roti</span><span>₹40</span></li>
-              <li><span>Missi Butter Roti</span><span>₹45</span></li>
-              <li><span>Lachha Paratha</span><span>₹40</span></li>
-              <li><span>Aloo Paratha</span><span>₹50</span></li>
-              <li><span>Paneer Paratha</span><span>₹60</span></li>
-              <li><span>Plain Naan</span><span>₹50</span></li>
-              <li><span>Butter Naan</span><span>₹60</span></li>
-              <li><span>Stuffed Naan</span><span>₹80</span></li>
-              <li><span>Chur Chur Naan</span><span>₹70</span></li>
-              <li><span>Garlic Naan</span><span>₹70</span></li>
-              <li><span>Kashmiri Naan</span><span>₹80</span></li>
-              <li><span>Onion Kulcha</span><span>₹70</span></li>
-              <li><span>Amritsari Kulcha</span><span>₹80</span></li>
-            </ul>
+        <div class="menu-card" data-category="south-indian">
+          <div class="menu-card-body">
+            <h3>Tomato Uttapam</h3>
+            <p>Fluffy pancake with fresh tomato topping</p>
+            <span class="price">₹ 170</span>
           </div>
+        </div>
 
-          <!-- Salad & Raita -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Salad &amp; Raita</h3>
-            <ul class="gcat-list">
-              <li><span>Garden Green Salad</span><span>₹70</span></li>
-              <li><span>Onion Salad</span><span>₹50</span></li>
-              <li><span>Plain Raita</span><span>₹80</span></li>
-              <li><span>Boondi Raita</span><span>₹100</span></li>
-              <li><span>Mix Veg Raita</span><span>₹100</span></li>
-              <li><span>Pineapple Raita</span><span>₹120</span></li>
-              <li><span>Mix Fruit Raita</span><span>₹150</span></li>
-            </ul>
+        <!-- STARTERS -->
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Sweet Corn Soup</h3>
+            <p>Creamy sweet corn soup with vegetables</p>
+            <span class="price">₹ 110</span>
           </div>
+        </div>
 
-          <!-- Thali -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Thali</h3>
-            <ul class="gcat-list gcat-list--thali">
-              <li>
-                <div class="gcat-thali-item">
-                  <div class="gcat-thali-name">Executive Thali</div>
-                  <div class="gcat-thali-desc">Dal · Rice · Mix Veg · Raita · Sweet · Papad · Salad · Roti (2 pcs)</div>
-                  <div class="gcat-thali-price">₹250</div>
-                </div>
-              </li>
-              <li>
-                <div class="gcat-thali-item">
-                  <div class="gcat-thali-name">Gupshup Special Thali</div>
-                  <div class="gcat-thali-desc">Dal · SPl Paneer · Mix Veg · Veg Pulav · Raita · Papad · Sweet · Naan (1 pc)</div>
-                  <div class="gcat-thali-price">₹350</div>
-                </div>
-              </li>
-            </ul>
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Manchow Soup</h3>
+            <p>Spicy Indo-Chinese broth with crispy noodles</p>
+            <span class="price">₹ 120</span>
           </div>
+        </div>
 
-          <!-- Desserts -->
-          <div class="gcat-block">
-            <h3 class="gcat-title">Desserts</h3>
-            <ul class="gcat-list gcat-list--thali">
-              <li>
-                <div class="gcat-thali-item">
-                  <div class="gcat-thali-name">Icecream Single Scoop</div>
-                  <div class="gcat-thali-desc">Vanilla · Chocolate · Strawberry</div>
-                  <div class="gcat-thali-price">₹60</div>
-                </div>
-              </li>
-              <li>
-                <div class="gcat-thali-item">
-                  <div class="gcat-thali-name">Premium Icecream Single Scoop</div>
-                  <div class="gcat-thali-desc">Butterscotch · Kesar Pista · American Nuts</div>
-                  <div class="gcat-thali-price">₹80</div>
-                </div>
-              </li>
-              <li><span>Sizzling Brownee With Icecream</span><span>₹150</span></li>
-              <li><span>Gulab Zamun (2 pcs)</span><span>₹60</span></li>
-              <li><span>Rasmalai</span><span>₹60</span></li>
-              <li><span>Rajbhog (1 pc)</span><span>₹40</span></li>
-              <li><span>Gajar Halwa (seasonal)</span><span>₹90</span></li>
-            </ul>
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Tomato Soup</h3>
+            <p>Classic tomato soup, smooth and comforting</p>
+            <span class="price">₹ 120</span>
           </div>
+        </div>
 
-        </div><!-- /gupshup-menu-grid -->
-      </div><!-- /gupshup-section -->
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Cream Of Mushroom Soup</h3>
+            <p>Rich, velvety mushroom cream soup</p>
+            <span class="price">₹ 110</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Lemon Coriander Soup</h3>
+            <p>Refreshing tangy soup with fresh coriander</p>
+            <span class="price">₹ 110</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Tikka</h3>
+            <p>Marinated paneer cubes, tandoor-charred</p>
+            <span class="price">₹ 285</span>
+          </div>
+          <div class="menu-card-badge">Must Try</div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Achari Tikka</h3>
+            <p>Pickle-spiced paneer from the tandoor</p>
+            <span class="price">₹ 285</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Malai Tikka</h3>
+            <p>Creamy malai-marinated paneer, melt-in-mouth</p>
+            <span class="price">₹ 300</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Kali Mirch Tikka</h3>
+            <p>Black pepper marinated paneer, bold flavour</p>
+            <span class="price">₹ 285</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Mushroom Tikka</h3>
+            <p>Spiced button mushrooms grilled in tandoor</p>
+            <span class="price">₹ 285</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Seekh Kabab</h3>
+            <p>Spiced vegetable skewers from clay oven</p>
+            <span class="price">₹ 250</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Hara Bhara Kabab</h3>
+            <p>Spinach, peas, paneer patties, grilled</p>
+            <span class="price">₹ 250</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Dahi Ke Kabab</h3>
+            <p>Hung curd patties, melt-in-mouth texture</p>
+            <span class="price">₹ 275</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Tandoori Soya Chaap</h3>
+            <p>Marinated soya chaap grilled in tandoor</p>
+            <span class="price">₹ 240</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Chef Special Platter</h3>
+            <p>5 starters, 2 pcs each — the ultimate sharing platter</p>
+            <span class="price">₹ 400</span>
+          </div>
+          <div class="menu-card-badge">Chef's Pick</div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Chilli</h3>
+            <p>Crispy paneer tossed in spicy chilli sauce</p>
+            <span class="price">₹ 260</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Honey Chilli Potato</h3>
+            <p>Crispy potato in honey-chilli glaze</p>
+            <span class="price">₹ 200</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Crispy Babycorn</h3>
+            <p>Battered baby corn, golden and crunchy</p>
+            <span class="price">₹ 260</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Momo (Steam)</h3>
+            <p>Delicate steamed dumplings with veg filling</p>
+            <span class="price">₹ 125</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Paneer Momo (Steam)</h3>
+            <p>Steamed momos stuffed with spiced paneer</p>
+            <span class="price">₹ 140</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Momo (Fried)</h3>
+            <p>Crispy fried dumplings with tangy chutney</p>
+            <span class="price">₹ 140</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="starters">
+          <div class="menu-card-body">
+            <h3>Veg Chilli Momo</h3>
+            <p>Fried momos tossed in spicy chilli sauce</p>
+            <span class="price">₹ 190</span>
+          </div>
+          <div class="menu-card-badge">Spicy</div>
+        </div>
+
+        <!-- BREAD -->
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Plain Roti</h3>
+            <p>Soft whole-wheat flatbread, fresh off the tawa</p>
+            <span class="price">₹ 15</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Butter Roti</h3>
+            <p>Tawa roti finished with a generous spread of desi butter</p>
+            <span class="price">₹ 20</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Tandoori Roti</h3>
+            <p>Whole-wheat bread baked in a clay tandoor, charred and smoky</p>
+            <span class="price">₹ 25</span>
+          </div>
+          <div class="menu-card-badge">Must Try</div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Plain Naan</h3>
+            <p>Leavened white bread, soft and pillowy from the tandoor</p>
+            <span class="price">₹ 35</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Garlic Naan</h3>
+            <p>Naan brushed with garlic butter and fresh coriander</p>
+            <span class="price">₹ 50</span>
+          </div>
+          <div class="menu-card-badge">Best Seller</div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Missi Roti</h3>
+            <p>Spiced gram-flour flatbread with ajwain and coriander</p>
+            <span class="price">₹ 30</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Plain Kulcha</h3>
+            <p>Soft leavened bread, lightly blistered in the tandoor</p>
+            <span class="price">₹ 35</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="bread">
+          <div class="menu-card-body">
+            <h3>Paneer Kulcha</h3>
+            <p>Kulcha stuffed with spiced cottage cheese filling</p>
+            <span class="price">₹ 70</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+
+        </div>
+
+      </div><!-- /menu-grid -->
+      </div><!-- /menuDataSource -->
+
 
     </div>
   </section>

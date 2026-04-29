@@ -3,19 +3,19 @@
    =========================== */
 
 :root {
-  --gold: #C9A84C;
-  --gold-light: #E2C97E;
-  --gold-dark: #A8862F;
-  --black: #0A0A0A;
-  --dark: #111111;
-  --dark-2: #181818;
-  --dark-3: #222222;
-  --dark-4: #2A2A2A;
-  --white: #FFFFFF;
-  --white-80: rgba(255,255,255,0.8);
-  --white-50: rgba(255,255,255,0.5);
-  --white-20: rgba(255,255,255,0.2);
-  --white-10: rgba(255,255,255,0.1);
+  --gold: #356B22;
+  --gold-light: #4E9232;
+  --gold-dark: #23460F;
+  --black: #F8F5EF;
+  --dark: #EFECE4;
+  --dark-2: #E7E3D8;
+  --dark-3: #DEDAD0;
+  --dark-4: #D4CFC4;
+  --white: #1A2A15;
+  --white-80: rgba(26,42,21,0.8);
+  --white-50: rgba(26,42,21,0.5);
+  --white-20: rgba(26,42,21,0.2);
+  --white-10: rgba(26,42,21,0.1);
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
   --nav-h: 80px;
@@ -269,6 +269,41 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── Nav cart button ── */
+.nav-cart-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--white-80);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  z-index: 1001;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+.nav-cart-btn:hover { color: var(--gold); }
+
+.nav-cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -7px;
+  background: var(--gold);
+  color: var(--black);
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
 
 /* ── PAGE HERO (interior pages) ── */
 .page-hero {

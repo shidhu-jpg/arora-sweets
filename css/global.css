@@ -57,7 +57,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 /* ── CONTAINER ── */
 .container {
   width: 92%;
-  max-width: 1280px;
+  max-width: 100%;
   margin-inline: auto;
 }
 

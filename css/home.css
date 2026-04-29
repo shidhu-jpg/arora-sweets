@@ -23,8 +23,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transform: scale(1.05);
-  animation: heroZoom 10s ease forwards;
+  animation: heroZoom 1.5s ease both;
 }
 
 @keyframes heroZoom {
@@ -32,7 +31,7 @@
   to   { transform: scale(1.0); }
 }
 
-.hero-overlay {
+/* .hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
@@ -41,7 +40,7 @@
     rgba(255, 255, 255, 0.6) 50%,
     rgba(255, 254, 254, 0.75) 100%
   );
-}
+} */
 
 .hero-content {
   position: relative;

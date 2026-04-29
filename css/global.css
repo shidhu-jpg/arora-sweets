@@ -36,6 +36,8 @@ body {
   font-weight: 300;
   line-height: 1.7;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
 }
 
 img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -143,14 +145,61 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 .btn-outline-gold {
+  position: relative;
+  overflow: hidden;
   background: transparent;
   color: var(--gold);
   border-color: var(--gold);
+  box-shadow:
+    0 0 0 0 rgba(53,107,34,0.35),
+    inset 0 0 0 0 rgba(53,107,34,0);
+  animation: goldPulse 2.8s ease-in-out 1.5s infinite;
+  letter-spacing: 0.12em;
+  font-weight: 500;
 }
+
+.btn-outline-gold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(53,107,34,0.18) 50%,
+    transparent 100%
+  );
+  transition: left 0.55s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+}
+
+.btn-outline-gold:hover::before {
+  left: 160%;
+}
+
 .btn-outline-gold:hover {
   background: var(--gold);
   color: var(--black);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow:
+    0 8px 28px rgba(53,107,34,0.35),
+    0 2px 8px rgba(53,107,34,0.2);
+  animation: none;
+}
+
+@keyframes goldPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(53,107,34,0.35),
+      0 0 0 0 rgba(53,107,34,0.15);
+  }
+  50% {
+    box-shadow:
+      0 0 14px 4px rgba(53,107,34,0.22),
+      0 0 28px 10px rgba(53,107,34,0.08);
+  }
 }
 
 .center-cta { text-align: center; margin-top: 56px; }
@@ -185,10 +234,10 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 .navbar.scrolled {
-  background: rgba(10,10,10,0.96);
+  background: rgba(248,245,239,0.96);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 1px 0 rgba(201,168,76,0.2);
+  box-shadow: 0 1px 0 rgba(53,107,34,0.2);
 }
 
 .nav-logo {
@@ -257,7 +306,11 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   border: none;
   cursor: pointer;
   z-index: 1001;
-  padding: 4px;
+  padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
 }
 .nav-toggle span {
   display: block;
@@ -266,6 +319,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   background: var(--white);
   transition: var(--transition);
 }
+.nav-toggle.open span { background: #F8F5EF; }
 .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
@@ -542,17 +596,34 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   .nav-toggle { display: flex; }
   .nav-links {
     position: fixed;
-    inset: 0;
-    background: rgba(10,10,10,0.98);
-    backdrop-filter: blur(20px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 998;
+    background: #1A2A15;
     flex-direction: column;
     justify-content: center;
-    gap: 36px;
+    align-items: center;
+    gap: 32px;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   }
   .nav-links.open { transform: translateX(0); }
-  .nav-links a { font-size: 1.1rem; letter-spacing: 0.15em; }
+  .nav-links a {
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: #F8F5EF;
+    padding: 10px 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+  }
+  .nav-links a.active,
+  .nav-links a:hover { color: var(--gold); }
 
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
   .footer-bottom-inner { flex-direction: column; align-items: center; text-align: center; }
@@ -562,6 +633,8 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 @media (max-width: 480px) {
+  .section { padding: 56px 0; }
   .footer-inner { grid-template-columns: 1fr; }
-  .btn { padding: 12px 28px; font-size: 0.75rem; }
+  .btn { padding: 14px 28px; font-size: 0.75rem; min-height: 44px; }
+  .whatsapp-float { bottom: 80px; }
 }

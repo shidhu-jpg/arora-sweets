@@ -593,6 +593,10 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   :root { --nav-h: 66px; }
   .section { padding: 72px 0; }
 
+  .quote-mark { font-size: 4rem; vertical-align: -1.4rem; }
+  .quote-strip { padding: 56px 0; }
+  .quote-strip blockquote { padding: 0 8px; }
+
   .nav-toggle { display: flex; }
   .nav-links {
     position: fixed;
@@ -637,4 +641,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   .footer-inner { grid-template-columns: 1fr; }
   .btn { padding: 14px 28px; font-size: 0.75rem; min-height: 44px; }
   .whatsapp-float { bottom: 80px; }
+  .page-hero { min-height: 280px; padding-bottom: 40px; }
+  .page-hero-content h1 { font-size: clamp(2rem, 10vw, 3rem); }
+  .footer-compliance { font-size: 0.65rem; }
 }

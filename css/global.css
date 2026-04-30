@@ -265,6 +265,21 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   object-fit: contain;
 }
 
+/* Logo overlay on hero video — mobile only, does not scroll with page */
+.mobile-fixed-logo {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+.mobile-fixed-logo-img {
+  height: 150px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
 .nav-links {
   display: flex;
   gap: 40px;
@@ -597,7 +612,8 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 
 @media (max-width: 768px) {
   :root { --nav-h: 66px; }
-  .nav-logo-img { height: 140px; }
+  .nav-logo-img { display: none; }
+  .mobile-fixed-logo { display: block; }
   .navbar { padding: 0 2% 0 1%; }
   .section { padding: 72px 0; }
 
@@ -645,7 +661,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 @media (max-width: 480px) {
-  .nav-logo-img { height: 155px; }
+  .mobile-fixed-logo-img { height: 155px; }
   .navbar { padding: 0 2% 0 0; }
   .section { padding: 56px 0; }
   .footer-inner { grid-template-columns: 1fr; }

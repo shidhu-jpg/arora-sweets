@@ -353,30 +353,29 @@
   pointer-events: all;
 }
 
-/* ── Cart panel (centered modal) ── */
+/* ── Cart panel (right-side drawer) ── */
 .cart-panel {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 92%;
-  max-width: 520px;
-  max-height: 85vh;
+  top: 0;
+  right: 0;
+  width: 420px;
+  max-width: 100vw;
+  height: 100vh;
   z-index: 1100;
   background: var(--dark-2);
-  border: 1px solid var(--white-10);
-  border-radius: 18px;
+  border-left: 1px solid var(--white-10);
+  border-radius: 0;
   display: flex;
   flex-direction: column;
-  transform: translate(-50%, -50%) scale(0.92);
-  opacity: 0;
+  transform: translateX(100%);
+  opacity: 1;
   pointer-events: none;
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
 }
 
 .cart-panel.open {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
+  transform: translateX(0);
   pointer-events: all;
 }
 

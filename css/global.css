@@ -27,6 +27,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -204,6 +205,13 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 
 .center-cta { text-align: center; margin-top: 56px; }
 
+.btn-whatsapp-styled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .link-gold {
   color: var(--gold);
   font-size: 0.8rem;
@@ -251,12 +259,10 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 .nav-logo:hover { color: var(--gold-light); }
 .nav-logo-img {
-  height: 48px;
+  height: 54px;
   width: auto;
   display: block;
   object-fit: contain;
-  mix-blend-mode: multiply;
-  filter: contrast(1.1);
 }
 
 .nav-links {
@@ -591,6 +597,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 
 @media (max-width: 768px) {
   :root { --nav-h: 66px; }
+  .nav-logo-img { height: 44px; }
   .section { padding: 72px 0; }
 
   .quote-mark { font-size: 4rem; vertical-align: -1.4rem; }
@@ -637,6 +644,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 @media (max-width: 480px) {
+  .nav-logo-img { height: 52px; }
   .section { padding: 56px 0; }
   .footer-inner { grid-template-columns: 1fr; }
   .btn { padding: 14px 28px; font-size: 0.75rem; min-height: 44px; }

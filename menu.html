@@ -7,9 +7,12 @@
   <title>Menu — Arora Sweets</title>
   <link rel="stylesheet" href="css/global.css" />
   <link rel="stylesheet" href="css/pages.css" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" /></noscript>
 </head>
 <body>
 
@@ -108,11 +111,51 @@
             </div>
           </div>
 
-          <div class="menu-cat-card" data-cat="sweets">
+          <div class="menu-cat-card" data-cat="laddu">
+             <img src="images/motichoorladdu.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Laddu</h3>
+              <span class="menu-cat-count" data-cat="laddu"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="kaju-sweets">
              <img src="images/kajukatli.png" alt=""/>
             <div class="menu-cat-overlay">
-              <h3>Sweets</h3>
-              <span class="menu-cat-count" data-cat="sweets"></span>
+              <h3>Kaju Sweets</h3>
+              <span class="menu-cat-count" data-cat="kaju-sweets"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="khoa-sweets">
+             <img src="images/barfi.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Khoa Sweets</h3>
+              <span class="menu-cat-count" data-cat="khoa-sweets"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="besan-sweets">
+             <img src="images/jalebi.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Besan Sweets</h3>
+              <span class="menu-cat-count" data-cat="besan-sweets"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="nariyal-sweets">
+             <img src="images/nariyal.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Nariyal Sweets</h3>
+              <span class="menu-cat-count" data-cat="nariyal-sweets"></span>
+            </div>
+          </div>
+
+          <div class="menu-cat-card" data-cat="chena-sweets">
+             <img src="images/rasgulla.png" alt=""/>
+            <div class="menu-cat-overlay">
+              <h3>Chena Sweets</h3>
+              <span class="menu-cat-count" data-cat="chena-sweets"></span>
             </div>
           </div>
 
@@ -224,7 +267,7 @@
           </div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="breakfast">
           <div class="menu-card-body">
             <h3>Ghee Jalebi</h3>
             <p>Crispy spirals soaked in pure desi ghee syrup</p>
@@ -607,79 +650,916 @@
           <div class="menu-card-badge">Chef's Pick</div>
         </div>
 
-        <!-- SWEETS -->
-        <div class="menu-card" data-category="sweets">
+        <!-- LADDU -->
+        <div class="menu-card" data-category="laddu">
           <div class="menu-card-body">
-            <h3>Kaju Katli</h3>
-            <p>Premium cashew fudge with edible silver leaf</p>
-            <span class="price">₹ 800 / kg</span>
-          </div>
-          <div class="menu-card-badge">Best Seller</div>
-        </div>
-
-        <div class="menu-card" data-category="sweets">
-          <div class="menu-card-body">
-            <h3>Gulab Jamun</h3>
-            <p>Rose-infused syrup, saffron, served warm</p>
-            <span class="price">₹ 350 / kg</span>
+            <h3>Dana Laddu</h3>
+            <p>Classic gram-pearl laddu, light and aromatic</p>
+            <span class="price">₹ 320 / kg</span>
           </div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="laddu">
           <div class="menu-card-body">
-            <h3>Rasgulla</h3>
-            <p>Soft cottage cheese dumplings in light syrup</p>
-            <span class="price">₹ 280 / kg</span>
-          </div>
-          <div class="menu-card-badge">New</div>
-        </div>
-
-        <div class="menu-card" data-category="sweets">
-          <div class="menu-card-body">
-            <h3>Motichoor Ladoo</h3>
-            <p>Fine-gram pearls, ghee-roasted with saffron</p>
-            <span class="price">₹ 420 / kg</span>
-          </div>
-        </div>
-
-        <div class="menu-card" data-category="sweets">
-          <div class="menu-card-body">
-            <h3>Pista Barfi</h3>
-            <p>Pistachio, cardamom, silver leaf garnish</p>
+            <h3>Ghee Dana Laddu</h3>
+            <p>Rich desi ghee dana laddu, melt-in-mouth</p>
             <span class="price">₹ 650 / kg</span>
           </div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="laddu">
           <div class="menu-card-body">
-            <h3>Fresh Jalebi</h3>
-            <p>Crispy spirals, pure ghee, spiced syrup</p>
-            <span class="price">₹ 180 / kg</span>
+            <h3>Ghee Besan Laddu</h3>
+            <p>Slow-roasted gram flour laddu in pure ghee</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+          <div class="menu-card-badge">Best Seller</div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Besan Laddu</h3>
+            <p>Traditional gram flour laddu with cardamom</p>
+            <span class="price">₹ 250 / kg</span>
           </div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="laddu">
           <div class="menu-card-body">
-            <h3>Besan Halwa</h3>
-            <p>Slow-roasted gram flour, desi ghee, dry fruits</p>
-            <span class="price">₹ 380 / kg</span>
+            <h3>Churma Laddu</h3>
+            <p>Coarsely ground wheat with jaggery and ghee</p>
+            <span class="price">₹ 650 / kg</span>
           </div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Pini Laddu</h3>
+            <p>Traditional winter laddu with dry fruits and ghee</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Ghee Navratan Laddu</h3>
+            <p>Nine-ingredient ghee laddu, festive and rich</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Gond Laddu</h3>
+            <p>Edible gum laddu with nuts, ghee and jaggery</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Sugar Free Khajoor Laddu</h3>
+            <p>Wholesome date laddu, no added sugar</p>
+            <span class="price">₹ 1100 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Mewa Anjir Laddu</h3>
+            <p>Dry fruits and fig laddu, nutritious and indulgent</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Gola Dry Fruit Laddu</h3>
+            <p>Loaded with assorted dry fruits, ghee-bound</p>
+            <span class="price">₹ 800 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Chana Laddu</h3>
+            <p>Roasted chickpea flour laddu with cardamom</p>
+            <span class="price">₹ 750 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Moong Laddu</h3>
+            <p>Green moong dal laddu, light and nourishing</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="laddu">
+          <div class="menu-card-body">
+            <h3>Chohada Laddu</h3>
+            <p>Fourteen-ingredient traditional festive laddu</p>
+            <span class="price">₹ 750 / kg</span>
+          </div>
+        </div>
+
+        <!-- KAJU SWEETS -->
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Barfi</h3>
+            <p>Classic cashew fudge with silver leaf garnish</p>
+            <span class="price">₹ 1100 / kg</span>
+          </div>
+          <div class="menu-card-badge">Best Seller</div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Gajak</h3>
+            <p>Crispy cashew brittle with sesame and jaggery</p>
+            <span class="price">₹ 1200 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Dry Fruit Laddu</h3>
+            <p>Premium cashew and dry fruit laddu</p>
+            <span class="price">₹ 1600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Special</h3>
+            <p>Special cashew sweet with premium ingredients</p>
+            <span class="price">₹ 1200 / kg</span>
+          </div>
+          <div class="menu-card-badge">Special</div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Pista Barfi</h3>
+            <p>Cashew and pistachio layered barfi, delicate flavour</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Anjir Roll</h3>
+            <p>Cashew paste rolled with fig filling</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Sandwich</h3>
+            <p>Two layers of cashew barfi with flavoured centre</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Sahi</h3>
+            <p>Royal cashew sweet with rich dry fruit filling</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Kasata</h3>
+            <p>Tri-coloured cashew sweet inspired by kulfi flavours</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Kalas</h3>
+            <p>Artisan cashew sweet in decorative pot shape</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Kamal</h3>
+            <p>Lotus-shaped cashew sweet, crafted by hand</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Strawberry Barfi</h3>
+            <p>Cashew barfi with strawberry flavour and colour</p>
+            <span class="price">₹ 1200 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Kiwi Barfi</h3>
+            <p>Cashew barfi with tropical kiwi flavour</p>
+            <span class="price">₹ 1200 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Chocolate Barfi</h3>
+            <p>Cashew fudge layered with rich chocolate</p>
+            <span class="price">₹ 1150 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Katori</h3>
+            <p>Cashew cup filled with dry fruit and rabdi</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Boarnbita</h3>
+            <p>Cashew sweet with malt-chocolate flavour</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Paan</h3>
+            <p>Cashew sweet shaped as paan, filled with gulkand</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Jalebi</h3>
+            <p>Cashew spiral sweet, crispy and flavour-rich</p>
+            <span class="price">₹ 1300 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Pudukiya</h3>
+            <p>Cashew modak, a Southern-inspired sweet</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Ball</h3>
+            <p>Round cashew sweet, soft and richly flavoured</p>
+            <span class="price">₹ 1500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="kaju-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Pista Roll</h3>
+            <p>Cashew roll filled with pistachio cream</p>
+            <span class="price">₹ 1400 / kg</span>
+          </div>
+        </div>
+
+        <!-- KHOA SWEETS -->
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Sada Khoa</h3>
+            <p>Pure reduced milk sweet, simple and classic</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khoa Slices</h3>
+            <p>Soft khoa cut in neat slices, cardamom-scented</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Pineapple Roll</h3>
+            <p>Khoa rolled with pineapple flavoured filling</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Kaju Pista Slice</h3>
+            <p>Khoa slice studded with cashew and pistachio</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Roll</h3>
+            <p>Soft khoa rolled with dry fruit filling</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Kesar Barfi</h3>
+            <p>Saffron-infused khoa barfi, golden and fragrant</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Chocolate Barfi</h3>
+            <p>Khoa barfi with a rich chocolate layer</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Chocolate Roll</h3>
+            <p>Khoa rolled with chocolate cream filling</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khowa Pakija</h3>
+            <p>Soft khoa sweet with aromatic spice blend</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Raskadam</h3>
+            <p>Khoa-coated rasgulla with saffron flavour</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Ghee Doda Barfi</h3>
+            <p>Grainy slow-cooked khoa barfi in pure ghee</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Ghee Khoa Halwa</h3>
+            <p>Rich khoa halwa finished with desi ghee</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Peda</h3>
+            <p>Classic milk peda, soft and cardamom-flavoured</p>
+            <span class="price">₹ 550 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Kesariya Peda</h3>
+            <p>Saffron-tinted peda with kesar aroma</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Rabdi Peda</h3>
+            <p>Peda with creamy rabdi layer on top</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Khoa Badam Barfi</h3>
+            <p>Khoa barfi with almond pieces throughout</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Milk Cake</h3>
+            <p>Caramelised reduced milk cake with granular texture</p>
+            <span class="price">₹ 550 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Chena Jalebi</h3>
+            <p>Soft chena-based jalebi soaked in sugar syrup</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Kalakanad</h3>
+            <p>Grainy khoa sweet with a soft, crumbly bite</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Panchmewa</h3>
+            <p>Five dry fruits combined in a khoa sweet</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Chandrakala</h3>
+            <p>Moon-shaped stuffed sweet with khoa filling</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Pudukiya</h3>
+            <p>Modak-shaped sweet with khoa and dry fruit filling</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>P.G.T</h3>
+            <p>Traditional Punjabi gharana sweet, slow-cooked</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Gajar Halwa</h3>
+            <p>Slow-cooked carrot halwa with ghee and dry fruits</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+          <div class="menu-card-badge">Seasonal</div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Moong Halwa</h3>
+            <p>Split green gram halwa, rich and aromatic</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Malpuaa</h3>
+            <p>Soft pan-fried sweet pancakes soaked in syrup</p>
+            <span class="price">₹ 45 / pcs</span>
+          </div>
+          <div class="menu-card-badge">Must Try</div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Moti Paak</h3>
+            <p>Pearl-like sugar-coated dry fruit sweet</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Chana Bite</h3>
+            <p>Crispy gram-based bite-sized sweet snack</p>
+            <span class="price">₹ 800 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Chana Barfi</h3>
+            <p>Gram flour barfi with cardamom and ghee</p>
+            <span class="price">₹ 750 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Amul Barfi</h3>
+            <p>Milk-based barfi made with Amul dairy products</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Maida Balsahi</h3>
+            <p>Flaky refined flour sweet soaked in sugar syrup</p>
+            <span class="price">₹ 500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="khoa-sweets">
+          <div class="menu-card-body">
+            <h3>Sugar Free Kalakand</h3>
+            <p>Grainy khoa sweet without added sugar</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <!-- BESAN SWEETS -->
+        <div class="menu-card" data-category="besan-sweets">
+          <div class="menu-card-body">
+            <h3>Besan Gajak</h3>
+            <p>Crispy gram flour brittle with sesame and jaggery</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="besan-sweets">
+          <div class="menu-card-body">
+            <h3>Besan Barfi</h3>
+            <p>Classic gram flour barfi with cardamom and ghee</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="besan-sweets">
+          <div class="menu-card-body">
+            <h3>Laug Lati</h3>
+            <p>Clove-spiced besan sweet, a regional speciality</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="besan-sweets">
+          <div class="menu-card-body">
+            <h3>Milki Battisa</h3>
+            <p>Thirty-two ingredient milk and besan sweet</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="besan-sweets">
+          <div class="menu-card-body">
+            <h3>Battisa</h3>
+            <p>Multi-ingredient gram flour sweet, nourishing</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <!-- NARIYAL SWEETS -->
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Nariyal Laddu</h3>
+            <p>Fresh coconut and jaggery laddu, sweet and chewy</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Nariyal Chamcham</h3>
+            <p>Coconut-coated chamcham, soft and syrupy</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Nariyal Santra</h3>
+            <p>Coconut sweet with orange flavour and colour</p>
+            <span class="price">₹ 550 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Nariyal Barfi</h3>
+            <p>Fresh coconut barfi with cardamom and sugar</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Parwal</h3>
+            <p>Pointed gourd stuffed with khoa and coconut</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+          <div class="menu-card-badge">Specialty</div>
+        </div>
+
+        <div class="menu-card" data-category="nariyal-sweets">
+          <div class="menu-card-body">
+            <h3>Moong Dal Barfi</h3>
+            <p>Split moong dal barfi with coconut and cardamom</p>
+            <span class="price">₹ 700 / kg</span>
+          </div>
+        </div>
+
+        <!-- CHENA SWEETS -->
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Rasgulla</h3>
+            <p>Soft chena dumplings in light sugar syrup</p>
+            <span class="price">₹ 14 / pcs</span>
+          </div>
+          <div class="menu-card-badge">Classic</div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
           <div class="menu-card-body">
             <h3>Rasmalai</h3>
-            <p>Chenna discs in saffron-infused rabri</p>
-            <span class="price">₹ 320 / kg</span>
+            <p>Chena discs soaked in saffron-infused rabdi</p>
+            <span class="price">₹ 50 / pcs</span>
           </div>
           <div class="menu-card-badge">Chef's Pick</div>
         </div>
 
-        <div class="menu-card" data-category="sweets">
+        <div class="menu-card" data-category="chena-sweets">
           <div class="menu-card-body">
-            <h3>Chum Chum</h3>
-            <p>Stuffed with coconut and dry fruits</p>
-            <span class="price">₹ 360 / kg</span>
+            <h3>Ghee Raslalmohan</h3>
+            <p>Ghee-finished raslalmohan in rich sugar syrup</p>
+            <span class="price">₹ 35 / pcs</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Raslalmohan</h3>
+            <p>Round chena sweet in flavoured sugar syrup</p>
+            <span class="price">₹ 20 / pcs</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Rajbhog</h3>
+            <p>Large saffron and dry fruit stuffed rasgulla</p>
+            <span class="price">₹ 30 / pcs</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Rabdi Roll</h3>
+            <p>Chena roll filled with creamy rabdi</p>
+            <span class="price">₹ 40 / pcs</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Paneer</h3>
+            <p>Fresh homemade cottage cheese, soft and milky</p>
+            <span class="price">₹ 500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Pista Bhog</h3>
+            <p>Chena sweet loaded with pistachio cream</p>
+            <span class="price">₹ 600 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Safed Cream Chop</h3>
+            <p>White chena chop with cream filling</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Orange Cream Chop</h3>
+            <p>Chena chop with orange-flavoured cream centre</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Orange Gajar Fadh</h3>
+            <p>Orange and carrot chena sweet, colourful and fresh</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chamcham Fadh Badam</h3>
+            <p>Chamcham with almond-cream stuffing</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Kaju Fadh</h3>
+            <p>Chena sweet with cashew filling and coating</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Mocha</h3>
+            <p>Soft chena sweet with a hint of coffee flavour</p>
+            <span class="price">₹ 400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Malai Chop</h3>
+            <p>Chena chop filled with thick fresh cream</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chena Tos</h3>
+            <p>Grilled chena sweet, golden and lightly crispy</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Dry Lalmohan</h3>
+            <p>Dry-finished lalmohan without syrup, rich flavour</p>
+            <span class="price">₹ 400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Danedar</h3>
+            <p>Grainy chena sweet, crumbly and mildly sweet</p>
+            <span class="price">₹ 350 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Safed Balusahi</h3>
+            <p>White flaky chena balusahi soaked in syrup</p>
+            <span class="price">₹ 400 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Rabdi</h3>
+            <p>Thick slow-reduced sweetened milk with cream layers</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Malai Cake</h3>
+            <p>Soft chena cake with a thick malai topping</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Kher Mohan</h3>
+            <p>Kheer-soaked mohan sweet, creamy and indulgent</p>
+            <span class="price">₹ 500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Thofuaa</h3>
+            <p>Silken chena sweet with light syrup, melt-in-mouth</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Orange Aarti Bhog</h3>
+            <p>Orange-flavoured chena sweet for prasad and festivity</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Safed Aarti Bhog</h3>
+            <p>White chena sweet, pure and ideal for prasad</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Designer Chena</h3>
+            <p>Handcrafted chena sweet in decorative shapes</p>
+            <span class="price">₹ 550 / kg</span>
+          </div>
+          <div class="menu-card-badge">Signature</div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chena Malai Roll</h3>
+            <p>Chena roll filled with thick malai and dry fruits</p>
+            <span class="price">₹ 650 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Cream Lalmohan</h3>
+            <p>Lalmohan soaked in cream and sugar syrup</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Siki Lalmohan</h3>
+            <p>Half-sized lalmohan, light and mildly sweet</p>
+            <span class="price">₹ 350 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chena Sandwich</h3>
+            <p>Two chena layers with a flavoured cream centre</p>
+            <span class="price">₹ 500 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chena Pies</h3>
+            <p>Assorted chena sweets served as a sharing plate</p>
+            <span class="price">₹ 50 / plate</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Rasgulla Big</h3>
+            <p>Jumbo rasgulla, extra-soft in sugar syrup</p>
+            <span class="price">₹ 25 / pcs</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Siki Chena</h3>
+            <p>Small chena sweet, light and delicately flavoured</p>
+            <span class="price">₹ 350 / kg</span>
+          </div>
+        </div>
+
+        <div class="menu-card" data-category="chena-sweets">
+          <div class="menu-card-body">
+            <h3>Chamcham</h3>
+            <p>Oblong chena sweet in sugar syrup, soft and spongy</p>
+            <span class="price">₹ 400 / kg</span>
           </div>
         </div>
 

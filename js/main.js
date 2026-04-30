@@ -138,8 +138,6 @@ document.head.appendChild(style);
 
 /* ── Order / Cart ── */
 (function () {
-  if (!document.querySelector('.menu-section') && !document.querySelector('.featured')) return;
-
   let cart = {};
   try { cart = JSON.parse(localStorage.getItem('aroraCart') || '{}'); } catch (e) {}
 

@@ -51,8 +51,8 @@ ul { list-style: none; }
 body { animation: pageFadeIn 0.5s ease forwards; }
 
 @keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ── CONTAINER ── */
@@ -597,14 +597,14 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 
 @media (max-width: 768px) {
   :root { --nav-h: 66px; }
-  .nav-logo-img { height: 44px; }
+  .nav-logo-img { height: 88px; }
   .section { padding: 72px 0; }
 
   .quote-mark { font-size: 4rem; vertical-align: -1.4rem; }
   .quote-strip { padding: 56px 0; }
   .quote-strip blockquote { padding: 0 8px; }
 
-  .nav-toggle { display: flex; }
+  .nav-toggle { display: none; }
   .nav-links {
     position: fixed;
     top: 0;
@@ -644,7 +644,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 @media (max-width: 480px) {
-  .nav-logo-img { height: 52px; }
+  .nav-logo-img { height: 104px; }
   .section { padding: 56px 0; }
   .footer-inner { grid-template-columns: 1fr; }
   .btn { padding: 14px 28px; font-size: 0.75rem; min-height: 44px; }

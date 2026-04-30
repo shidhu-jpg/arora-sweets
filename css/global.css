@@ -597,7 +597,8 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 
 @media (max-width: 768px) {
   :root { --nav-h: 66px; }
-  .nav-logo-img { height: 88px; }
+  .nav-logo-img { height: 140px; }
+  .navbar { padding: 0 2% 0 1%; }
   .section { padding: 72px 0; }
 
   .quote-mark { font-size: 4rem; vertical-align: -1.4rem; }
@@ -644,7 +645,8 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 
 @media (max-width: 480px) {
-  .nav-logo-img { height: 104px; }
+  .nav-logo-img { height: 155px; }
+  .navbar { padding: 0 2% 0 0; }
   .section { padding: 56px 0; }
   .footer-inner { grid-template-columns: 1fr; }
   .btn { padding: 14px 28px; font-size: 0.75rem; min-height: 44px; }

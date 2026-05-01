@@ -26,6 +26,24 @@
   animation: heroZoom 1.5s ease both;
 }
 
+/* Vimeo background video — portrait ratio 1:1.5275 */
+.vimeo-bg-wrapper {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.vimeo-bg-wrapper iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Scale up whichever axis needs to fill — covers both landscape and portrait screens */
+  width: max(100%, calc(100vh * 0.6547));
+  height: max(100%, calc(100vw * 1.5275));
+  border: 0;
+}
+
 @keyframes heroZoom {
   from { transform: scale(1.08); }
   to   { transform: scale(1.0); }

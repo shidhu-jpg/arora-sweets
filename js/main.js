@@ -2,6 +2,19 @@
    AURORA SWEETS — MAIN JS
    =========================== */
 
+/* ── Announcement banner close ── */
+const announceBar   = document.getElementById('announceBar');
+const announceClose = document.getElementById('announceClose');
+if (announceBar && announceClose) {
+  announceClose.addEventListener('click', () => {
+    announceBar.classList.add('hidden');
+    sessionStorage.setItem('announceDismissed', '1');
+  });
+  if (sessionStorage.getItem('announceDismissed')) {
+    announceBar.classList.add('hidden');
+  }
+}
+
 /* ── Navbar scroll effect ── */
 const navbar = document.getElementById('navbar');
 if (navbar) {
@@ -42,6 +55,56 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ── Animated stat counters ── */
+(function () {
+  const counters = document.querySelectorAll('.stat-number[data-target]');
+  if (!counters.length) return;
+
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target, 10);
+    const suffix = el.dataset.suffix || '';
+    const duration = 1600;
+    const step = 16;
+    const increment = target / (duration / step);
+    let current = 0;
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = (target >= 1000
+        ? Math.round(current).toLocaleString('en-IN')
+        : Math.round(current)) + suffix;
+    }, step);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        animateCounter(e.target);
+        counterObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  counters.forEach(el => counterObserver.observe(el));
+}());
+
+/* ── Scroll to top button ── */
+(function () {
+  const btn = document.getElementById('scrollTopBtn');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  }, { passive: true });
+
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}());
 
 /* ── Menu filter ── */
 const filterBtns     = document.querySelectorAll('.filter-btn');
@@ -372,7 +435,7 @@ document.head.appendChild(style);
       `*Total: ₹${total}*\n`;
     if (note) msg += `\n*Note:* ${note}`;
 
-    const waUrl = `https://wa.me/919698355507?text=${encodeURIComponent(msg)}`;
+    const waUrl = `https://wa.me/919934492744?text=${encodeURIComponent(msg)}`;
     window.open(waUrl, '_blank', 'noopener');
     closeCheckoutModal();
   });
@@ -553,4 +616,116 @@ document.head.appendChild(style);
   });
 
   if (backBtn) backBtn.addEventListener('click', showLanding);
+
+  /* expose showLanding for search to call */
+  window._aroraShowMenuLanding = showLanding;
+}());
+
+/* ── Menu Search ── */
+(function () {
+  const searchInput   = document.getElementById('menuSearchInput');
+  const searchClear   = document.getElementById('menuSearchClear');
+  const searchResults = document.getElementById('menuSearchResults');
+  const landing       = document.getElementById('menuCatLanding');
+  const backRow       = document.getElementById('menuCatBackRow');
+  const itemsDiv      = document.getElementById('menuCatItems');
+  const gupshupDiv    = document.getElementById('gupshupSection');
+  const catFooter     = document.getElementById('menuCatFooter');
+
+  if (!searchInput || !searchResults) return;
+
+  const CAT_LABELS = {
+    breakfast: 'Breakfast', chaat: 'Chaat', starters: 'Starters',
+    'south-indian': 'South Indian', 'continental-snacks': 'Continental Snacks',
+    pizza: 'Pizza', laddu: 'Laddu', 'kaju-sweets': 'Kaju Sweets',
+    'khoa-sweets': 'Khoa Sweets', 'besan-sweets': 'Besan Sweets',
+    'nariyal-sweets': 'Nariyal Sweets', 'chena-sweets': 'Chena Sweets',
+    mains: 'Mains', beverages: 'Beverages', bread: 'Bread'
+  };
+
+  function parsePrice(str) {
+    if (!str) return 0;
+    const m = str.match(/[\d,]+/);
+    return m ? parseInt(m[0].replace(',', ''), 10) : 0;
+  }
+
+  function getAllItems() {
+    const items = [];
+    document.querySelectorAll('#menuDataSource .menu-card').forEach(card => {
+      const name  = card.querySelector('h3')?.textContent.trim()     || '';
+      const desc  = card.querySelector('p')?.textContent.trim()      || '';
+      const price = card.querySelector('.price')?.textContent.trim() || '';
+      const badge = card.querySelector('.menu-card-badge')?.textContent.trim() || '';
+      const cat   = card.dataset.category || '';
+      if (name) items.push({ name, desc, price, badge, cat });
+    });
+    return items;
+  }
+
+  function showSearchView() {
+    if (landing)    landing.style.display    = 'none';
+    if (backRow)    backRow.style.display    = 'none';
+    if (itemsDiv)   itemsDiv.style.display   = 'none';
+    if (gupshupDiv) gupshupDiv.style.display = 'none';
+    if (catFooter)  catFooter.style.display  = 'none';
+    searchResults.style.display = 'block';
+  }
+
+  function hideSearchView() {
+    searchResults.style.display = 'none';
+    if (landing) landing.style.display = '';
+  }
+
+  function renderSearchResults(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) { hideSearchView(); return; }
+
+    showSearchView();
+    const all     = getAllItems();
+    const matched = all.filter(item =>
+      item.name.toLowerCase().includes(q) ||
+      item.desc.toLowerCase().includes(q) ||
+      (CAT_LABELS[item.cat] || '').toLowerCase().includes(q)
+    );
+
+    if (!matched.length) {
+      searchResults.innerHTML = `<p class="menu-search-empty">No items found for "<strong>${query}</strong>"</p>`;
+      return;
+    }
+
+    searchResults.innerHTML = matched.map(item => `
+      <div class="menu-item-row">
+        <div class="menu-item-info">
+          <div class="menu-item-name-row">
+            <h3 class="menu-item-name">${item.name}</h3>
+            ${item.badge ? `<span class="menu-item-badge">${item.badge}</span>` : ''}
+            <span class="menu-search-item-cat">${CAT_LABELS[item.cat] || item.cat}</span>
+          </div>
+          <p class="menu-item-desc">${item.desc}</p>
+        </div>
+        <div class="menu-item-right">
+          <span class="menu-item-price">${item.price}</span>
+          <button class="menu-item-add-btn" data-name="${item.name}" data-price="${parsePrice(item.price)}">+ Add</button>
+        </div>
+      </div>`).join('');
+
+    searchResults.querySelectorAll('.menu-item-add-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window._aroraCartAdd) window._aroraCartAdd(btn.dataset.name, parseInt(btn.dataset.price, 10), btn);
+      });
+    });
+  }
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value;
+    searchClear.style.display = q ? 'inline-block' : 'none';
+    renderSearchResults(q);
+  });
+
+  searchClear.addEventListener('click', () => {
+    searchInput.value = '';
+    searchClear.style.display = 'none';
+    hideSearchView();
+    searchInput.focus();
+  });
 }());

@@ -1794,6 +1794,7 @@ select.party-input option { background: #141414; }
   .masonry-grid { column-count: 1; }
   .menu-section { padding: 56px 0; }
   .filter-btn { padding: 10px 16px; }
+  .menu-search-wrap { padding-top: 56px; margin-bottom: 28px; }
 }
 
 /* ══════════════════════
@@ -1923,6 +1924,88 @@ select.party-input option { background: #141414; }
   background: var(--gold-dark);
   padding: 6px 16px;
   border-left: 4px solid var(--gold-light);
+}
+
+/* ── Menu search bar ── */
+.menu-search-wrap {
+  max-width: 560px;
+  margin: 0 auto 40px;
+  padding-top: 72px;
+}
+
+.menu-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 40px;
+  padding: 0 18px;
+  gap: 10px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.menu-search-box:focus-within {
+  border-color: var(--gold-light);
+  background: rgba(255,255,255,0.09);
+}
+
+.menu-search-icon { color: rgba(255,255,255,0.4); flex-shrink: 0; }
+
+.menu-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 0.97rem;
+  padding: 14px 0;
+}
+
+.menu-search-input::placeholder { color: rgba(255,255,255,0.35); }
+
+.menu-search-input::-webkit-search-cancel-button { display: none; }
+
+.menu-search-clear {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+.menu-search-clear:hover { color: var(--white); }
+
+/* ── Search results ── */
+.menu-search-results {
+  max-width: 860px;
+  margin-inline: auto;
+  padding-bottom: 48px;
+}
+
+.menu-search-empty {
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.95rem;
+  padding: 56px 0;
+}
+
+.menu-search-item-cat {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: rgba(200,160,60,0.12);
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin-left: 8px;
+  vertical-align: middle;
 }
 
 /* ── Menu item rows (text only, no images) ── */

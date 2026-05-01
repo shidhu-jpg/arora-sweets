@@ -514,15 +514,20 @@ document.head.appendChild(style);
 
 /* ── Menu Category Navigation ── */
 (function () {
-  const landing     = document.getElementById('menuCatLanding');
-  const backRow     = document.getElementById('menuCatBackRow');
-  const backBtn     = document.getElementById('menuCatBackBtn');
-  const activeTitle = document.getElementById('menuCatActiveTitle');
-  const itemsDiv    = document.getElementById('menuCatItems');
-  const gupshupDiv  = document.getElementById('gupshupSection');
-  const catFooter   = document.getElementById('menuCatFooter');
+  const landing        = document.getElementById('menuCatLanding');
+  const backRow        = document.getElementById('menuCatBackRow');
+  const backBtn        = document.getElementById('menuCatBackBtn');
+  const activeTitle    = document.getElementById('menuCatActiveTitle');
+  const itemsDiv       = document.getElementById('menuCatItems');
+  const gupshupDiv     = document.getElementById('gupshupSection');
+  const catFooter      = document.getElementById('menuCatFooter');
+  const catSearchWrap  = document.getElementById('menuCatSearchWrap');
+  const catSearchInput = document.getElementById('menuCatSearchInput');
+  const catSearchClear = document.getElementById('menuCatSearchClear');
 
   if (!landing) return;
+
+  let currentCatKey = null;
 
   /* Count items per category from hidden data source */
   const dataCounts = {};
@@ -541,8 +546,14 @@ document.head.appendChild(style);
     landing.style.display  = '';
     backRow.style.display  = 'none';
     itemsDiv.style.display = 'none';
-    if (gupshupDiv) gupshupDiv.style.display = 'none';
-    if (catFooter) catFooter.style.display = 'none';
+    if (gupshupDiv)    gupshupDiv.style.display    = 'none';
+    if (catFooter)     catFooter.style.display     = 'none';
+    if (catSearchWrap) catSearchWrap.style.display = 'none';
+    if (catSearchInput) { catSearchInput.value = ''; }
+    if (catSearchClear) catSearchClear.style.display = 'none';
+    const globalSearchWrap = document.getElementById('menuSearchWrap');
+    if (globalSearchWrap) globalSearchWrap.style.display = '';
+    currentCatKey = null;
     window.scrollTo({ top: document.querySelector('.menu-section')?.offsetTop - 80 || 0, behavior: 'smooth' });
   }
 
@@ -552,59 +563,88 @@ document.head.appendChild(style);
     return m ? parseInt(m[0].replace(',', ''), 10) : 0;
   }
 
-  function renderItems(catKey) {
+  function buildItemRow(name, desc, price, badge) {
+    const row = document.createElement('div');
+    row.className = 'menu-item-row';
+    row.innerHTML = `
+      <div class="menu-item-info">
+        <div class="menu-item-name-row">
+          <h3 class="menu-item-name">${name}</h3>
+          ${badge ? `<span class="menu-item-badge">${badge}</span>` : ''}
+        </div>
+        <p class="menu-item-desc">${desc}</p>
+      </div>
+      <div class="menu-item-right">
+        <span class="menu-item-price">${price}</span>
+        <button class="menu-item-add-btn" data-name="${name}" data-price="${parsePrice(price)}">+ Add</button>
+      </div>`;
+    row.querySelector('.menu-item-add-btn').addEventListener('click', function () {
+      if (window._aroraCartAdd) window._aroraCartAdd(this.dataset.name, parseInt(this.dataset.price, 10), this);
+    });
+    return row;
+  }
+
+  function renderItems(catKey, query) {
     itemsDiv.innerHTML = '';
+    const q = (query || '').trim().toLowerCase();
     const cards = document.querySelectorAll(`#menuDataSource .menu-card[data-category="${catKey}"]`);
+    let count = 0;
     cards.forEach(card => {
-      const name  = card.querySelector('h3')?.textContent.trim()    || '';
-      const desc  = card.querySelector('p')?.textContent.trim()     || '';
+      const name  = card.querySelector('h3')?.textContent.trim()     || '';
+      const desc  = card.querySelector('p')?.textContent.trim()      || '';
       const price = card.querySelector('.price')?.textContent.trim() || '';
       const badge = card.querySelector('.menu-card-badge')?.textContent.trim() || '';
-
-      const row = document.createElement('div');
-      row.className = 'menu-item-row';
-      row.innerHTML = `
-        <div class="menu-item-info">
-          <div class="menu-item-name-row">
-            <h3 class="menu-item-name">${name}</h3>
-            ${badge ? `<span class="menu-item-badge">${badge}</span>` : ''}
-          </div>
-          <p class="menu-item-desc">${desc}</p>
-        </div>
-        <div class="menu-item-right">
-          <span class="menu-item-price">${price}</span>
-          <button class="menu-item-add-btn" data-name="${name}" data-price="${parsePrice(price)}">+ Add</button>
-        </div>`;
-      itemsDiv.appendChild(row);
+      if (q && !name.toLowerCase().includes(q) && !desc.toLowerCase().includes(q)) return;
+      itemsDiv.appendChild(buildItemRow(name, desc, price, badge));
+      count++;
     });
-
-    itemsDiv.querySelectorAll('.menu-item-add-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const name  = btn.dataset.name;
-        const price = parseInt(btn.dataset.price, 10);
-        if (window._aroraCartAdd) {
-          window._aroraCartAdd(name, price, btn);
-        }
-      });
-    });
+    if (q && count === 0) {
+      itemsDiv.innerHTML = `<p class="menu-search-empty">No items found for "<strong>${query}</strong>"</p>`;
+    }
   }
 
   function showCategory(catKey, catLabel) {
     landing.style.display = 'none';
     backRow.style.display = 'flex';
     activeTitle.textContent = catLabel;
+    currentCatKey = catKey;
+
+    const globalSearchWrap = document.getElementById('menuSearchWrap');
+    if (globalSearchWrap) globalSearchWrap.style.display = 'none';
+
+    if (catSearchInput) catSearchInput.value = '';
+    if (catSearchClear) catSearchClear.style.display = 'none';
 
     if (catKey === 'gupshup') {
       itemsDiv.style.display = 'none';
-      if (catFooter) catFooter.style.display = 'none';
-      if (gupshupDiv) gupshupDiv.style.display = 'block';
+      if (catFooter)     catFooter.style.display     = 'none';
+      if (catSearchWrap) catSearchWrap.style.display = 'none';
+      if (gupshupDiv)    gupshupDiv.style.display    = 'block';
     } else {
-      if (gupshupDiv) gupshupDiv.style.display = 'none';
+      if (gupshupDiv)    gupshupDiv.style.display    = 'none';
+      if (catSearchWrap) catSearchWrap.style.display = 'block';
       renderItems(catKey);
       itemsDiv.style.display = 'block';
       if (catFooter) catFooter.style.display = 'block';
     }
     window.scrollTo({ top: document.querySelector('.menu-section')?.offsetTop - 80 || 0, behavior: 'smooth' });
+  }
+
+  /* In-category search events */
+  if (catSearchInput) {
+    catSearchInput.addEventListener('input', () => {
+      const q = catSearchInput.value;
+      catSearchClear.style.display = q ? 'inline-block' : 'none';
+      if (currentCatKey) renderItems(currentCatKey, q);
+    });
+  }
+  if (catSearchClear) {
+    catSearchClear.addEventListener('click', () => {
+      catSearchInput.value = '';
+      catSearchClear.style.display = 'none';
+      if (currentCatKey) renderItems(currentCatKey);
+      catSearchInput.focus();
+    });
   }
 
   document.querySelectorAll('.menu-cat-card').forEach(card => {
@@ -668,6 +708,8 @@ document.head.appendChild(style);
     if (itemsDiv)   itemsDiv.style.display   = 'none';
     if (gupshupDiv) gupshupDiv.style.display = 'none';
     if (catFooter)  catFooter.style.display  = 'none';
+    const csw = document.getElementById('menuCatSearchWrap');
+    if (csw) csw.style.display = 'none';
     searchResults.style.display = 'block';
   }
 

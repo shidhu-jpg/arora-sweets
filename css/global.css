@@ -278,6 +278,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
   width: auto;
   display: block;
   object-fit: contain;
+  object-position: left top;
 }
 
 .nav-links {

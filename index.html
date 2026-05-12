@@ -78,7 +78,7 @@
     </a>
     <div class="hero-bg">
       <div class="vimeo-bg-wrapper">
-        <iframe src="https://player.vimeo.com/video/1188363709?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;background=1&amp;autoplay=1&amp;loop=1&amp;muted=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="homepagevideo"></iframe>
+        <video src="images/homepagevideo.mp4" autoplay loop muted playsinline></video>
       </div>
       <div class="hero-overlay"></div>
     </div>
@@ -435,7 +435,6 @@
     </svg>
   </button>
 
-  <script src="https://player.vimeo.com/api/player.js"></script>
   <script src="js/main.js"></script>
   <script>
     (function () {
@@ -457,11 +456,10 @@
         }, remaining);
       }
 
-      var vimeoIframe = document.querySelector('.vimeo-bg-wrapper iframe');
-      if (vimeoIframe && typeof Vimeo !== 'undefined') {
-        var player = new Vimeo.Player(vimeoIframe);
-        player.on('play', hideLoader);
-        player.ready().catch(hideLoader);
+      var bgVideo = document.querySelector('.vimeo-bg-wrapper video');
+      if (bgVideo) {
+        bgVideo.addEventListener('playing', hideLoader, { once: true });
+        bgVideo.addEventListener('error', hideLoader, { once: true });
       } else {
         window.addEventListener('load', hideLoader);
       }

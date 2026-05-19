@@ -259,7 +259,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 .nav-logo:hover { color: var(--gold-light); }
 .nav-logo-img {
-  height: 54px;
+  height: 70px;
   width: auto;
   display: block;
   object-fit: contain;

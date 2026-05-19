@@ -18,7 +18,7 @@
   --white-10: rgba(26,42,21,0.1);
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, sans-serif;
-  --nav-h: 80px;
+  --nav-h: 100px;
   --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -259,7 +259,7 @@ body { animation: pageFadeIn 0.5s ease forwards; }
 }
 .nav-logo:hover { color: var(--gold-light); }
 .nav-logo-img {
-  height: 70px;
+  height: 92px;
   width: auto;
   display: block;
   object-fit: contain;

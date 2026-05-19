@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Arora Sweets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <style>
+    /* ── Setup banner ── */
+    .setup-banner {
+      background: #fff8e8; border: 1.5px solid #C9973B; border-radius: 10px;
+      padding: 20px 24px; margin-bottom: 24px;
+    }
+    .setup-banner h3 { font-size: 15px; font-weight: 700; color: #6a4810; margin-bottom: 10px; }
+    .setup-banner ol { padding-left: 18px; color: #5a3800; font-size: 13px; line-height: 1.9; }
+    .setup-banner code {
+      background: #f5e8cc; border-radius: 4px; padding: 1px 6px;
+      font-family: monospace; font-size: 12px; color: #5a3800;
+    }
+    .setup-banner a { color: #2a7a2a; font-weight: 600; }
+    .setup-warn { background: #fdf0ef; border: 1.5px solid #e8c8c5; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; color: #8b2020; font-size: 13px; }
+  </style>
+</head>
+<body>
+
+<!-- ── Login Screen ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Arora Sweets</div>
+    <p class="login-subtitle">Owner Portal</p>
+    <form id="loginForm">
+      <div class="login-field">
+        <input type="password" id="passwordInput" placeholder="Enter admin password" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="login-btn">Sign In</button>
+      <p class="login-error" id="loginError"></p>
+    </form>
+  </div>
+</div>
+
+<!-- ── Admin Panel ── -->
+<div id="adminPanel" style="display:none">
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <span class="admin-logo">Arora Sweets</span>
+      <span class="admin-badge">Admin</span>
+    </div>
+    <div class="admin-header-right">
+      <button class="btn btn-outline" id="exportBtn">Export JSON</button>
+      <button class="btn btn-outline" id="importBtn">Import JSON</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" />
+      <button class="btn btn-danger" id="resetAllBtn">Reset All Prices</button>
+      <button class="btn btn-outline" id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <div class="admin-toolbar">
+      <h2>Price Management</h2>
+      <div class="toolbar-right">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search items…" />
+        <button class="btn btn-save" id="saveAllBtn">Save Changes</button>
+      </div>
+    </div>
+
+    <!-- Firebase setup guide (shown when dbUrl is not configured) -->
+    <div class="setup-banner" id="setupBanner" style="display:none">
+      <h3>Firebase Setup Required — prices won't sync across devices until this is done</h3>
+      <ol>
+        <li>Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> and click <strong>Add project</strong></li>
+        <li>Enter any project name (e.g. <code>arora-sweets</code>), click through and create the project</li>
+        <li>In the left sidebar click <strong>Build → Realtime Database → Create Database</strong></li>
+        <li>Choose any location and select <strong>Start in test mode</strong> → Enable</li>
+        <li>Copy the Database URL shown at the top (looks like <code>https://arora-sweets-default-rtdb.firebaseio.com</code>)</li>
+        <li>Go to <strong>Project Settings (gear icon) → Service Accounts → Database Secrets</strong> → click <strong>Show</strong> → copy the secret</li>
+        <li>Open the file <code>js/firebase-config.js</code> and paste the URL into <code>dbUrl</code> and the secret into <code>secret</code></li>
+        <li>Save the file, deploy/upload your site, then refresh this page</li>
+      </ol>
+    </div>
+
+    <div class="setup-warn" id="firebaseWarn" style="display:none">
+      Firebase is not configured — changes will only be saved in this browser.
+      Follow the setup steps above to enable cross-device sync.
+    </div>
+
+    <div class="stats-bar" id="statsBar"></div>
+    <div id="itemsContainer"><p class="no-results">Loading menu…</p></div>
+  </div>
+
+  <div class="save-banner" id="saveBanner">
+    <span id="saveBannerText">You have unsaved changes</span>
+    <button id="saveBannerBtn">Save Now</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script>
+(function () {
+  /* ── Config ── */
+  var ADMIN_PASSWORD = 'AroraAdmin2024';
+  var SESSION_KEY    = 'aroraAdminSession';
+  var CACHE_KEY      = 'aroraPriceOverrides';
+  var fb             = (typeof ARORA_FB !== 'undefined') ? ARORA_FB : {};
+
+  var CAT_LABELS = {
+    breakfast: 'Breakfast', chaat: 'Chaat', starters: 'Starters',
+    'south-indian': 'South Indian', 'continental-snacks': 'Continental Snacks',
+    pizza: 'Pizza', laddu: 'Laddu', 'kaju-sweets': 'Kaju Sweets',
+    'khoa-sweets': 'Khoa Sweets', 'besan-sweets': 'Besan Sweets',
+    'nariyal-sweets': 'Nariyal Sweets', 'chena-sweets': 'Chena Sweets',
+    mains: 'Mains', beverages: 'Beverages', bread: 'Bread',
+    'featured-home': 'Featured (Homepage)'
+  };
+
+  var CAT_ORDER = [
+    'featured-home','breakfast','chaat','starters','south-indian',
+    'continental-snacks','pizza','mains','bread','beverages',
+    'laddu','kaju-sweets','khoa-sweets','besan-sweets','nariyal-sweets','chena-sweets'
+  ];
+
+  var pendingChanges = {};
+
+  /* ── Auth ── */
+  function isLoggedIn() { return sessionStorage.getItem(SESSION_KEY) === '1'; }
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      showAdmin();
+    } else {
+      document.getElementById('loginError').textContent = 'Incorrect password.';
+      document.getElementById('passwordInput').value = '';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+
+  /* ── Firebase helpers ── */
+  function fbConfigured() { return !!(fb.dbUrl && fb.dbUrl.trim()); }
+
+  function fbReadUrl()  { return fb.dbUrl.replace(/\/$/, '') + '/prices.json'; }
+  function fbWriteUrl() {
+    var url = fb.dbUrl.replace(/\/$/, '') + '/prices.json';
+    if (fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
+    return url;
+  }
+
+  async function fetchFromFirebase() {
+    var r    = await fetch(fbReadUrl());
+    var data = await r.json();
+    return (data && typeof data === 'object') ? data : {};
+  }
+
+  async function saveToFirebase(data) {
+    var r = await fetch(fbWriteUrl(), {
+      method:  'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(data)
+    });
+    if (!r.ok) throw new Error('Firebase write failed: ' + r.status);
+  }
+
+  /* ── LocalStorage cache (fallback when offline) ── */
+  function loadCache() {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch (e) { return {}; }
+  }
+
+  function updateCache(data) {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  }
+
+  /* ── Price helpers ── */
+  function parsePriceStr(str) {
+    var m = (str || '').trim().match(/₹\s*([\d,]+)\s*(.*)/);
+    if (!m) return { numeric: 0, unit: '' };
+    return { numeric: parseInt(m[1].replace(/,/g, ''), 10), unit: m[2].trim() };
+  }
+
+  function buildDisplay(numeric, unit) {
+    return unit ? '₹ ' + numeric + ' ' + unit : '₹ ' + numeric;
+  }
+
+  /* ── Fetch menu items from menu.html + index.html ── */
+  async function fetchMenuItems() {
+    var items  = [];
+    var parser = new DOMParser();
+
+    var menuResp = await fetch('menu.html');
+    var menuDoc  = parser.parseFromString(await menuResp.text(), 'text/html');
+    menuDoc.querySelectorAll('#menuDataSource .menu-card').forEach(function (card) {
+      var name  = card.querySelector('h3')?.textContent.trim()         || '';
+      var desc  = card.querySelector('p')?.textContent.trim()          || '';
+      var price = card.querySelector('.price')?.textContent.trim()     || '';
+      var cat   = card.dataset.category                                || '';
+      var badge = card.querySelector('.menu-card-badge')?.textContent.trim() || '';
+      if (name) items.push({ name, desc, priceStr: price, cat, badge });
+    });
+
+    var idxResp = await fetch('index.html');
+    var idxDoc  = parser.parseFromString(await idxResp.text(), 'text/html');
+    idxDoc.querySelectorAll('.sweet-card').forEach(function (card) {
+      var name  = card.querySelector('h3')?.textContent.trim()     || '';
+      var desc  = card.querySelector('p')?.textContent.trim()      || '';
+      var price = card.querySelector('.price')?.textContent.trim() || '';
+      if (name) items.push({ name, desc, priceStr: price, cat: 'featured-home', badge: '' });
+    });
+
+    return items;
+  }
+
+  /* ── Build UI ── */
+  function buildUI(items, overrides) {
+    var catMap = {};
+    items.forEach(function (item) {
+      if (!catMap[item.cat]) catMap[item.cat] = [];
+      catMap[item.cat].push(item);
+    });
+
+    var orderedCats = CAT_ORDER.filter(function (k) { return catMap[k]; });
+    Object.keys(catMap).forEach(function (k) { if (!orderedCats.includes(k)) orderedCats.push(k); });
+
+    var container = document.getElementById('itemsContainer');
+    container.innerHTML = '';
+
+    orderedCats.forEach(function (cat) {
+      var catItems = catMap[cat];
+      var label    = CAT_LABELS[cat] || cat;
+      var modCount = catItems.filter(function (i) { return overrides[i.name]; }).length;
+
+      var section = document.createElement('div');
+      section.className  = 'cat-section';
+      section.dataset.cat = cat;
+      section.innerHTML =
+        '<div class="cat-header">' +
+          '<span class="cat-chevron">▾</span>' +
+          '<span class="cat-title">' + label + '</span>' +
+          '<span class="cat-count">' + catItems.length + ' items</span>' +
+          (modCount ? '<span class="cat-mod-count">' + modCount + ' modified</span>' : '') +
+        '</div>' +
+        '<div class="cat-body"></div>';
+
+      var body = section.querySelector('.cat-body');
+
+      catItems.forEach(function (item) {
+        var ov     = overrides[item.name];
+        var parsed = parsePriceStr(item.priceStr);
+        var curNum = ov ? ov.numeric : parsed.numeric;
+
+        var row = document.createElement('div');
+        row.className    = 'item-row' + (ov ? ' modified' : '');
+        row.dataset.name = item.name;
+        row.dataset.unit = parsed.unit;
+        row.dataset.def  = parsed.numeric;
+
+        row.innerHTML =
+          '<div class="item-info">' +
+            '<div class="item-name">' + esc(item.name) +
+              (item.badge ? '<span class="item-badge">' + esc(item.badge) + '</span>' : '') +
+            '</div>' +
+            '<div class="item-desc">' + esc(item.desc) + '</div>' +
+          '</div>' +
+          '<div class="item-price-ctrl">' +
+            '<span class="price-prefix">₹</span>' +
+            '<input class="price-input" type="number" min="0" step="1" value="' + curNum + '" />' +
+            (parsed.unit ? '<span class="price-unit">' + esc(parsed.unit) + '</span>' : '<span class="price-unit"></span>') +
+            (ov ? '<button class="reset-item-btn" title="Reset to ₹' + parsed.numeric + '">↺</button>'
+                : '<span class="reset-item-spacer"></span>') +
+          '</div>';
+
+        wireRow(row, item.name, parsed.numeric, parsed.unit);
+        body.appendChild(row);
+      });
+
+      section.querySelector('.cat-header').addEventListener('click', function () {
+        section.classList.toggle('collapsed');
+      });
+
+      container.appendChild(section);
+    });
+
+    updateStats(items, overrides);
+  }
+
+  function wireRow(row, name, defNum, unit) {
+    row.querySelector('.price-input').addEventListener('input', function () {
+      var val = parseInt(this.value, 10);
+      if (isNaN(val) || val < 0) return;
+      if (val === defNum) {
+        delete pendingChanges[name];
+        row.classList.remove('modified');
+        var rb = row.querySelector('.reset-item-btn');
+        if (rb) rb.outerHTML = '<span class="reset-item-spacer"></span>';
+      } else {
+        pendingChanges[name] = { numeric: val, display: buildDisplay(val, unit) };
+        row.classList.add('modified');
+        if (!row.querySelector('.reset-item-btn')) {
+          var sp = row.querySelector('.reset-item-spacer');
+          if (sp) {
+            sp.outerHTML = '<button class="reset-item-btn" title="Reset to ₹' + defNum + '">↺</button>';
+            row.querySelector('.reset-item-btn').addEventListener('click', function () {
+              row.querySelector('.price-input').value = defNum;
+              delete pendingChanges[name];
+              row.classList.remove('modified');
+              this.outerHTML = '<span class="reset-item-spacer"></span>';
+              updateBanner();
+            });
+          }
+        }
+      }
+      updateBanner();
+    });
+
+    var resetBtn = row.querySelector('.reset-item-btn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        row.querySelector('.price-input').value = defNum;
+        delete pendingChanges[name];
+        row.classList.remove('modified');
+        this.outerHTML = '<span class="reset-item-spacer"></span>';
+        updateBanner();
+      });
+    }
+  }
+
+  /* ── Stats ── */
+  function updateStats(items, overrides) {
+    var allMod = new Set([...Object.keys(overrides), ...Object.keys(pendingChanges)]);
+    var bar    = document.getElementById('statsBar');
+    bar.innerHTML =
+      '<div class="stat-chip"><strong>' + items.length + '</strong> total items</div>' +
+      (allMod.size ? '<div class="stat-chip mod"><strong>' + allMod.size + '</strong> prices modified</div>' : '');
+  }
+
+  /* ── Save ── */
+  document.getElementById('saveAllBtn').addEventListener('click', saveAll);
+  document.getElementById('saveBannerBtn').addEventListener('click', saveAll);
+
+  async function saveAll() {
+    var overrides = loadCache();
+    Object.assign(overrides, pendingChanges);
+
+    /* Remove any rows that were reset back to default */
+    document.querySelectorAll('.item-row').forEach(function (row) {
+      var name = row.dataset.name;
+      var val  = parseInt(row.querySelector('.price-input').value, 10);
+      var def  = parseInt(row.dataset.def, 10);
+      if (!isNaN(val) && val === def) delete overrides[name];
+    });
+
+    /* Write to Firebase if configured, otherwise only cache locally */
+    if (fbConfigured()) {
+      try {
+        if (Object.keys(overrides).length === 0) {
+          /* Firebase doesn't store empty objects cleanly — delete the node */
+          await fetch(fbWriteUrl(), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
+        } else {
+          await saveToFirebase(overrides);
+        }
+        showToast('Prices saved and synced!', 'success');
+      } catch (err) {
+        showToast('Firebase error — saved locally only. Check your internet connection.');
+      }
+    } else {
+      showToast('Saved locally (Firebase not set up — won\'t sync to other devices).');
+    }
+
+    updateCache(overrides);
+    pendingChanges = {};
+    updateBanner();
+
+    /* Refresh visual indicators */
+    document.querySelectorAll('.item-row').forEach(function (row) {
+      row.classList.toggle('modified', !!overrides[row.dataset.name]);
+    });
+    refreshCatModCounts();
+  }
+
+  /* ── Reset All ── */
+  document.getElementById('resetAllBtn').addEventListener('click', async function () {
+    if (!confirm('Reset ALL prices to default? This cannot be undone.')) return;
+
+    if (fbConfigured()) {
+      try {
+        await fetch(fbWriteUrl(), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
+      } catch (e) {
+        showToast('Firebase error — could not reset remotely.');
+        return;
+      }
+    }
+
+    localStorage.removeItem(CACHE_KEY);
+    pendingChanges = {};
+    updateBanner();
+    showToast('All prices reset to default.', 'success');
+    init();
+  });
+
+  /* ── Banner ── */
+  function updateBanner() {
+    var count  = Object.keys(pendingChanges).length;
+    var banner = document.getElementById('saveBanner');
+    document.getElementById('saveBannerText').textContent =
+      count + ' unsaved change' + (count !== 1 ? 's' : '');
+    banner.classList.toggle('visible', count > 0);
+  }
+
+  /* ── Search ── */
+  document.getElementById('searchInput').addEventListener('input', function () {
+    var q = this.value.toLowerCase().trim();
+    document.querySelectorAll('.item-row').forEach(function (row) {
+      row.classList.toggle('hidden', !!q && !row.dataset.name.toLowerCase().includes(q));
+    });
+    document.querySelectorAll('.cat-section').forEach(function (sec) {
+      sec.style.display = sec.querySelectorAll('.item-row:not(.hidden)').length ? '' : 'none';
+    });
+  });
+
+  /* ── Export ── */
+  document.getElementById('exportBtn').addEventListener('click', function () {
+    var data = loadCache();
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var a    = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    a.download = 'arora-prices-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  /* ── Import ── */
+  document.getElementById('importBtn').addEventListener('click', function () {
+    document.getElementById('importFile').click();
+  });
+
+  document.getElementById('importFile').addEventListener('change', function () {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = async function (e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
+        if (fbConfigured()) await saveToFirebase(data);
+        updateCache(data);
+        pendingChanges = {};
+        showToast('Prices imported and saved!', 'success');
+        init();
+      } catch (err) {
+        showToast('Invalid file — could not import.');
+      }
+    };
+    reader.readAsText(file);
+    this.value = '';
+  });
+
+  /* ── Helpers ── */
+  function refreshCatModCounts() {
+    document.querySelectorAll('.cat-section').forEach(function (sec) {
+      var n   = sec.querySelectorAll('.item-row.modified').length;
+      var old = sec.querySelector('.cat-mod-count');
+      if (n && !old) {
+        sec.querySelector('.cat-count').insertAdjacentHTML('afterend',
+          '<span class="cat-mod-count">' + n + ' modified</span>');
+      } else if (!n && old) {
+        old.remove();
+      } else if (n && old) {
+        old.textContent = n + ' modified';
+      }
+    });
+  }
+
+  var toastTimer;
+  function showToast(msg, type) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className   = 'toast' + (type ? ' ' + type : '');
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('show'); }, 3000);
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── Init ── */
+  async function init() {
+    document.getElementById('itemsContainer').innerHTML = '<p class="no-results">Loading menu…</p>';
+
+    /* Show / hide Firebase status elements */
+    document.getElementById('setupBanner').style.display = fbConfigured() ? 'none' : 'block';
+    document.getElementById('firebaseWarn').style.display = fbConfigured() ? 'none' : 'block';
+
+    var overrides = {};
+    if (fbConfigured()) {
+      try {
+        overrides = await fetchFromFirebase();
+        updateCache(overrides); /* keep localStorage in sync */
+      } catch (e) {
+        /* Offline — fall back to local cache */
+        overrides = loadCache();
+        showToast('Could not reach Firebase — showing cached prices.');
+      }
+    } else {
+      overrides = loadCache();
+    }
+
+    try {
+      var items = await fetchMenuItems();
+      buildUI(items, overrides);
+    } catch (err) {
+      document.getElementById('itemsContainer').innerHTML =
+        '<p class="no-results">Could not load menu. The site must be served over HTTP (not opened as a local file).</p>';
+    }
+  }
+
+  function showAdmin() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display  = 'block';
+    init();
+  }
+
+  if (isLoggedIn()) showAdmin();
+}());
+</script>
+</body>
+</html>

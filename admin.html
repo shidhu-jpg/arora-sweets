@@ -266,7 +266,7 @@
   }
 
   function buildDisplay(numeric, unit) {
-    return unit ? '₹ ' + numeric + ' ' + unit : '₹ ' + numeric;
+    return '₹ ' + numeric + (unit ? ' ' + unit : ' per piece');
   }
 
   /* ── Fetch menu items ── */

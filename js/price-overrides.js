@@ -14,20 +14,30 @@
     return data;
   }
 
+  function buildDisplay(numeric, unit) {
+    return '₹ ' + numeric + (unit ? ' ' + unit : ' per piece');
+  }
+
   /* Patch all .price spans in menu and homepage cards */
   function applyToDom(data) {
     var prices = getPrices(data);
+    var units  = (data && data.units && typeof data.units === 'object') ? data.units : {};
     if (!Object.keys(prices).length) return;
 
     function patch(els) {
       els.forEach(function (el) {
         var nameEl = el.querySelector('h3');
         if (!nameEl) return;
-        var ov = prices[nameEl.textContent.trim()];
-        if (ov && ov.display) {
-          var priceEl = el.querySelector('.price');
-          if (priceEl) priceEl.textContent = ov.display;
-        }
+        var name = nameEl.textContent.trim();
+        var ov   = prices[name];
+        if (!ov || ov.numeric === undefined) return;
+        var priceEl = el.querySelector('.price');
+        if (!priceEl) return;
+        /* Rebuild display from numeric + units so "per piece" appears correctly */
+        var unit = units.hasOwnProperty(name) ? units[name] : null;
+        priceEl.textContent = unit !== null
+          ? buildDisplay(ov.numeric, unit)
+          : (ov.display || ('₹ ' + ov.numeric));
       });
     }
     patch(document.querySelectorAll('#menuDataSource .menu-card'));
@@ -39,6 +49,7 @@
      data arrives later we recreate the buttons with the fresh price. */
   function repatchHomepageButtons(data) {
     var prices = getPrices(data);
+    var units  = (data && data.units && typeof data.units === 'object') ? data.units : {};
     document.querySelectorAll('.sweet-card').forEach(function (card) {
       var nameEl = card.querySelector('h3');
       if (!nameEl) return;
@@ -47,7 +58,12 @@
       if (!ov || !window._aroraCartAdd) return;
 
       var priceEl = card.querySelector('.price');
-      if (priceEl) priceEl.textContent = ov.display;
+      if (priceEl) {
+        var unit = units.hasOwnProperty(name) ? units[name] : null;
+        priceEl.textContent = unit !== null
+          ? buildDisplay(ov.numeric, unit)
+          : (ov.display || ('₹ ' + ov.numeric));
+      }
 
       var oldBtn = card.querySelector('.menu-add-btn');
       if (!oldBtn) return;
@@ -88,14 +104,7 @@
       localStorage.removeItem(OLD_KEY); /* clean up old key */
 
       /* Patch hidden menuDataSource (menu page reads from here on category click) */
-      var prices = getPrices(fresh);
-      document.querySelectorAll('#menuDataSource .menu-card').forEach(function (card) {
-        var nameEl  = card.querySelector('h3');
-        var priceEl = card.querySelector('.price');
-        if (!nameEl || !priceEl) return;
-        var ov = prices[nameEl.textContent.trim()];
-        if (ov && ov.display) priceEl.textContent = ov.display;
-      });
+      applyToDom(fresh);
 
       /* Re-patch homepage buttons with fresh data (main.js has already run by now) */
       repatchHomepageButtons(fresh);

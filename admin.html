@@ -369,8 +369,11 @@
 
     var defNum  = parsed.numeric;
     var defUnit = parsed.unit;
-    var curNum  = pend.numeric !== undefined ? pend.numeric  : (ovPrice ? ovPrice.numeric : defNum);
-    var curUnit = pend.unit    !== undefined ? pend.unit     : (ovUnit !== null ? ovUnit : defUnit);
+    /* fbNum/fbUnit = the latest saved price (Firebase or HTML default) — used as markDirty baseline */
+    var fbNum   = ovPrice ? ovPrice.numeric : defNum;
+    var fbUnit  = ovUnit !== null ? ovUnit : defUnit;
+    var curNum  = pend.numeric !== undefined ? pend.numeric : fbNum;
+    var curUnit = pend.unit    !== undefined ? pend.unit    : fbUnit;
     var curName = pend.newName || ovName || item.name;
 
     var isMod = !!(ovPrice || ovUnit !== null || ovName || Object.keys(pend).length);
@@ -404,11 +407,11 @@
         '<button class="delete-item-btn" title="Remove item">🗑</button>' +
       '</div>';
 
-    wireRow(row, item.name, defNum, defUnit, !!item.isCustom, !!item.isPending, item.pendingId);
+    wireRow(row, item.name, defNum, defUnit, fbNum, fbUnit, !!item.isCustom, !!item.isPending, item.pendingId);
     return row;
   }
 
-  function wireRow(row, name, defNum, defUnit, isCustom, isPending, pendingId) {
+  function wireRow(row, name, defNum, defUnit, fbNum, fbUnit, isCustom, isPending, pendingId) {
     var priceInput = row.querySelector('.price-input');
     var unitSel    = row.querySelector('.unit-select');
 
@@ -418,8 +421,9 @@
       var nd   = row.querySelector('.name-display');
       var displayName = nd ? nd.textContent.trim() : name;
 
-      var priceChanged = !isNaN(val) && val !== defNum;
-      var unitChanged  = unit !== defUnit;
+      /* Compare against Firebase-saved price (fbNum/fbUnit), not hardcoded HTML default */
+      var priceChanged = !isNaN(val) && val !== fbNum;
+      var unitChanged  = unit !== fbUnit;
       var nameChanged  = displayName !== name;
 
       if (priceChanged || unitChanged || nameChanged) {
@@ -442,8 +446,9 @@
     wireEditName(row.querySelector('.item-name'), name, markDirty);
 
     row.querySelector('.reset-item-btn').addEventListener('click', function () {
-      priceInput.value = defNum;
-      unitSel.value    = defUnit;
+      /* Reset to the Firebase-saved price (fbNum/fbUnit), not the hardcoded HTML default */
+      priceInput.value = fbNum;
+      unitSel.value    = fbUnit;
       var nd = row.querySelector('.name-display');
       if (nd) nd.textContent = name;
       delete pendingChanges[name];
@@ -533,7 +538,18 @@
   document.getElementById('saveBannerBtn').addEventListener('click', saveAll);
 
   async function saveAll() {
-    var data = loadData();
+    var data;
+    if (fbConfigured()) {
+      try {
+        data = await fetchFromFirebase();
+        saveDataLocal(data);
+      } catch (e) {
+        data = loadData();
+        showToast('Warning: could not fetch latest Firebase data before saving.');
+      }
+    } else {
+      data = loadData();
+    }
 
     Object.keys(pendingChanges).forEach(function (itemName) {
       var ch = pendingChanges[itemName];

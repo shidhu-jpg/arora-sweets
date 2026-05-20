@@ -247,7 +247,12 @@
 
   function loadData() {
     try {
-      return Object.assign(emptyData(), JSON.parse(localStorage.getItem(DATA_KEY) || '{}'));
+      var raw = JSON.parse(localStorage.getItem(DATA_KEY) || '{}');
+      /* Migrate old flat format { itemName: {numeric,display} } → new nested format */
+      if (raw && !raw.prices && !raw.units && !raw.deleted && !raw.custom) {
+        return Object.assign(emptyData(), { prices: raw });
+      }
+      return Object.assign(emptyData(), raw);
     } catch (e) { return emptyData(); }
   }
 
@@ -627,6 +632,10 @@
       try {
         var d = JSON.parse(e.target.result);
         if (typeof d !== 'object' || Array.isArray(d)) throw new Error();
+        /* Migrate old flat format { itemName: {numeric,display} } → nested */
+        if (!d.prices && !d.units && !d.deleted && !d.custom) {
+          d = Object.assign(emptyData(), { prices: d });
+        }
         if (fbConfigured()) await saveToFirebase(d);
         saveDataLocal(d); pendingChanges = {}; pendingNewItems = [];
         showToast('Imported and saved!', 'success'); init();

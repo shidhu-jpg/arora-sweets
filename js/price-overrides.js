@@ -1,23 +1,30 @@
 /* Price overrides — patches .price spans from Firebase (with localStorage cache)
    Runs before main.js so the menu JS picks up updated prices. */
 (function () {
-  var CACHE_KEY = 'aroraPriceOverrides';
-  var config    = (typeof ARORA_FB !== 'undefined') ? ARORA_FB : {};
+  var DATA_KEY = 'aroraAdminData';
+  var OLD_KEY  = 'aroraPriceOverrides'; /* backward-compat with pre-admin-rewrite cache */
+  var config   = (typeof ARORA_FB !== 'undefined') ? ARORA_FB : {};
 
-  function parseNum(str) {
-    var m = (str || '').match(/[\d,]+/);
-    return m ? parseInt(m[0].replace(/,/g, ''), 10) : 0;
+  /* Extract the prices map from either old flat or new nested format */
+  function getPrices(data) {
+    if (!data || typeof data !== 'object') return {};
+    /* New format: { prices: { name: { display, numeric } }, units: {}, ... } */
+    if (data.prices && typeof data.prices === 'object') return data.prices;
+    /* Old flat format: { name: { display, numeric } } */
+    return data;
   }
 
-  /* Patch .price spans in both the hidden menu source and homepage cards */
-  function applyToDom(overrides) {
-    if (!overrides || !Object.keys(overrides).length) return;
+  /* Patch all .price spans in menu and homepage cards */
+  function applyToDom(data) {
+    var prices = getPrices(data);
+    if (!Object.keys(prices).length) return;
+
     function patch(els) {
       els.forEach(function (el) {
         var nameEl = el.querySelector('h3');
         if (!nameEl) return;
-        var ov = overrides[nameEl.textContent.trim()];
-        if (ov) {
+        var ov = prices[nameEl.textContent.trim()];
+        if (ov && ov.display) {
           var priceEl = el.querySelector('.price');
           if (priceEl) priceEl.textContent = ov.display;
         }
@@ -30,12 +37,13 @@
   /* Re-wire homepage "Add" buttons after async Firebase update.
      main.js captures price in a closure at run-time, so if Firebase
      data arrives later we recreate the buttons with the fresh price. */
-  function repatchHomepageButtons(overrides) {
+  function repatchHomepageButtons(data) {
+    var prices = getPrices(data);
     document.querySelectorAll('.sweet-card').forEach(function (card) {
       var nameEl = card.querySelector('h3');
       if (!nameEl) return;
       var name = nameEl.textContent.trim();
-      var ov   = overrides[name];
+      var ov   = prices[name];
       if (!ov || !window._aroraCartAdd) return;
 
       var priceEl = card.querySelector('.price');
@@ -47,9 +55,7 @@
       newBtn.className   = 'menu-add-btn';
       newBtn.textContent = '+ Add';
       (function (n, p) {
-        newBtn.addEventListener('click', function () {
-          window._aroraCartAdd(n, p, newBtn);
-        });
+        newBtn.addEventListener('click', function () { window._aroraCartAdd(n, p, newBtn); });
       }(name, ov.numeric));
       oldBtn.parentNode.replaceChild(newBtn, oldBtn);
     });
@@ -57,30 +63,38 @@
 
   /* ── Step 1: apply cached prices immediately (zero delay) ── */
   var cached = {};
-  try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch (e) {}
+  try {
+    var raw = localStorage.getItem(DATA_KEY) || localStorage.getItem(OLD_KEY);
+    if (raw) cached = JSON.parse(raw);
+  } catch (e) {}
   applyToDom(cached);
 
   /* ── Step 2: fetch fresh prices from Firebase ── */
-  if (!config.dbUrl) return; // Firebase not configured yet
+  if (!config.dbUrl) return;
 
-  fetch(config.dbUrl.replace(/\/$/, '') + '/prices.json')
+  var authSuffix = config.secret ? '?auth=' + encodeURIComponent(config.secret) : '';
+  fetch(config.dbUrl.replace(/\/$/, '') + '/prices.json' + authSuffix)
     .then(function (r) { return r.json(); })
     .then(function (fresh) {
       if (!fresh || typeof fresh !== 'object') {
-        /* No prices saved in Firebase yet — clear stale cache */
-        localStorage.removeItem(CACHE_KEY);
+        /* Nothing saved yet — clear stale caches */
+        localStorage.removeItem(DATA_KEY);
+        localStorage.removeItem(OLD_KEY);
         return;
       }
-      /* Update local cache so next page load is instant */
-      localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
+
+      /* Cache under new key so next page load is instant */
+      localStorage.setItem(DATA_KEY, JSON.stringify(fresh));
+      localStorage.removeItem(OLD_KEY); /* clean up old key */
 
       /* Patch hidden menuDataSource (menu page reads from here on category click) */
+      var prices = getPrices(fresh);
       document.querySelectorAll('#menuDataSource .menu-card').forEach(function (card) {
-        var nameEl   = card.querySelector('h3');
-        var priceEl  = card.querySelector('.price');
+        var nameEl  = card.querySelector('h3');
+        var priceEl = card.querySelector('.price');
         if (!nameEl || !priceEl) return;
-        var ov = fresh[nameEl.textContent.trim()];
-        if (ov) priceEl.textContent = ov.display;
+        var ov = prices[nameEl.textContent.trim()];
+        if (ov && ov.display) priceEl.textContent = ov.display;
       });
 
       /* Re-patch homepage buttons with fresh data (main.js has already run by now) */

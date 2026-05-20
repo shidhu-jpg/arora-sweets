@@ -216,13 +216,14 @@
   function fbConfigured() { return !!(fb.dbUrl && fb.dbUrl.trim()); }
 
   function fbUrl(write) {
-    var url = fb.dbUrl.replace(/\/$/, '') + '/data.json';
-    if (write && fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
+    var url = fb.dbUrl.replace(/\/$/, '') + '/prices.json';
+    if (fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
     return url;
   }
 
   async function fetchFromFirebase() {
     var r = await fetch(fbUrl(false));
+    if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
     var d = await r.json();
     if (d && typeof d === 'object' && !Array.isArray(d)) {
       if (d.prices || d.units || d.deleted || d.custom) return Object.assign(emptyData(), d);

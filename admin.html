@@ -62,6 +62,7 @@
       <h2>Price Management</h2>
       <div class="toolbar-right">
         <input type="text" class="search-input" id="searchInput" placeholder="Search items…" />
+        <button class="btn btn-gold" id="addItemBtn">+ Add Item</button>
         <button class="btn btn-save" id="saveAllBtn">Save Changes</button>
       </div>
     </div>
@@ -98,13 +99,72 @@
   <div class="toast" id="toast"></div>
 </div>
 
+<!-- ── Add Item Modal ── -->
+<div id="addItemModal" class="modal-overlay" style="display:none">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add New Item</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field">
+        <label>Item Name</label>
+        <input type="text" id="newItemName" placeholder="e.g. Andrus Gulla" autocomplete="off" />
+      </div>
+      <div class="modal-field">
+        <label>Category</label>
+        <select id="newItemCat">
+          <option value="laddu">Laddu</option>
+          <option value="kaju-sweets">Kaju Sweets</option>
+          <option value="khoa-sweets">Khoa Sweets</option>
+          <option value="besan-sweets">Besan Sweets</option>
+          <option value="nariyal-sweets">Nariyal Sweets</option>
+          <option value="chena-sweets">Chena Sweets</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="chaat">Chaat</option>
+          <option value="starters">Starters</option>
+          <option value="south-indian">South Indian</option>
+          <option value="continental-snacks">Continental Snacks</option>
+          <option value="pizza">Pizza</option>
+          <option value="mains">Mains</option>
+          <option value="bread">Bread</option>
+          <option value="beverages">Beverages</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Description</label>
+        <input type="text" id="newItemDesc" placeholder="Brief description" autocomplete="off" />
+      </div>
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Price (₹)</label>
+          <input type="number" id="newItemPrice" min="0" step="1" placeholder="0" />
+        </div>
+        <div class="modal-field">
+          <label>Unit</label>
+          <select id="newItemUnit">
+            <option value="">per piece</option>
+            <option value="/ kg">/ kg</option>
+            <option value="/ 500g">/ 500g</option>
+            <option value="per dozen">per dozen</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancel">Cancel</button>
+      <button class="btn btn-primary" id="modalAdd">Add Item</button>
+    </div>
+  </div>
+</div>
+
 <script src="js/firebase-config.js"></script>
 <script>
 (function () {
   /* ── Config ── */
   var ADMIN_PASSWORD = 'AroraAdmin2024';
   var SESSION_KEY    = 'aroraAdminSession';
-  var CACHE_KEY      = 'aroraPriceOverrides';
+  var DATA_KEY       = 'aroraAdminData';
   var fb             = (typeof ARORA_FB !== 'undefined') ? ARORA_FB : {};
 
   var CAT_LABELS = {
@@ -123,7 +183,15 @@
     'laddu','kaju-sweets','khoa-sweets','besan-sweets','nariyal-sweets','chena-sweets'
   ];
 
-  var pendingChanges = {};
+  var UNIT_OPTIONS = [
+    { value: '',          label: 'per piece' },
+    { value: '/ kg',      label: '/ kg'      },
+    { value: '/ 500g',    label: '/ 500g'    },
+    { value: 'per dozen', label: 'per dozen' }
+  ];
+
+  var pendingChanges  = {}; /* { name: { numeric?, unit?, newName?, deleted?, isCustom? } } */
+  var pendingNewItems = []; /* [{ id, name, desc, cat, numeric, unit }] */
 
   /* ── Auth ── */
   function isLoggedIn() { return sessionStorage.getItem(SESSION_KEY) === '1'; }
@@ -147,36 +215,42 @@
   /* ── Firebase helpers ── */
   function fbConfigured() { return !!(fb.dbUrl && fb.dbUrl.trim()); }
 
-  function fbReadUrl()  { return fb.dbUrl.replace(/\/$/, '') + '/prices.json'; }
-  function fbWriteUrl() {
-    var url = fb.dbUrl.replace(/\/$/, '') + '/prices.json';
-    if (fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
+  function fbUrl(write) {
+    var url = fb.dbUrl.replace(/\/$/, '') + '/data.json';
+    if (write && fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
     return url;
   }
 
   async function fetchFromFirebase() {
-    var r    = await fetch(fbReadUrl());
-    var data = await r.json();
-    return (data && typeof data === 'object') ? data : {};
+    var r = await fetch(fbUrl(false));
+    var d = await r.json();
+    if (d && typeof d === 'object' && !Array.isArray(d)) {
+      if (d.prices || d.units || d.deleted || d.custom) return Object.assign(emptyData(), d);
+      return Object.assign(emptyData(), { prices: d }); /* migrate old flat format */
+    }
+    return emptyData();
   }
 
   async function saveToFirebase(data) {
-    var r = await fetch(fbWriteUrl(), {
-      method:  'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(data)
+    var r = await fetch(fbUrl(true), {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
     });
     if (!r.ok) throw new Error('Firebase write failed: ' + r.status);
   }
 
-  /* ── LocalStorage cache (fallback when offline) ── */
-  function loadCache() {
-    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch (e) { return {}; }
+  /* ── Data helpers ── */
+  function emptyData() {
+    return { prices: {}, units: {}, names: {}, deleted: [], custom: [] };
   }
 
-  function updateCache(data) {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  function loadData() {
+    try {
+      return Object.assign(emptyData(), JSON.parse(localStorage.getItem(DATA_KEY) || '{}'));
+    } catch (e) { return emptyData(); }
   }
+
+  function saveDataLocal(data) { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
   /* ── Price helpers ── */
   function parsePriceStr(str) {
@@ -189,20 +263,19 @@
     return unit ? '₹ ' + numeric + ' ' + unit : '₹ ' + numeric;
   }
 
-  /* ── Fetch menu items from menu.html + index.html ── */
+  /* ── Fetch menu items ── */
   async function fetchMenuItems() {
-    var items  = [];
-    var parser = new DOMParser();
+    var items = []; var parser = new DOMParser();
 
     var menuResp = await fetch('menu.html');
     var menuDoc  = parser.parseFromString(await menuResp.text(), 'text/html');
     menuDoc.querySelectorAll('#menuDataSource .menu-card').forEach(function (card) {
-      var name  = card.querySelector('h3')?.textContent.trim()         || '';
-      var desc  = card.querySelector('p')?.textContent.trim()          || '';
-      var price = card.querySelector('.price')?.textContent.trim()     || '';
-      var cat   = card.dataset.category                                || '';
-      var badge = card.querySelector('.menu-card-badge')?.textContent.trim() || '';
-      if (name) items.push({ name, desc, priceStr: price, cat, badge });
+      var name  = card.querySelector('h3')?.textContent.trim()              || '';
+      var desc  = card.querySelector('p')?.textContent.trim()               || '';
+      var price = card.querySelector('.price')?.textContent.trim()          || '';
+      var cat   = card.dataset.category                                     || '';
+      var badge = card.querySelector('.menu-card-badge')?.textContent.trim()|| '';
+      if (name) items.push({ name, desc, priceStr: price, cat, badge, isCustom: false });
     });
 
     var idxResp = await fetch('index.html');
@@ -211,16 +284,33 @@
       var name  = card.querySelector('h3')?.textContent.trim()     || '';
       var desc  = card.querySelector('p')?.textContent.trim()      || '';
       var price = card.querySelector('.price')?.textContent.trim() || '';
-      if (name) items.push({ name, desc, priceStr: price, cat: 'featured-home', badge: '' });
+      if (name) items.push({ name, desc, priceStr: price, cat: 'featured-home', badge: '', isCustom: false });
     });
 
     return items;
   }
 
   /* ── Build UI ── */
-  function buildUI(items, overrides) {
+  function buildUI(baseItems, data) {
+    var allItems = baseItems.slice();
+
+    (data.custom || []).forEach(function (ci) {
+      allItems.push({ name: ci.name, desc: ci.desc || '',
+        priceStr: buildDisplay(ci.numeric, ci.unit), cat: ci.cat,
+        badge: '', isCustom: true, customId: ci.id });
+    });
+
+    pendingNewItems.forEach(function (ni) {
+      allItems.push({ name: ni.name, desc: ni.desc || '',
+        priceStr: buildDisplay(ni.numeric, ni.unit), cat: ni.cat,
+        badge: 'NEW', isCustom: true, isPending: true, pendingId: ni.id });
+    });
+
     var catMap = {};
-    items.forEach(function (item) {
+    allItems.forEach(function (item) {
+      var del = (data.deleted || []).includes(item.name) ||
+                (pendingChanges[item.name] && pendingChanges[item.name].deleted);
+      if (del && !item.isPending) return;
       if (!catMap[item.cat]) catMap[item.cat] = [];
       catMap[item.cat].push(item);
     });
@@ -234,7 +324,10 @@
     orderedCats.forEach(function (cat) {
       var catItems = catMap[cat];
       var label    = CAT_LABELS[cat] || cat;
-      var modCount = catItems.filter(function (i) { return overrides[i.name]; }).length;
+      var modCount = catItems.filter(function (i) {
+        return !!(data.prices[i.name] || data.units.hasOwnProperty(i.name) ||
+                  data.names[i.name]  || pendingChanges[i.name]);
+      }).length;
 
       var section = document.createElement('div');
       section.className  = 'cat-section';
@@ -249,36 +342,7 @@
         '<div class="cat-body"></div>';
 
       var body = section.querySelector('.cat-body');
-
-      catItems.forEach(function (item) {
-        var ov     = overrides[item.name];
-        var parsed = parsePriceStr(item.priceStr);
-        var curNum = ov ? ov.numeric : parsed.numeric;
-
-        var row = document.createElement('div');
-        row.className    = 'item-row' + (ov ? ' modified' : '');
-        row.dataset.name = item.name;
-        row.dataset.unit = parsed.unit;
-        row.dataset.def  = parsed.numeric;
-
-        row.innerHTML =
-          '<div class="item-info">' +
-            '<div class="item-name">' + esc(item.name) +
-              (item.badge ? '<span class="item-badge">' + esc(item.badge) + '</span>' : '') +
-            '</div>' +
-            '<div class="item-desc">' + esc(item.desc) + '</div>' +
-          '</div>' +
-          '<div class="item-price-ctrl">' +
-            '<span class="price-prefix">₹</span>' +
-            '<input class="price-input" type="number" min="0" step="1" value="' + curNum + '" />' +
-            (parsed.unit ? '<span class="price-unit">' + esc(parsed.unit) + '</span>' : '<span class="price-unit"></span>') +
-            (ov ? '<button class="reset-item-btn" title="Reset to ₹' + parsed.numeric + '">↺</button>'
-                : '<span class="reset-item-spacer"></span>') +
-          '</div>';
-
-        wireRow(row, item.name, parsed.numeric, parsed.unit);
-        body.appendChild(row);
-      });
+      catItems.forEach(function (item) { body.appendChild(buildRow(item, data)); });
 
       section.querySelector('.cat-header').addEventListener('click', function () {
         section.classList.toggle('collapsed');
@@ -287,57 +351,175 @@
       container.appendChild(section);
     });
 
-    updateStats(items, overrides);
+    updateStats(allItems.length, data);
   }
 
-  function wireRow(row, name, defNum, unit) {
-    row.querySelector('.price-input').addEventListener('input', function () {
-      var val = parseInt(this.value, 10);
-      if (isNaN(val) || val < 0) return;
-      if (val === defNum) {
+  function buildRow(item, data) {
+    var parsed  = parsePriceStr(item.priceStr);
+    var ovPrice = data.prices[item.name];
+    var ovUnit  = data.units.hasOwnProperty(item.name) ? data.units[item.name] : null;
+    var ovName  = data.names[item.name] || null;
+    var pend    = pendingChanges[item.name] || {};
+
+    var defNum  = parsed.numeric;
+    var defUnit = parsed.unit;
+    var curNum  = pend.numeric !== undefined ? pend.numeric  : (ovPrice ? ovPrice.numeric : defNum);
+    var curUnit = pend.unit    !== undefined ? pend.unit     : (ovUnit !== null ? ovUnit : defUnit);
+    var curName = pend.newName || ovName || item.name;
+
+    var isMod = !!(ovPrice || ovUnit !== null || ovName || Object.keys(pend).length);
+
+    var row = document.createElement('div');
+    row.className  = 'item-row' + (isMod ? ' modified' : '');
+    row.dataset.name    = item.name;
+    row.dataset.def     = defNum;
+    row.dataset.defunit = defUnit;
+    if (item.isCustom)  row.dataset.custom  = item.customId || item.pendingId || '1';
+    if (item.isPending) row.dataset.pending = '1';
+
+    var unitOpts = UNIT_OPTIONS.map(function (o) {
+      return '<option value="' + esc(o.value) + '"' + (o.value === curUnit ? ' selected' : '') + '>' + esc(o.label) + '</option>';
+    }).join('');
+
+    row.innerHTML =
+      '<div class="item-info">' +
+        '<div class="item-name">' +
+          '<span class="name-display">' + esc(curName) + '</span>' +
+          '<button class="edit-name-btn" title="Edit name">✏</button>' +
+          (item.badge ? ' <span class="item-badge">' + esc(item.badge) + '</span>' : '') +
+        '</div>' +
+        '<div class="item-desc">' + esc(item.desc) + '</div>' +
+      '</div>' +
+      '<div class="item-price-ctrl">' +
+        '<span class="price-prefix">₹</span>' +
+        '<input class="price-input" type="number" min="0" step="1" value="' + curNum + '" />' +
+        '<select class="unit-select">' + unitOpts + '</select>' +
+        '<button class="reset-item-btn" title="Reset to default">↺</button>' +
+        '<button class="delete-item-btn" title="Remove item">🗑</button>' +
+      '</div>';
+
+    wireRow(row, item.name, defNum, defUnit, !!item.isCustom, !!item.isPending, item.pendingId);
+    return row;
+  }
+
+  function wireRow(row, name, defNum, defUnit, isCustom, isPending, pendingId) {
+    var priceInput = row.querySelector('.price-input');
+    var unitSel    = row.querySelector('.unit-select');
+
+    function markDirty() {
+      var val  = parseInt(priceInput.value, 10);
+      var unit = unitSel.value;
+      var nd   = row.querySelector('.name-display');
+      var displayName = nd ? nd.textContent.trim() : name;
+
+      var priceChanged = !isNaN(val) && val !== defNum;
+      var unitChanged  = unit !== defUnit;
+      var nameChanged  = displayName !== name;
+
+      if (priceChanged || unitChanged || nameChanged) {
+        var ch = pendingChanges[name] || {};
+        if (priceChanged) ch.numeric = val;
+        if (unitChanged)  ch.unit    = unit;
+        if (nameChanged)  ch.newName = displayName; else delete ch.newName;
+        pendingChanges[name] = ch;
+        row.classList.add('modified');
+      } else {
         delete pendingChanges[name];
         row.classList.remove('modified');
-        var rb = row.querySelector('.reset-item-btn');
-        if (rb) rb.outerHTML = '<span class="reset-item-spacer"></span>';
-      } else {
-        pendingChanges[name] = { numeric: val, display: buildDisplay(val, unit) };
-        row.classList.add('modified');
-        if (!row.querySelector('.reset-item-btn')) {
-          var sp = row.querySelector('.reset-item-spacer');
-          if (sp) {
-            sp.outerHTML = '<button class="reset-item-btn" title="Reset to ₹' + defNum + '">↺</button>';
-            row.querySelector('.reset-item-btn').addEventListener('click', function () {
-              row.querySelector('.price-input').value = defNum;
-              delete pendingChanges[name];
-              row.classList.remove('modified');
-              this.outerHTML = '<span class="reset-item-spacer"></span>';
-              updateBanner();
-            });
-          }
-        }
       }
+      updateBanner();
+    }
+
+    priceInput.addEventListener('input', markDirty);
+    unitSel.addEventListener('change', markDirty);
+
+    wireEditName(row.querySelector('.item-name'), name, markDirty);
+
+    row.querySelector('.reset-item-btn').addEventListener('click', function () {
+      priceInput.value = defNum;
+      unitSel.value    = defUnit;
+      var nd = row.querySelector('.name-display');
+      if (nd) nd.textContent = name;
+      delete pendingChanges[name];
+      row.classList.remove('modified');
       updateBanner();
     });
 
-    var resetBtn = row.querySelector('.reset-item-btn');
-    if (resetBtn) {
-      resetBtn.addEventListener('click', function () {
-        row.querySelector('.price-input').value = defNum;
-        delete pendingChanges[name];
-        row.classList.remove('modified');
-        this.outerHTML = '<span class="reset-item-spacer"></span>';
-        updateBanner();
-      });
+    row.querySelector('.delete-item-btn').addEventListener('click', function () {
+      var nd = row.querySelector('.name-display');
+      var label = nd ? nd.textContent : name;
+      if (!confirm('Remove "' + label + '" from the menu?')) return;
+      if (isPending) {
+        pendingNewItems = pendingNewItems.filter(function (ni) { return ni.id !== pendingId; });
+        row.remove();
+      } else {
+        pendingChanges[name] = Object.assign(pendingChanges[name] || {}, { deleted: true, isCustom: isCustom });
+        row.style.display = 'none';
+      }
+      updateBanner();
+      refreshCatCounts();
+    });
+  }
+
+  function wireEditName(nameDiv, name, markDirty) {
+    function attachEdit() {
+      var btn = nameDiv.querySelector('.edit-name-btn');
+      if (!btn) return;
+      btn.onclick = function () {
+        var nd = nameDiv.querySelector('.name-display');
+        if (!nd) return;
+        var orig = nd.textContent;
+        var input = document.createElement('input');
+        input.type = 'text'; input.value = orig; input.className = 'name-edit-input';
+        nd.replaceWith(input);
+        btn.textContent = '✓'; btn.title = 'Save';
+        input.focus(); input.select();
+
+        function doSave() {
+          var newText = input.value.trim() || orig;
+          var span = document.createElement('span');
+          span.className = 'name-display'; span.textContent = newText;
+          input.replaceWith(span);
+          btn.textContent = '✏'; btn.title = 'Edit name';
+          btn.onclick = null; attachEdit();
+          markDirty();
+        }
+        function doCancel() {
+          var span = document.createElement('span');
+          span.className = 'name-display'; span.textContent = orig;
+          input.replaceWith(span);
+          btn.textContent = '✏'; btn.title = 'Edit name';
+          btn.onclick = null; attachEdit();
+        }
+
+        btn.onclick = doSave;
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') doSave();
+          if (e.key === 'Escape') doCancel();
+        });
+      };
     }
+    attachEdit();
   }
 
   /* ── Stats ── */
-  function updateStats(items, overrides) {
-    var allMod = new Set([...Object.keys(overrides), ...Object.keys(pendingChanges)]);
-    var bar    = document.getElementById('statsBar');
+  function updateStats(total, data) {
+    var allMod = new Set([
+      ...Object.keys(data.prices), ...Object.keys(data.units),
+      ...Object.keys(data.names),  ...Object.keys(pendingChanges)
+    ]);
+    var bar = document.getElementById('statsBar');
     bar.innerHTML =
-      '<div class="stat-chip"><strong>' + items.length + '</strong> total items</div>' +
-      (allMod.size ? '<div class="stat-chip mod"><strong>' + allMod.size + '</strong> prices modified</div>' : '');
+      '<div class="stat-chip"><strong>' + total + '</strong> total items</div>' +
+      (allMod.size ? '<div class="stat-chip mod"><strong>' + allMod.size + '</strong> items modified</div>' : '');
+  }
+
+  function refreshCatCounts() {
+    document.querySelectorAll('.cat-section').forEach(function (sec) {
+      var n = sec.querySelectorAll('.item-row:not([style*="display: none"])').length;
+      var el = sec.querySelector('.cat-count');
+      if (el) el.textContent = n + ' items';
+    });
   }
 
   /* ── Save ── */
@@ -345,79 +527,78 @@
   document.getElementById('saveBannerBtn').addEventListener('click', saveAll);
 
   async function saveAll() {
-    var overrides = loadCache();
-    Object.assign(overrides, pendingChanges);
+    var data = loadData();
 
-    /* Remove any rows that were reset back to default */
-    document.querySelectorAll('.item-row').forEach(function (row) {
-      var name = row.dataset.name;
-      var val  = parseInt(row.querySelector('.price-input').value, 10);
-      var def  = parseInt(row.dataset.def, 10);
-      if (!isNaN(val) && val === def) delete overrides[name];
+    Object.keys(pendingChanges).forEach(function (itemName) {
+      var ch = pendingChanges[itemName];
+      if (ch.deleted) {
+        if (ch.isCustom) {
+          data.custom = (data.custom || []).filter(function (c) { return c.name !== itemName; });
+        } else {
+          if (!(data.deleted || []).includes(itemName)) data.deleted.push(itemName);
+        }
+        delete data.prices[itemName]; delete data.units[itemName]; delete data.names[itemName];
+      } else {
+        if (ch.numeric !== undefined || ch.unit !== undefined) {
+          var num  = ch.numeric !== undefined ? ch.numeric : (data.prices[itemName] ? data.prices[itemName].numeric : 0);
+          var unit = ch.unit    !== undefined ? ch.unit    : (data.units[itemName] || '');
+          data.prices[itemName] = { numeric: num, display: buildDisplay(num, unit) };
+        }
+        if (ch.unit    !== undefined) data.units[itemName] = ch.unit;
+        if (ch.newName)               data.names[itemName] = ch.newName;
+      }
     });
 
-    /* Write to Firebase if configured, otherwise only cache locally */
+    pendingNewItems.forEach(function (ni) {
+      if (!data.custom) data.custom = [];
+      if (!data.custom.find(function (c) { return c.id === ni.id; })) data.custom.push(ni);
+    });
+
     if (fbConfigured()) {
       try {
-        if (Object.keys(overrides).length === 0) {
-          /* Firebase doesn't store empty objects cleanly — delete the node */
-          await fetch(fbWriteUrl(), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
-        } else {
-          await saveToFirebase(overrides);
-        }
-        showToast('Prices saved and synced!', 'success');
-      } catch (err) {
-        showToast('Firebase error — saved locally only. Check your internet connection.');
-      }
+        await saveToFirebase(data);
+        showToast('Saved and synced!', 'success');
+      } catch (e) { showToast('Firebase error — saved locally only.'); }
     } else {
-      showToast('Saved locally (Firebase not set up — won\'t sync to other devices).');
+      showToast('Saved locally (Firebase not configured).');
     }
 
-    updateCache(overrides);
-    pendingChanges = {};
+    saveDataLocal(data);
+    pendingChanges = {}; pendingNewItems = [];
     updateBanner();
-
-    /* Refresh visual indicators */
-    document.querySelectorAll('.item-row').forEach(function (row) {
-      row.classList.toggle('modified', !!overrides[row.dataset.name]);
-    });
-    refreshCatModCounts();
+    init();
   }
 
   /* ── Reset All ── */
   document.getElementById('resetAllBtn').addEventListener('click', async function () {
-    if (!confirm('Reset ALL prices to default? This cannot be undone.')) return;
-
+    if (!confirm('Reset ALL prices, units, names and custom items? This cannot be undone.')) return;
     if (fbConfigured()) {
       try {
-        await fetch(fbWriteUrl(), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
-      } catch (e) {
-        showToast('Firebase error — could not reset remotely.');
-        return;
-      }
+        await fetch(fbUrl(true), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
+      } catch (e) { showToast('Firebase error — could not reset remotely.'); return; }
     }
-
-    localStorage.removeItem(CACHE_KEY);
-    pendingChanges = {};
+    localStorage.removeItem(DATA_KEY);
+    pendingChanges = {}; pendingNewItems = [];
     updateBanner();
-    showToast('All prices reset to default.', 'success');
+    showToast('All data reset to default.', 'success');
     init();
   });
 
   /* ── Banner ── */
   function updateBanner() {
-    var count  = Object.keys(pendingChanges).length;
-    var banner = document.getElementById('saveBanner');
+    var count = Object.keys(pendingChanges).length + pendingNewItems.length;
     document.getElementById('saveBannerText').textContent =
       count + ' unsaved change' + (count !== 1 ? 's' : '');
-    banner.classList.toggle('visible', count > 0);
+    document.getElementById('saveBanner').classList.toggle('visible', count > 0);
   }
 
   /* ── Search ── */
   document.getElementById('searchInput').addEventListener('input', function () {
     var q = this.value.toLowerCase().trim();
     document.querySelectorAll('.item-row').forEach(function (row) {
-      row.classList.toggle('hidden', !!q && !row.dataset.name.toLowerCase().includes(q));
+      var nd = row.querySelector('.name-display');
+      var n  = (nd ? nd.textContent : row.dataset.name).toLowerCase();
+      row.classList.toggle('hidden', !!q && !n.includes(q));
     });
     document.querySelectorAll('.cat-section').forEach(function (sec) {
       sec.style.display = sec.querySelectorAll('.item-row:not(.hidden)').length ? '' : 'none';
@@ -426,13 +607,11 @@
 
   /* ── Export ── */
   document.getElementById('exportBtn').addEventListener('click', function () {
-    var data = loadCache();
+    var data = loadData();
     var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    var a    = document.createElement('a');
-    a.href     = URL.createObjectURL(blob);
-    a.download = 'arora-prices-' + new Date().toISOString().slice(0, 10) + '.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'arora-data-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click(); URL.revokeObjectURL(a.href);
   });
 
   /* ── Import ── */
@@ -441,24 +620,56 @@
   });
 
   document.getElementById('importFile').addEventListener('change', function () {
-    var file = this.files[0];
-    if (!file) return;
+    var file = this.files[0]; if (!file) return;
     var reader = new FileReader();
     reader.onload = async function (e) {
       try {
-        var data = JSON.parse(e.target.result);
-        if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
-        if (fbConfigured()) await saveToFirebase(data);
-        updateCache(data);
-        pendingChanges = {};
-        showToast('Prices imported and saved!', 'success');
-        init();
-      } catch (err) {
-        showToast('Invalid file — could not import.');
-      }
+        var d = JSON.parse(e.target.result);
+        if (typeof d !== 'object' || Array.isArray(d)) throw new Error();
+        if (fbConfigured()) await saveToFirebase(d);
+        saveDataLocal(d); pendingChanges = {}; pendingNewItems = [];
+        showToast('Imported and saved!', 'success'); init();
+      } catch (err) { showToast('Invalid file — could not import.'); }
     };
-    reader.readAsText(file);
-    this.value = '';
+    reader.readAsText(file); this.value = '';
+  });
+
+  /* ── Add Item Modal ── */
+  document.getElementById('addItemBtn').addEventListener('click', openModal);
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  document.getElementById('addItemModal').addEventListener('click', function (e) {
+    if (e.target === this) closeModal();
+  });
+
+  function openModal() {
+    document.getElementById('addItemModal').style.display = 'flex';
+    document.getElementById('newItemName').focus();
+  }
+
+  function closeModal() {
+    document.getElementById('addItemModal').style.display = 'none';
+    ['newItemName', 'newItemDesc', 'newItemPrice'].forEach(function (id) {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('newItemUnit').value = '';
+    document.getElementById('newItemCat').value = 'laddu';
+  }
+
+  document.getElementById('modalAdd').addEventListener('click', function () {
+    var name  = document.getElementById('newItemName').value.trim();
+    var desc  = document.getElementById('newItemDesc').value.trim();
+    var price = parseInt(document.getElementById('newItemPrice').value, 10);
+    var unit  = document.getElementById('newItemUnit').value;
+    var cat   = document.getElementById('newItemCat').value;
+
+    if (!name)                    { showToast('Please enter a name.'); return; }
+    if (isNaN(price) || price < 0) { showToast('Please enter a valid price.'); return; }
+
+    pendingNewItems.push({ id: 'c_' + Date.now(), name, desc, cat, numeric: price, unit });
+    closeModal();
+    updateBanner();
+    init();
   });
 
   /* ── Helpers ── */
@@ -488,36 +699,31 @@
   }
 
   function esc(s) {
-    return String(s)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   /* ── Init ── */
   async function init() {
     document.getElementById('itemsContainer').innerHTML = '<p class="no-results">Loading menu…</p>';
-
-    /* Show / hide Firebase status elements */
     document.getElementById('setupBanner').style.display = fbConfigured() ? 'none' : 'block';
     document.getElementById('firebaseWarn').style.display = fbConfigured() ? 'none' : 'block';
 
-    var overrides = {};
+    var data = emptyData();
     if (fbConfigured()) {
       try {
-        overrides = await fetchFromFirebase();
-        updateCache(overrides); /* keep localStorage in sync */
+        data = await fetchFromFirebase();
+        saveDataLocal(data);
       } catch (e) {
-        /* Offline — fall back to local cache */
-        overrides = loadCache();
-        showToast('Could not reach Firebase — showing cached prices.');
+        data = loadData();
+        showToast('Could not reach Firebase — showing cached data.');
       }
     } else {
-      overrides = loadCache();
+      data = loadData();
     }
 
     try {
-      var items = await fetchMenuItems();
-      buildUI(items, overrides);
+      var baseItems = await fetchMenuItems();
+      buildUI(baseItems, data);
     } catch (err) {
       document.getElementById('itemsContainer').innerHTML =
         '<p class="no-results">Could not load menu. The site must be served over HTTP (not opened as a local file).</p>';

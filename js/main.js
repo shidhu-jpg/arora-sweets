@@ -377,6 +377,9 @@ document.head.appendChild(style);
         <label class="checkout-label">Phone Number <span class="req">*</span>
           <input class="checkout-input" id="checkoutPhone" type="tel" placeholder="e.g. 9876543210" required />
         </label>
+        <label class="checkout-label">Delivery Address <span class="opt">(optional)</span>
+          <textarea class="checkout-input checkout-textarea" id="checkoutAddress" placeholder="House no., street, area, city…" rows="2"></textarea>
+        </label>
         <label class="checkout-label">Special Instructions <span class="opt">(optional)</span>
           <textarea class="checkout-input checkout-textarea" id="checkoutNote" placeholder="Allergies, delivery note, etc." rows="2"></textarea>
         </label>
@@ -407,9 +410,10 @@ document.head.appendChild(style);
 
   document.getElementById('checkoutForm').addEventListener('submit', e => {
     e.preventDefault();
-    const name  = document.getElementById('checkoutName').value.trim();
-    const phone = document.getElementById('checkoutPhone').value.trim();
-    const note  = document.getElementById('checkoutNote').value.trim();
+    const name    = document.getElementById('checkoutName').value.trim();
+    const phone   = document.getElementById('checkoutPhone').value.trim();
+    const address = document.getElementById('checkoutAddress').value.trim();
+    const note    = document.getElementById('checkoutNote').value.trim();
     const errEl = document.getElementById('checkoutError');
 
     if (!name || !phone) {
@@ -430,7 +434,9 @@ document.head.appendChild(style);
     let msg =
       `🛍️ *New Order — Arora Sweets*\n\n` +
       `*Name:* ${name}\n` +
-      `*Phone:* ${phone}\n\n` +
+      `*Phone:* ${phone}\n` +
+      (address ? `*Address:* ${address}\n` : '') +
+      `\n` +
       `*Order:*\n${lines}\n\n` +
       `*Total: ₹${total}*\n` +
       `_(5% tax will be applied on food items)_`;

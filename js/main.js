@@ -439,7 +439,8 @@ document.head.appendChild(style);
       `\n` +
       `*Order:*\n${lines}\n\n` +
       `*Total: ₹${total}*\n` +
-      `_(5% tax will be applied on food items)_`;
+      `_(5% tax will be applied on food items)_\n` +
+      `_Ordered via Arora Sweets website_`;
     if (note) msg += `\n*Note:* ${note}`;
 
     const waUrl = `https://wa.me/919934492744?text=${encodeURIComponent(msg)}`;

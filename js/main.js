@@ -432,7 +432,8 @@ document.head.appendChild(style);
       `*Name:* ${name}\n` +
       `*Phone:* ${phone}\n\n` +
       `*Order:*\n${lines}\n\n` +
-      `*Total: ₹${total}*\n`;
+      `*Total: ₹${total}*\n` +
+      `_(5% tax will be applied on food items)_`;
     if (note) msg += `\n*Note:* ${note}`;
 
     const waUrl = `https://wa.me/919934492744?text=${encodeURIComponent(msg)}`;

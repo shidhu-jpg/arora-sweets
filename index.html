@@ -20,7 +20,7 @@
   <!-- PAGE LOADER -->
   <div id="page-loader" aria-hidden="true">
     <div class="loader-inner">
-      <img src="images/logoori.png" alt="Arora Sweets" class="loader-logo" />
+      <img src="images/logoori.webp" alt="Arora Sweets" class="loader-logo" />
       <div class="loader-dots">
         <span></span><span></span><span></span>
       </div>
@@ -46,7 +46,7 @@
   <nav class="navbar" id="navbar">
 
     <a href="index.html" class="nav-logo">
-      <img src="images/logoori.png" alt="Arora Sweets" class="nav-logo-img" fetchpriority="high" />
+      <img src="images/logoori.webp" alt="Arora Sweets" class="nav-logo-img" fetchpriority="high" />
     </a>
 
     <button class="nav-toggle" id="navToggle" aria-label="Open menu">
@@ -74,16 +74,16 @@
   <section class="hero">
     <!-- Logo overlay on video — mobile only, stays on video, disappears on scroll -->
     <a href="index.html" class="mobile-fixed-logo">
-      <img src="images/logoori.png" alt="Arora Sweets" class="mobile-fixed-logo-img" />
+      <img src="images/logoori.webp" alt="Arora Sweets" class="mobile-fixed-logo-img" />
     </a>
     <div class="hero-bg">
       <div class="vimeo-bg-wrapper">
-        <video src="images/homepagevideo.mp4" autoplay loop muted playsinline></video>
+        <video id="heroBgVideo" poster="images/homeimg.jpeg" muted playsinline loop preload="none"></video>
       </div>
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-content">
-       <!-- <a href="index.html"><img src="images/logoori.png" alt="Arora Sweets" class="nav-cart-btn"></a> -->
+       <!-- <a href="index.html"><img src="images/logoori.webp" alt="Arora Sweets" class="nav-cart-btn"></a> -->
       <div class="hero-text-box">
         <p class="hero-eyebrow">Est. 2018 &nbsp;</p>
 
@@ -111,7 +111,7 @@
       <div class="featured-grid">
         <article class="sweet-card">
           <div class="sweet-card-img">
-            <img src="images/kajukatli.png" alt="Kaju Katli" loading="lazy" />
+            <img src="images/kajukatli.webp" alt="Kaju Katli" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -122,7 +122,7 @@
         </article>
         <article class="sweet-card featured-main">
           <div class="sweet-card-img">
-            <img src="images/gulabjamun.png" alt="Gulab Jamun" loading="lazy" />
+            <img src="images/gulabjamun.webp" alt="Gulab Jamun" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -133,7 +133,7 @@
         </article>
         <article class="sweet-card">
           <div class="sweet-card-img">
-            <img src="images/rasgulla.png" alt="Rasgulla" loading="lazy" />
+            <img src="images/rasgulla.webp" alt="Rasgulla" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -144,7 +144,7 @@
         </article>
         <article class="sweet-card">
           <div class="sweet-card-img">
-            <img src="images/motichoorladdu.png" alt="Motichoor Ladoo" loading="lazy" />
+            <img src="images/motichoorladdu.webp" alt="Motichoor Ladoo" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -155,7 +155,7 @@
         </article>
         <article class="sweet-card">
           <div class="sweet-card-img">
-            <img src="images/barfi.png" alt="Barfi" loading="lazy" />
+            <img src="images/barfi.webp" alt="Barfi" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -166,7 +166,7 @@
         </article>
         <article class="sweet-card">
           <div class="sweet-card-img">
-            <img src="images/jalebi.png" alt="Jalebi" loading="lazy" />
+            <img src="images/jalebi.webp" alt="Jalebi" loading="lazy" />
             <div class="card-overlay"></div>
           </div>
           <div class="sweet-card-body">
@@ -465,10 +465,20 @@
         }, remaining);
       }
 
-      var bgVideo = document.querySelector('.vimeo-bg-wrapper video');
+      /* Lazy-load the background video after page is interactive */
+      var bgVideo = document.getElementById('heroBgVideo');
       if (bgVideo) {
         bgVideo.addEventListener('playing', hideLoader, { once: true });
         bgVideo.addEventListener('error', hideLoader, { once: true });
+        function startVideo() {
+          bgVideo.src = 'images/homepagevideo.mp4';
+          bgVideo.play().catch(function(){});
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(startVideo, { timeout: 2000 });
+        } else {
+          window.addEventListener('load', startVideo);
+        }
       } else {
         window.addEventListener('load', hideLoader);
       }

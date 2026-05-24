@@ -149,6 +149,7 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script>
   (function () {
 
@@ -409,22 +410,70 @@
     });
 
     /* ── Place order ── */
-    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+    document.getElementById('placeOrderBtn').addEventListener('click', async () => {
       if (!validate()) {
         const firstInvalid = document.querySelector('.form-group input.invalid, .form-group textarea.invalid');
         if (firstInvalid) firstInvalid.focus();
         return;
       }
 
+      const btn = document.getElementById('placeOrderBtn');
+      btn.textContent = 'Placing Order…';
+      btn.disabled = true;
+
       const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
       const orderId   = 'AS-' + Math.floor(100000 + Math.random() * 900000);
       const eta       = isDelivery ? '35 – 45 minutes' : '~20 minutes';
+      const city      = isDelivery ? (document.getElementById('fCity')?.value.trim() || '') : 'Bettiah';
 
-      /* Save order confirmation data */
+      const orderData = {
+        id:            orderId,
+        timestamp:     Date.now(),
+        status:        'new',
+        orderType,
+        paymentMethod: payMethod,
+        customer: {
+          name:     document.getElementById('fName').value.trim(),
+          phone:    document.getElementById('fPhone').value.trim(),
+          email:    document.getElementById('fEmail')?.value.trim() || '',
+          address:  isDelivery ? (document.getElementById('fAddress')?.value.trim() || '') : '',
+          city,
+          pincode:  isDelivery ? (document.getElementById('fPincode')?.value.trim() || '') : '',
+          landmark: isDelivery ? (document.getElementById('fLandmark')?.value.trim() || '') : '',
+        },
+        location:            city || 'Bettiah',
+        items,
+        subtotal,
+        discount,
+        deliveryFee:         delivery,
+        tax,
+        total,
+        coupon:              checkout.coupon || '',
+        specialInstructions: document.getElementById('fInstructions')?.value.trim() || '',
+      };
+
+      /* Save to Firebase dashboard */
+      try {
+        if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+          await fetch(
+            ARORA_FB.dbUrl + 'orders/' + orderId + '.json?auth=' + ARORA_FB.secret,
+            {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(orderData),
+            }
+          );
+        }
+      } catch (e) {
+        /* Silently continue — order confirmed locally even if Firebase unreachable */
+        console.warn('Firebase save failed:', e);
+      }
+
+      /* Save local confirmation data */
       localStorage.setItem('aroraLastOrder', JSON.stringify({
         orderId, total, eta, payMethod,
-        name: document.getElementById('fName').value.trim(),
-        phone: document.getElementById('fPhone').value.trim(),
+        name:  orderData.customer.name,
+        phone: orderData.customer.phone,
       }));
 
       /* Clear cart + checkout state */

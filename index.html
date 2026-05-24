@@ -207,6 +207,56 @@
     </div>
   </section>
 
+  <!-- SPECIAL OFFERS (hidden until Firebase returns active offers) -->
+  <section class="section offers-strip" id="offersStrip" style="display:none">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Limited Time</p>
+        <h2 class="section-title">🔥 Special Offers<br /><em>&amp; Deals</em></h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="offers-cards-grid" id="offersCardsGrid"></div>
+    </div>
+  </section>
+  <script src="js/firebase-config.js"></script>
+  <script>
+  (function () {
+    if (typeof ARORA_FB === 'undefined' || !ARORA_FB.dbUrl) return;
+    fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
+      .then(r => r.json())
+      .then(data => {
+        if (!data) return;
+        const now = Date.now();
+        const active = Object.values(data).filter(o => o.isActive && o.showOnHomepage && (o.endTime||0) > now);
+        if (!active.length) return;
+        active.sort((a,b) => (a.endTime||0)-(b.endTime||0));
+        const grid = document.getElementById('offersCardsGrid');
+        grid.innerHTML = active.map(o => {
+          const ms  = (o.endTime||0) - now;
+          const h   = Math.floor(ms/3600000);
+          const m   = Math.floor((ms%3600000)/60000);
+          const cd  = h >= 24 ? Math.floor(h/24)+'d '+h%24+'h left' : h > 0 ? h+'h '+m+'m left' : m+'m left';
+          const disc = o.type==='percent' ? o.value+'% OFF' : '₹'+o.value+' OFF';
+          return `
+            <div class="offer-card">
+              <div class="offer-card-badge">${disc}</div>
+              <div class="offer-card-emoji">${o.emoji||'🏷️'}</div>
+              <h3 class="offer-card-title">${String(o.title||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</h3>
+              <p class="offer-card-desc">${String(o.description||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+              <div class="offer-card-code">
+                <span class="offer-code-label">Use code</span>
+                <span class="offer-code-val">${String(o.couponCode||'').replace(/&/g,'&amp;')}</span>
+              </div>
+              <div class="offer-card-countdown">⏱ ${cd}</div>
+              <a href="menu.html" class="offer-card-cta">Order Now →</a>
+            </div>`;
+        }).join('');
+        document.getElementById('offersStrip').style.display = '';
+      })
+      .catch(() => {});
+  })();
+  </script>
+
   <!-- BRAND INTRO -->
   <section class="section brand-intro">
     <div class="container brand-intro-inner">

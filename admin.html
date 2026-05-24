@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — Arora Sweets</title>
+  <title>Owner Portal — Arora Sweets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -22,6 +22,157 @@
     }
     .setup-banner a { color: #2a7a2a; font-weight: 600; }
     .setup-warn { background: #fdf0ef; border: 1.5px solid #e8c8c5; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; color: #8b2020; font-size: 13px; }
+
+    /* ═══ TAB BAR ═══ */
+    .admin-tabs { display:flex; gap:0; background:#fff; border-bottom:1px solid var(--border); padding:0 32px; }
+    .admin-tab {
+      padding:13px 20px; background:transparent; border:none; border-bottom:3px solid transparent;
+      color:var(--muted); font-size:13px; font-weight:600; font-family:inherit; cursor:pointer;
+      transition:color .15s,border-color .15s; white-space:nowrap;
+    }
+    .admin-tab:hover { color:var(--text); }
+    .admin-tab.active { color:var(--gold); border-bottom-color:var(--gold); }
+    .price-only { display:flex; gap:8px; align-items:center; }
+
+    /* ═══ LIVE INDICATOR ═══ */
+    .live-ind { display:none; align-items:center; gap:6px; font-size:12px; color:var(--green); font-weight:700; }
+    .live-ind.on { display:flex; }
+    .live-dot-g { width:7px; height:7px; border-radius:50%; background:var(--green); animation:pg 2s infinite; }
+    @keyframes pg { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    .dash-lbl { font-size:11px; color:var(--muted); }
+
+    /* ═══ ORDERS PANEL ═══ */
+    .dash-panel { padding:24px 32px; }
+    .dash-panel-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px; }
+    .dp-stat {
+      background:#fff; border:1px solid var(--border); border-radius:10px;
+      padding:16px 18px; display:flex; align-items:center; gap:14px;
+    }
+    .dp-stat-pending { border-left:3px solid #f59e0b; }
+    .dp-stat-done    { border-left:3px solid var(--green); }
+    .dp-stat-icon { font-size:26px; }
+    .dp-stat-val { font-size:22px; font-weight:700; color:var(--gold); line-height:1; margin-bottom:3px; }
+    .dp-stat-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+    .dash-filter-bar { display:flex; align-items:center; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+    .dash-status-tabs { display:flex; gap:4px; flex:1; flex-wrap:wrap; }
+    .dst-btn {
+      padding:5px 12px; background:transparent; border:1px solid var(--border); border-radius:20px;
+      color:var(--muted); font-size:12px; font-weight:500; font-family:inherit; cursor:pointer; transition:all .15s;
+    }
+    .dst-btn:hover { border-color:var(--gold); color:var(--gold); }
+    .dst-btn.active { background:var(--gold); border-color:var(--gold); color:#fff; font-weight:700; }
+    .dash-filter-sel, .dash-filter-search {
+      padding:6px 10px; background:var(--bg); border:1px solid var(--border);
+      border-radius:6px; color:var(--text); font-size:12px; font-family:inherit; outline:none;
+    }
+    .dash-filter-search { width:190px; }
+    .dash-filter-search:focus,.dash-filter-sel:focus { border-color:var(--gold); }
+    /* orders table */
+    .o-table { background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; min-width:1000px; }
+    .o-table-wrap { overflow-x:auto; }
+    .o-head, .o-row {
+      display:grid;
+      grid-template-columns:110px 160px 110px 1fr 90px 110px 90px 130px 90px;
+      padding:11px 14px; align-items:center;
+    }
+    .o-head { background:#f8f5ef; border-bottom:1px solid var(--border); font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .o-row { border-bottom:1px solid var(--border); transition:background .12s; }
+    .o-row:last-child { border-bottom:none; }
+    .o-row:hover { background:#faf7f2; }
+    .o-row.o-new { border-left:3px solid #f59e0b; }
+    .o-id { font-size:12px; font-weight:700; color:var(--gold); }
+    .o-cname { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .o-phone { font-size:11px; color:var(--muted); margin-top:2px; }
+    .o-loc { display:inline-block; padding:2px 8px; background:#f5ecd8; border:1px solid #e0c88a; border-radius:4px; font-size:11px; font-weight:700; color:#6a4810; }
+    .o-items-p { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .o-total { font-size:14px; font-weight:700; }
+    .o-type { font-size:11px; padding:2px 8px; border-radius:4px; font-weight:600; white-space:nowrap; }
+    .o-delivery { background:#dbeafe; color:#1d4ed8; border:1px solid #bfdbfe; }
+    .o-pickup   { background:#d1fae5; color:#065f46; border:1px solid #a7f3d0; }
+    .o-time { font-size:12px; font-weight:500; }
+    .o-date { font-size:11px; color:var(--muted); margin-top:2px; }
+    .o-ssel { width:100%; padding:5px 7px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:12px; font-family:inherit; outline:none; cursor:pointer; }
+    .o-ssel:focus { border-color:var(--gold); }
+    .o-aBtn { width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--border); border-radius:5px; cursor:pointer; font-size:13px; margin-right:4px; }
+    .o-aBtn:hover { background:#fff; border-color:var(--gold); }
+    .o-loading, .o-empty { text-align:center; padding:48px; color:var(--muted); font-size:14px; }
+    .s-badge { display:inline-block; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+
+    /* order detail modal — light theme additions */
+    .odm-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .odm-id { font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; color:var(--gold); margin-bottom:3px; }
+    .odm-time { font-size:12px; color:var(--muted); }
+    .odm-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+    .odm-section { margin-bottom:16px; }
+    .odm-stitle { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin-bottom:8px; }
+    .odm-field { font-size:13px; margin-bottom:5px; line-height:1.5; }
+    .odm-items { border:1px solid var(--border); border-radius:7px; overflow:hidden; }
+    .odm-items-head, .odm-item-row { display:grid; grid-template-columns:1fr 60px 80px 80px; padding:8px 12px; }
+    .odm-items-head { background:#f8f5ef; font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--border); }
+    .odm-item-row { font-size:13px; border-top:1px solid var(--border); }
+    .odm-bill { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:14px; margin-top:14px; margin-bottom:16px; }
+    .odm-bill-row { display:flex; justify-content:space-between; font-size:13px; color:var(--muted); margin-bottom:7px; }
+    .odm-bill-row:last-child { margin-bottom:0; }
+    .odm-bill-total { font-size:15px; font-weight:700; color:var(--text); padding-top:10px; border-top:1px solid var(--border); margin-top:4px; }
+    .odm-pay { background:#f5ecd8; color:#6a4810; border-radius:4px; padding:1px 8px; font-size:11px; font-weight:700; }
+    .odm-note { background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:12px; font-size:13px; color:var(--muted); font-style:italic; }
+    .odm-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:14px; border-top:1px solid var(--border); margin-top:4px; }
+    .odm-wa-btn { padding:9px 16px; background:#25d366; color:#fff; border:none; border-radius:7px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .odm-status-wrap { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); margin-left:auto; }
+    .odm-ssel { padding:7px 10px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:13px; font-family:inherit; outline:none; }
+    .odm-disc { color:var(--green); }
+
+    /* ═══ OFFERS PANEL ═══ */
+    .offers-live-bar { display:none; background:#f0faf5; border:1px solid #a7f3d0; border-radius:8px; padding:10px 14px; margin-bottom:18px; font-size:12px; color:#065f46; align-items:center; gap:10px; flex-wrap:wrap; }
+    .offers-live-bar.on { display:flex; }
+    .olb-chip { background:#d1fae5; border:1px solid #a7f3d0; border-radius:20px; padding:2px 10px; font-weight:700; font-size:11px; }
+    .offers-sec { margin-bottom:28px; }
+    .offers-sec-hdr { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:18px; }
+    .offers-sec-hdr h3 { font-size:15px; font-weight:700; margin-bottom:4px; }
+    .offers-sec-hdr p { font-size:12px; color:var(--muted); }
+    .btn-new-offer { padding:9px 16px; background:var(--gold); color:#fff; border:none; border-radius:7px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; flex-shrink:0; }
+    .btn-new-offer:hover { opacity:.85; }
+    /* template cards */
+    .tpl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+    .tpl-card { background:#fff; border:1px solid var(--border); border-top:3px solid var(--tc,var(--gold)); border-radius:10px; padding:18px; position:relative; transition:transform .15s; }
+    .tpl-card:hover { transform:translateY(-2px); }
+    .tpl-emoji { font-size:28px; line-height:1; margin-bottom:8px; }
+    .tpl-badge { position:absolute; top:14px; right:14px; background:var(--tc,var(--gold)); color:#fff; font-size:10px; font-weight:800; padding:2px 9px; border-radius:20px; }
+    .tpl-name { font-size:14px; font-weight:700; margin-bottom:6px; }
+    .tpl-desc { font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:14px; }
+    .tpl-btn { padding:7px 14px; background:var(--bg); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; transition:background .12s,color .12s,border-color .12s; }
+    .tpl-btn:hover { background:var(--gold); color:#fff; border-color:var(--gold); }
+    /* active offers list */
+    .active-offers-list { display:flex; flex-direction:column; gap:10px; }
+    .aol-row { display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--border); border-radius:10px; padding:13px 16px; flex-wrap:wrap; transition:border-color .15s; }
+    .aol-row.aol-live { border-left:3px solid var(--green); }
+    .aol-row.aol-expired { opacity:.5; }
+    .aol-emoji { font-size:26px; flex-shrink:0; }
+    .aol-info { flex:1; min-width:0; }
+    .aol-title { font-size:14px; font-weight:700; }
+    .aol-desc { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .aol-meta { display:flex; align-items:center; gap:12px; flex-wrap:wrap; font-size:12px; }
+    .aol-disc { background:#f5ecd8; color:#6a4810; border:1px solid #e0c88a; border-radius:4px; padding:2px 9px; font-weight:800; font-size:11px; }
+    .aol-code { color:var(--green-dk); font-weight:700; }
+    .aol-time { color:var(--green); font-weight:600; }
+    .aol-time.exp { color:var(--danger); }
+    .aol-hp { color:var(--muted); font-size:11px; }
+    .aol-actions { display:flex; gap:7px; }
+    .btn-aol-toggle { padding:5px 11px; background:#fff3cd; border:1px solid #ffc107; color:#856404; border-radius:5px; font-size:11px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .btn-aol-del { padding:5px 11px; background:#fef2f2; border:1px solid #fca5a5; color:var(--danger); border-radius:5px; font-size:11px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .aol-empty { text-align:center; padding:36px; color:var(--muted); font-size:13px; }
+    /* offer form in modal */
+    .of-row { display:flex; gap:12px; margin-bottom:14px; }
+    .of-grp { display:flex; flex-direction:column; gap:5px; flex:1; }
+    .of-grp label { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+    .of-grp input, .of-grp select, .of-grp textarea { padding:9px 11px; background:var(--bg); border:1px solid var(--border); border-radius:var(--radius); color:var(--text); font-size:13px; font-family:inherit; outline:none; width:100%; }
+    .of-grp input:focus,.of-grp select:focus { border-color:var(--gold); }
+    .of-check-lbl { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; margin-bottom:14px; }
+    .of-check-lbl input { width:16px; height:16px; accent-color:var(--gold); cursor:pointer; }
+    .btn-of-save { flex:1; padding:11px; background:var(--green); color:#fff; border:none; border-radius:var(--radius); font-size:14px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .btn-of-save:hover { background:var(--green-dk); }
+    .btn-of-save:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-of-cancel { padding:11px 18px; background:transparent; border:1px solid var(--border); border-radius:var(--radius); color:var(--muted); font-size:13px; font-family:inherit; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -46,17 +197,29 @@
   <header class="admin-header">
     <div class="admin-header-left">
       <span class="admin-logo">Arora Sweets</span>
-      <span class="admin-badge">Admin</span>
+      <span class="admin-badge">Owner Portal</span>
     </div>
     <div class="admin-header-right">
-      <button class="btn btn-outline" id="exportBtn">Export JSON</button>
-      <button class="btn btn-outline" id="importBtn">Import JSON</button>
-      <input type="file" id="importFile" accept=".json" style="display:none" />
-      <button class="btn btn-danger" id="resetAllBtn">Reset All Prices</button>
+      <div class="live-ind" id="liveInd"><span class="live-dot-g"></span> Live</div>
+      <span class="dash-lbl" id="lastRefreshed"></span>
+      <div class="price-only" id="priceOnlyBtns">
+        <button class="btn btn-outline" id="exportBtn">Export JSON</button>
+        <button class="btn btn-outline" id="importBtn">Import JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" />
+        <button class="btn btn-danger" id="resetAllBtn">Reset All Prices</button>
+      </div>
       <button class="btn btn-outline" id="logoutBtn">Logout</button>
     </div>
   </header>
 
+  <!-- ── Tab Bar ── -->
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="prices">🏷 Price Management</button>
+    <button class="admin-tab" data-tab="orders">📦 Orders</button>
+    <button class="admin-tab" data-tab="offers">🎁 Offers &amp; Deals</button>
+  </div>
+
+  <div id="pricesPanel">
   <div class="admin-body">
     <div class="admin-toolbar">
       <h2>Price Management</h2>
@@ -89,6 +252,207 @@
 
     <div class="stats-bar" id="statsBar"></div>
     <div id="itemsContainer"><p class="no-results">Loading menu…</p></div>
+  </div>
+
+  </div><!-- /admin-body -->
+  </div><!-- /pricesPanel -->
+
+  <!-- ══════════════ ORDERS PANEL ══════════════ -->
+  <div id="ordersPanel" style="display:none" class="dash-panel">
+
+    <div class="dash-panel-stats">
+      <div class="dp-stat">
+        <div class="dp-stat-icon">📦</div>
+        <div><div class="dp-stat-val" id="dStatOrders">0</div><div class="dp-stat-lbl">Orders Today</div></div>
+      </div>
+      <div class="dp-stat">
+        <div class="dp-stat-icon">💰</div>
+        <div><div class="dp-stat-val" id="dStatRev">₹0</div><div class="dp-stat-lbl">Revenue Today</div></div>
+      </div>
+      <div class="dp-stat dp-stat-pending">
+        <div class="dp-stat-icon">⏳</div>
+        <div><div class="dp-stat-val" id="dStatActive">0</div><div class="dp-stat-lbl">Active Orders</div></div>
+      </div>
+      <div class="dp-stat dp-stat-done">
+        <div class="dp-stat-icon">✅</div>
+        <div><div class="dp-stat-val" id="dStatDone">0</div><div class="dp-stat-lbl">Completed Today</div></div>
+      </div>
+    </div>
+
+    <div class="dash-filter-bar">
+      <div class="dash-status-tabs" id="dStatusTabs">
+        <button class="dst-btn active" data-s="all">All</button>
+        <button class="dst-btn" data-s="new">🔴 New</button>
+        <button class="dst-btn" data-s="confirmed">🔵 Confirmed</button>
+        <button class="dst-btn" data-s="preparing">🟣 Preparing</button>
+        <button class="dst-btn" data-s="ready">🟢 Ready</button>
+        <button class="dst-btn" data-s="delivered">⚫ Delivered</button>
+        <button class="dst-btn" data-s="cancelled">🔴 Cancelled</button>
+      </div>
+      <select id="dLocSel" class="dash-filter-sel"><option value="all">All Locations</option></select>
+      <select id="dDateSel" class="dash-filter-sel">
+        <option value="today">Today</option>
+        <option value="yesterday">Yesterday</option>
+        <option value="week">This Week</option>
+        <option value="all">All Time</option>
+      </select>
+      <input type="text" id="dSearch" class="dash-filter-search" placeholder="Search order or name…" />
+    </div>
+
+    <div class="o-table-wrap">
+      <div id="dOrdersLoading" class="o-loading">Connecting to Firebase…</div>
+      <div id="dOrdersEmpty"   class="o-empty hidden">No orders found.</div>
+      <div id="dOrdersTable"   class="o-table hidden">
+        <div class="o-head">
+          <div>Order</div><div>Customer</div><div>Location</div><div>Items</div>
+          <div>Total</div><div>Type</div><div>Time</div><div>Status</div><div>Actions</div>
+        </div>
+        <div id="dOrdersList"></div>
+      </div>
+    </div>
+
+  </div><!-- /ordersPanel -->
+
+  <!-- ══════════════ OFFERS PANEL ══════════════ -->
+  <div id="offersPanel" style="display:none" class="dash-panel">
+
+    <div class="offers-live-bar" id="offersLiveBar"></div>
+
+    <!-- Template cards -->
+    <div class="offers-sec">
+      <div class="offers-sec-hdr">
+        <div>
+          <h3>⚡ Quick-Start Offer Templates</h3>
+          <p>Pick a template and activate it in one click — it goes live on your homepage instantly.</p>
+        </div>
+        <button class="btn-new-offer" id="btnNewOffer">+ Custom Offer</button>
+      </div>
+      <div class="tpl-grid">
+        <div class="tpl-card" style="--tc:#f59e0b">
+          <div class="tpl-emoji">🕐</div><div class="tpl-badge">10% OFF</div>
+          <div class="tpl-name">Happy Hours</div>
+          <div class="tpl-desc">10% off on orders placed between 2 PM – 6 PM today. Great for quiet afternoons.</div>
+          <button class="tpl-btn" data-tpl="happy">Activate →</button>
+        </div>
+        <div class="tpl-card" style="--tc:#8b5cf6">
+          <div class="tpl-emoji">🎉</div><div class="tpl-badge">15% OFF</div>
+          <div class="tpl-name">Weekend Bonanza</div>
+          <div class="tpl-desc">15% off all weekend orders. Boosts Saturday &amp; Sunday footfall consistently.</div>
+          <button class="tpl-btn" data-tpl="weekend">Activate →</button>
+        </div>
+        <div class="tpl-card" style="--tc:#ef4444">
+          <div class="tpl-emoji">⚡</div><div class="tpl-badge">20% OFF</div>
+          <div class="tpl-name">Flash Sale</div>
+          <div class="tpl-desc">20% off for 24 hours. Creates urgency and spikes orders quickly.</div>
+          <button class="tpl-btn" data-tpl="flash">Activate →</button>
+        </div>
+        <div class="tpl-card" style="--tc:#10b981">
+          <div class="tpl-emoji">🛒</div><div class="tpl-badge">20% OFF</div>
+          <div class="tpl-name">Big Order Bonus</div>
+          <div class="tpl-desc">20% off orders above ₹1000. Encourages customers to add more to their cart.</div>
+          <button class="tpl-btn" data-tpl="bulk">Activate →</button>
+        </div>
+        <div class="tpl-card" style="--tc:#3b82f6">
+          <div class="tpl-emoji">👋</div><div class="tpl-badge">₹50 OFF</div>
+          <div class="tpl-name">Welcome Discount</div>
+          <div class="tpl-desc">₹50 flat off for first-time customers. Converts new visitors into buyers.</div>
+          <button class="tpl-btn" data-tpl="welcome">Activate →</button>
+        </div>
+        <div class="tpl-card" style="--tc:#C9973B">
+          <div class="tpl-emoji">🎊</div><div class="tpl-badge">15% OFF</div>
+          <div class="tpl-name">Festival Special</div>
+          <div class="tpl-desc">15% off for 3 days around a festival. Great for Diwali, Eid, Holi, etc.</div>
+          <button class="tpl-btn" data-tpl="festival">Activate →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active offers list -->
+    <div class="offers-sec">
+      <div class="offers-sec-hdr" style="margin-bottom:14px">
+        <h3>📋 Active &amp; Scheduled Offers</h3>
+      </div>
+      <div id="aolLoading" class="o-loading" style="padding:28px 0">Loading offers…</div>
+      <div id="aolEmpty"   class="aol-empty hidden">No offers yet — activate a template or create a custom offer above.</div>
+      <div id="aolList"    class="active-offers-list hidden"></div>
+    </div>
+
+  </div><!-- /offersPanel -->
+
+  <!-- ── Order Detail Modal (light) ── -->
+  <div id="orderDetailModal" class="modal-overlay" style="display:none">
+    <div class="modal-box" style="max-width:620px;max-height:90vh;overflow-y:auto">
+      <div class="modal-header">
+        <h3 id="odmTitle">Order Details</h3>
+        <button class="modal-close" id="odmClose">✕</button>
+      </div>
+      <div class="modal-body" id="odmBody"></div>
+    </div>
+  </div>
+
+  <!-- ── Offer Create Modal ── -->
+  <div id="offerCreateModal" class="modal-overlay" style="display:none">
+    <div class="modal-box" style="max-width:500px">
+      <div class="modal-header">
+        <h3 id="ofModalTitle">Create Offer</h3>
+        <button class="modal-close" id="ofModalClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px">The coupon code you set here will appear on the homepage and work at checkout automatically.</p>
+        <div class="of-row">
+          <div class="of-grp" style="max-width:80px">
+            <label>Emoji</label>
+            <input type="text" id="ofEmo" value="🎉" maxlength="4" style="font-size:20px;text-align:center" />
+          </div>
+          <div class="of-grp">
+            <label>Offer Title *</label>
+            <input type="text" id="ofTitle" placeholder="e.g. Weekend Special" />
+          </div>
+        </div>
+        <div class="of-row">
+          <div class="of-grp">
+            <label>Description (shown on homepage)</label>
+            <input type="text" id="ofDesc" placeholder="e.g. 15% off on all orders this weekend!" />
+          </div>
+        </div>
+        <div class="of-row">
+          <div class="of-grp">
+            <label>Discount Type *</label>
+            <select id="ofType"><option value="percent">Percentage (%)</option><option value="flat">Flat Amount (₹)</option></select>
+          </div>
+          <div class="of-grp">
+            <label>Value *</label>
+            <input type="number" id="ofValue" min="1" max="99" placeholder="e.g. 15" />
+          </div>
+        </div>
+        <div class="of-row">
+          <div class="of-grp">
+            <label>Coupon Code *</label>
+            <input type="text" id="ofCode" placeholder="e.g. WEEKEND15" style="text-transform:uppercase;font-weight:700;letter-spacing:.05em" />
+          </div>
+          <div class="of-grp">
+            <label>Valid For</label>
+            <select id="ofDur">
+              <option value="4">4 hours</option>
+              <option value="8">8 hours</option>
+              <option value="24" selected>24 hours</option>
+              <option value="48">48 hours</option>
+              <option value="72">3 days</option>
+              <option value="168">7 days</option>
+              <option value="720">30 days</option>
+            </select>
+          </div>
+        </div>
+        <label class="of-check-lbl">
+          <input type="checkbox" id="ofHomepage" checked />
+          Show this offer on the homepage
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-of-cancel" id="ofModalCancel">Cancel</button>
+        <button class="btn btn-primary btn-of-save" id="ofSaveBtn">Save &amp; Activate</button>
+      </div>
+    </div>
   </div>
 
   <div class="save-banner" id="saveBanner">
@@ -761,6 +1125,437 @@
     document.getElementById('adminPanel').style.display  = 'block';
     init();
   }
+
+  /* ══════════════════════════════════════════
+     TABS
+  ══════════════════════════════════════════ */
+  document.querySelectorAll('.admin-tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.admin-tab').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = tab.dataset.tab;
+      document.getElementById('pricesPanel').style.display   = panel === 'prices'  ? '' : 'none';
+      document.getElementById('ordersPanel').style.display   = panel === 'orders'  ? '' : 'none';
+      document.getElementById('offersPanel').style.display   = panel === 'offers'  ? '' : 'none';
+      document.getElementById('priceOnlyBtns').style.display = panel === 'prices'  ? '' : 'none';
+      document.getElementById('liveInd').classList.toggle('on', panel === 'orders');
+      document.getElementById('lastRefreshed').style.display = panel === 'orders'  ? '' : 'none';
+      document.getElementById('saveBanner').style.display    = panel === 'prices'  ? '' : 'none';
+      if (panel === 'orders') { dLoadOrders(); dOrdersInterval = dOrdersInterval || setInterval(dLoadOrders, 30000); }
+      if (panel === 'offers') dLoadOffers();
+    });
+  });
+
+  /* ══════════════════════════════════════════
+     DASHBOARD — SHARED STATE & CONFIG
+  ══════════════════════════════════════════ */
+  var dbUrl    = fb.dbUrl    ? fb.dbUrl.replace(/\/$/, '') : '';
+  var dbSecret = fb.secret   || '';
+  var waNum    = '919934492744';
+  var dAllOrders  = [];
+  var dAllOffers  = [];
+  var dPrevIds    = new Set();
+  var dFilter     = { status: 'all', location: 'all', date: 'today', search: '' };
+  var dOrdersInterval = null;
+
+  var DSTATUS = {
+    new:       { label:'New',       color:'#f59e0b' },
+    confirmed: { label:'Confirmed', color:'#3b82f6' },
+    preparing: { label:'Preparing', color:'#8b5cf6' },
+    ready:     { label:'Ready',     color:'#10b981' },
+    delivered: { label:'Delivered', color:'#6b7280' },
+    cancelled: { label:'Cancelled', color:'#ef4444' },
+  };
+
+  var DTPLS = {
+    happy:   { emoji:'🕐', title:'Happy Hours Deal',     desc:'Order between 2 PM – 6 PM and save 10%!',                    type:'percent', value:10, code:'HAPPY10',   hours:4   },
+    weekend: { emoji:'🎉', title:'Weekend Bonanza',      desc:'Enjoy 15% off on all sweets every weekend!',                type:'percent', value:15, code:'WEEKEND15', hours:48  },
+    flash:   { emoji:'⚡', title:'⚡ Flash Sale — 20% Off!', desc:'Limited time! 20% off on all orders for 24 hours.',       type:'percent', value:20, code:'FLASH20',   hours:24  },
+    bulk:    { emoji:'🛒', title:'Big Order Bonus',      desc:'Order ₹1000 or more and get 20% off instantly!',            type:'percent', value:20, code:'BULK20',    hours:168 },
+    welcome: { emoji:'👋', title:'Welcome Discount',     desc:"First-time customer? Get ₹50 off your first purchase!",     type:'flat',    value:50, code:'WELCOME50', hours:720 },
+    festival:{ emoji:'🎊', title:'Festival Special',     desc:'Celebrate with 15% off on all our festive sweets!',         type:'percent', value:15, code:'FESTIVAL15',hours:72  },
+  };
+
+  function dEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  /* ══════════════════════════════════════════
+     ORDERS — LOAD
+  ══════════════════════════════════════════ */
+  async function dLoadOrders() {
+    if (!dbUrl) { document.getElementById('dOrdersLoading').textContent = 'Firebase not configured in js/firebase-config.js'; return; }
+    try {
+      var res  = await fetch(dbUrl + '/orders.json?auth=' + dbSecret);
+      var data = await res.json();
+      var inc  = data ? Object.entries(data).map(function (e) { return Object.assign({}, e[1], { _fbKey: e[0] }); }) : [];
+      inc.sort(function (a,b) { return (b.timestamp||0)-(a.timestamp||0); });
+      if (dPrevIds.size) {
+        inc.forEach(function (o) {
+          if (!dPrevIds.has(o.id) && o.status==='new' && Notification.permission==='granted') {
+            new Notification('New Order — Arora Sweets', { body: o.id + ' • ' + (o.customer&&o.customer.name||'Customer') + ' • ₹' + o.total });
+          }
+        });
+      }
+      if (Notification.permission==='default') Notification.requestPermission();
+      dPrevIds = new Set(inc.map(function (o) { return o.id; }));
+      dAllOrders = inc;
+      dUpdateStats(); dUpdateLocFilter(); dRenderOrders();
+      var now = new Date();
+      document.getElementById('lastRefreshed').textContent = 'Updated ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    } catch (e) { document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed'; }
+  }
+
+  function dUpdateStats() {
+    var now = new Date(); var s = new Date(now); s.setHours(0,0,0,0);
+    var today  = dAllOrders.filter(function (o) { return (o.timestamp||0) >= s.getTime(); });
+    var active = today.filter(function (o) { return ['new','confirmed','preparing','ready'].includes(o.status); });
+    var done   = today.filter(function (o) { return o.status==='delivered'; });
+    var rev    = today.filter(function (o) { return o.status!=='cancelled'; }).reduce(function (a,o) { return a+(o.total||0); }, 0);
+    document.getElementById('dStatOrders').textContent = today.length;
+    document.getElementById('dStatRev').textContent    = '₹' + rev.toLocaleString('en-IN');
+    document.getElementById('dStatActive').textContent = active.length;
+    document.getElementById('dStatDone').textContent   = done.length;
+  }
+
+  function dUpdateLocFilter() {
+    var locs = [];
+    dAllOrders.forEach(function (o) { var l = o.location||( o.customer&&o.customer.city)||''; if (l && !locs.includes(l)) locs.push(l); });
+    locs.sort();
+    var sel = document.getElementById('dLocSel'); var cur = sel.value;
+    sel.innerHTML = '<option value="all">All Locations</option>';
+    locs.forEach(function (l) { var op=document.createElement('option'); op.value=op.textContent=l; sel.appendChild(op); });
+    if (locs.includes(cur)) sel.value = cur;
+  }
+
+  function dGetFiltered() {
+    var list = dAllOrders;
+    if (dFilter.status !== 'all') list = list.filter(function (o) { return o.status===dFilter.status; });
+    if (dFilter.location !== 'all') list = list.filter(function (o) { return (o.location||(o.customer&&o.customer.city)||'')===dFilter.location; });
+    var now = new Date();
+    if (dFilter.date === 'today') {
+      var s=new Date(now);s.setHours(0,0,0,0);
+      list = list.filter(function (o) { return (o.timestamp||0)>=s.getTime(); });
+    } else if (dFilter.date === 'yesterday') {
+      var s=new Date(now);s.setHours(0,0,0,0);s.setDate(s.getDate()-1);
+      var e=new Date(now);e.setHours(0,0,0,0);
+      list = list.filter(function (o) { return (o.timestamp||0)>=s.getTime()&&(o.timestamp||0)<e.getTime(); });
+    } else if (dFilter.date === 'week') {
+      var s=new Date(now);s.setDate(s.getDate()-7);s.setHours(0,0,0,0);
+      list = list.filter(function (o) { return (o.timestamp||0)>=s.getTime(); });
+    }
+    if (dFilter.search) {
+      var q=dFilter.search.toLowerCase();
+      list = list.filter(function (o) {
+        return (o.id||'').toLowerCase().includes(q)||(o.customer&&o.customer.name||'').toLowerCase().includes(q)||(o.customer&&o.customer.phone||'').includes(q);
+      });
+    }
+    return list;
+  }
+
+  function dRenderOrders() {
+    var f = dGetFiltered();
+    var loading = document.getElementById('dOrdersLoading');
+    var empty   = document.getElementById('dOrdersEmpty');
+    var table   = document.getElementById('dOrdersTable');
+    var list    = document.getElementById('dOrdersList');
+    loading.classList.add('hidden');
+    if (!f.length) { empty.classList.remove('hidden'); table.classList.add('hidden'); return; }
+    empty.classList.add('hidden'); table.classList.remove('hidden');
+    list.innerHTML = f.map(dOrderRow).join('');
+    list.querySelectorAll('.o-row').forEach(function (row) {
+      var id = row.dataset.oid;
+      var eyeBtn = row.querySelector('.oBtn-eye');
+      var waBtn  = row.querySelector('.oBtn-wa');
+      var ssel   = row.querySelector('.o-ssel');
+      if (eyeBtn) eyeBtn.addEventListener('click', function (e) { e.stopPropagation(); dOpenModal(id); });
+      if (waBtn)  waBtn.addEventListener('click',  function (e) { e.stopPropagation(); dSendWa(id); });
+      if (ssel)   ssel.addEventListener('change',  function (e) { e.stopPropagation(); dUpdateStatus(id, e.target.value); });
+    });
+  }
+
+  function dStatusBadge(s) {
+    var x = DSTATUS[s]||{label:s,color:'#6b7280'};
+    return '<span class="s-badge" style="background:'+x.color+'22;color:'+x.color+';border:1px solid '+x.color+'44">'+x.label+'</span>';
+  }
+  function dStatusOpts(cur) {
+    return Object.entries(DSTATUS).map(function (e) {
+      return '<option value="'+e[0]+'"'+(cur===e[0]?' selected':'')+'>'+e[1].label+'</option>';
+    }).join('');
+  }
+
+  function dOrderRow(o) {
+    var t    = new Date(o.timestamp||Date.now());
+    var time = t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    var date = t.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
+    var loc  = dEsc(o.location||(o.customer&&o.customer.city)||'—');
+    var items= o.items||[];
+    var prev = items.slice(0,2).map(function (i) { return i.name+' ×'+i.qty; }).join(', ')+(items.length>2?' +'+(items.length-2)+' more':'');
+    return '<div class="o-row'+(o.status==='new'?' o-new':'')+'" data-oid="'+dEsc(o.id)+'">'
+      +'<div><div class="o-id">'+dEsc(o.id)+'</div></div>'
+      +'<div><div class="o-cname">'+dEsc((o.customer&&o.customer.name)||'—')+'</div><div class="o-phone">'+dEsc((o.customer&&o.customer.phone)||'')+'</div></div>'
+      +'<div><span class="o-loc">'+loc+'</span></div>'
+      +'<div><div class="o-items-p">'+dEsc(prev||'—')+'</div></div>'
+      +'<div><span class="o-total">₹'+(o.total||0)+'</span></div>'
+      +'<div><span class="o-type '+(o.orderType==='pickup'?'o-pickup':'o-delivery')+'">'+(o.orderType==='pickup'?'🏪 Pickup':'🚴 Delivery')+'</span></div>'
+      +'<div><div class="o-time">'+time+'</div><div class="o-date">'+date+'</div></div>'
+      +'<div><select class="o-ssel">'+dStatusOpts(o.status)+'</select></div>'
+      +'<div><button class="o-aBtn oBtn-eye" title="Details">👁</button><button class="o-aBtn oBtn-wa" title="WhatsApp">💬</button></div>'
+      +'</div>';
+  }
+
+  async function dUpdateStatus(orderId, newStatus) {
+    var o = dAllOrders.find(function (x) { return x.id===orderId; });
+    if (!o||!dbUrl) return;
+    try {
+      await fetch(dbUrl+'/orders/'+o._fbKey+'.json?auth='+dbSecret,
+        {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})});
+      o.status = newStatus; dUpdateStats(); dRenderOrders();
+    } catch (e) { showToast('Failed to update status.'); }
+  }
+
+  /* ── Order Detail Modal ── */
+  function dOpenModal(orderId) {
+    var o = dAllOrders.find(function (x) { return x.id===orderId; }); if (!o) return;
+    var t   = new Date(o.timestamp||Date.now());
+    var loc = o.location||(o.customer&&o.customer.city)||'—';
+    var items = o.items||[];
+    document.getElementById('odmTitle').textContent = o.id;
+    document.getElementById('odmBody').innerHTML =
+      '<div class="odm-header"><div>'
+        +'<div class="odm-id">'+dEsc(o.id)+'</div>'
+        +'<div class="odm-time">'+t.toLocaleString('en-IN')+' &nbsp;·&nbsp; '+(o.orderType==='pickup'?'🏪 Pickup':'🚴 Delivery')+'</div>'
+      +'</div>'+dStatusBadge(o.status)+'</div>'
+
+      +'<div class="odm-grid">'
+        +'<div class="odm-section"><div class="odm-stitle">Customer</div>'
+          +'<div class="odm-field"><strong>Name:</strong> '+dEsc((o.customer&&o.customer.name)||'—')+'</div>'
+          +'<div class="odm-field"><strong>Phone:</strong> '+dEsc((o.customer&&o.customer.phone)||'—')+'</div>'
+          +((o.customer&&o.customer.email)?'<div class="odm-field"><strong>Email:</strong> '+dEsc(o.customer.email)+'</div>':'')
+        +'</div>'
+        +'<div class="odm-section"><div class="odm-stitle">'+(o.orderType==='pickup'?'Pickup':'Delivery Address')+'</div>'
+          +(o.orderType==='pickup'
+            ?'<div class="odm-field">Supriya Road, Bettiah</div><div class="odm-field" style="color:var(--green);font-size:12px">Store Pickup</div>'
+            :'<div class="odm-field">'+dEsc((o.customer&&o.customer.address)||'—')+'</div>'
+             +'<div class="odm-field">'+dEsc((o.customer&&o.customer.city)||'')+((o.customer&&o.customer.pincode)?' – '+dEsc(o.customer.pincode):'')+'</div>'
+             +((o.customer&&o.customer.landmark)?'<div class="odm-field" style="color:var(--muted)">Near: '+dEsc(o.customer.landmark)+'</div>':''))
+          +'<div class="odm-field" style="margin-top:8px"><strong>📍 Location:</strong> '+dEsc(loc)+'</div>'
+        +'</div>'
+      +'</div>'
+
+      +'<div class="odm-section"><div class="odm-stitle">Items ('+items.length+')</div>'
+        +'<div class="odm-items">'
+          +'<div class="odm-items-head"><span>Item</span><span style="text-align:center">Qty</span><span style="text-align:right">Rate</span><span style="text-align:right">Amount</span></div>'
+          +items.map(function (i) {
+            return '<div class="odm-item-row"><span>'+dEsc(i.name)+'</span>'
+              +'<span style="text-align:center">×'+i.qty+'</span>'
+              +'<span style="text-align:right">₹'+i.price+'</span>'
+              +'<span style="text-align:right">₹'+(i.price*i.qty)+'</span></div>';
+          }).join('')
+        +'</div>'
+      +'</div>'
+
+      +'<div class="odm-bill">'
+        +'<div class="odm-bill-row"><span>Item Total</span><span>₹'+(o.subtotal||0)+'</span></div>'
+        +((o.discount||0)>0?'<div class="odm-bill-row odm-disc"><span>Discount'+( o.coupon?' ('+dEsc(o.coupon)+')':'' )+'</span><span>−₹'+o.discount+'</span></div>':'')
+        +'<div class="odm-bill-row"><span>'+(o.orderType==='pickup'?'Pickup':'Delivery')+'</span><span>'+((o.deliveryFee||0)===0?'FREE':'₹'+o.deliveryFee)+'</span></div>'
+        +'<div class="odm-bill-row"><span>GST (5%)</span><span>₹'+(o.tax||0)+'</span></div>'
+        +'<div class="odm-bill-row odm-bill-total"><span>Total Paid</span><span>₹'+o.total+'</span></div>'
+        +'<div class="odm-bill-row"><span>Payment</span><span class="odm-pay">'+((o.paymentMethod||'cod').toUpperCase())+'</span></div>'
+      +'</div>'
+
+      +(o.specialInstructions?'<div class="odm-section"><div class="odm-stitle">Special Instructions</div><div class="odm-note">"'+dEsc(o.specialInstructions)+'"</div></div>':'')
+
+      +'<div class="odm-actions">'
+        +'<button class="odm-wa-btn" id="odmWaBtn">💬 Notify via WhatsApp</button>'
+        +'<div class="odm-status-wrap"><span>Update status:</span>'
+          +'<select class="odm-ssel" id="odmSsel">'+dStatusOpts(o.status)+'</select>'
+        +'</div>'
+      +'</div>';
+
+    document.getElementById('odmWaBtn').onclick      = function () { dSendWa(o.id); };
+    document.getElementById('odmSsel').onchange      = function (e) { dUpdateStatus(o.id, e.target.value); document.getElementById('orderDetailModal').style.display='none'; };
+    document.getElementById('orderDetailModal').style.display = 'flex';
+  }
+
+  document.getElementById('odmClose').addEventListener('click', function () {
+    document.getElementById('orderDetailModal').style.display = 'none';
+  });
+  document.getElementById('orderDetailModal').addEventListener('click', function (e) {
+    if (e.target === this) this.style.display = 'none';
+  });
+
+  /* ── WhatsApp ── */
+  function dSendWa(orderId) {
+    var o = dAllOrders.find(function (x) { return x.id===orderId; }); if (!o) return;
+    var loc = o.location||(o.customer&&o.customer.city)||'—';
+    var items = (o.items||[]).map(function (i) { return '• '+i.name+' × '+i.qty+'  =  ₹'+(i.price*i.qty); }).join('\n');
+    var msg = '🍬 *NEW ORDER — '+o.id+'*\n\n'
+      +'👤 Name: '+((o.customer&&o.customer.name)||'—')+'\n'
+      +'📱 Phone: '+((o.customer&&o.customer.phone)||'—')+'\n'
+      +'📍 Location: '+loc+'\n'
+      +'🚴 Type: '+(o.orderType==='pickup'?'Store Pickup':'Home Delivery')+'\n'
+      +(o.orderType!=='pickup'?'🏠 Address: '+((o.customer&&o.customer.address)||'—')+', '+((o.customer&&o.customer.city)||'')+'\n':'')
+      +'\n*Items:*\n'+items+'\n\n'
+      +'💰 Total: ₹'+o.total+'\n'
+      +'💳 Payment: '+((o.paymentMethod||'cod').toUpperCase())
+      +(o.specialInstructions?'\n📝 Note: '+o.specialInstructions:'');
+    window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+  }
+
+  /* ── Filter bindings ── */
+  document.getElementById('dStatusTabs').addEventListener('click', function (e) {
+    var btn = e.target.closest('.dst-btn'); if (!btn) return;
+    document.querySelectorAll('.dst-btn').forEach(function (b) { b.classList.remove('active'); });
+    btn.classList.add('active'); dFilter.status = btn.dataset.s; dRenderOrders();
+  });
+  document.getElementById('dLocSel').addEventListener('change',  function (e) { dFilter.location=e.target.value; dRenderOrders(); });
+  document.getElementById('dDateSel').addEventListener('change', function (e) { dFilter.date=e.target.value; dUpdateStats(); dRenderOrders(); });
+  var dSt; document.getElementById('dSearch').addEventListener('input', function (e) {
+    clearTimeout(dSt); dSt=setTimeout(function () { dFilter.search=e.target.value.trim(); dRenderOrders(); },280);
+  });
+
+  /* ══════════════════════════════════════════
+     OFFERS — LOAD & RENDER
+  ══════════════════════════════════════════ */
+  async function dLoadOffers() {
+    document.getElementById('aolLoading').classList.remove('hidden');
+    document.getElementById('aolList').classList.add('hidden');
+    document.getElementById('aolEmpty').classList.add('hidden');
+    if (!dbUrl) { document.getElementById('aolLoading').textContent='Firebase not configured.'; return; }
+    try {
+      var res  = await fetch(dbUrl+'/offers.json?auth='+dbSecret);
+      var data = await res.json();
+      dAllOffers = data ? Object.entries(data).map(function (e) { return Object.assign({},e[1],{_fbKey:e[0]}); }) : [];
+      dAllOffers.sort(function (a,b) { return (b.createdAt||0)-(a.createdAt||0); });
+      dRenderOffers(); dUpdateLiveBar();
+    } catch (e) { document.getElementById('aolLoading').textContent='⚠ Failed to load offers.'; }
+  }
+
+  function dRenderOffers() {
+    var loading = document.getElementById('aolLoading');
+    var empty   = document.getElementById('aolEmpty');
+    var list    = document.getElementById('aolList');
+    loading.classList.add('hidden');
+    if (!dAllOffers.length) { empty.classList.remove('hidden'); list.classList.add('hidden'); return; }
+    empty.classList.add('hidden'); list.classList.remove('hidden');
+    list.innerHTML = dAllOffers.map(dOfferRow).join('');
+    list.querySelectorAll('.aol-row').forEach(function (row) {
+      var id = row.dataset.oid;
+      row.querySelector('.btn-aol-toggle').addEventListener('click', function () { dToggleOffer(id); });
+      row.querySelector('.btn-aol-del').addEventListener('click',    function () { dDeleteOffer(id); });
+    });
+  }
+
+  function dUpdateLiveBar() {
+    var bar  = document.getElementById('offersLiveBar');
+    var now  = Date.now();
+    var live = dAllOffers.filter(function (o) { return o.isActive&&(o.endTime||0)>now; });
+    if (!live.length) { bar.classList.remove('on'); return; }
+    bar.classList.add('on');
+    bar.innerHTML = '<span style="font-weight:700">🟢 Live on homepage:</span> '
+      + live.map(function (o) { return '<span class="olb-chip">'+(o.emoji||'🏷️')+' '+dEsc(o.title)+' — <strong>'+dEsc(o.couponCode)+'</strong></span>'; }).join('');
+  }
+
+  function dOfferRow(o) {
+    var now = Date.now(); var exp = (o.endTime||0)<=now; var live = o.isActive&&!exp;
+    var ms  = (o.endTime||0)-now;
+    var h   = Math.floor(ms/3600000); var m=Math.floor((ms%3600000)/60000);
+    var cd  = ms<=0?'Expired':h>=24?Math.floor(h/24)+'d '+h%24+'h left':h>0?h+'h '+m+'m left':m+'m left';
+    var disc= o.type==='percent'?o.value+'% OFF':'₹'+o.value+' OFF';
+    return '<div class="aol-row'+(live?' aol-live':exp?' aol-expired':'')+'" data-oid="'+dEsc(o.id||o._fbKey)+'">'
+      +'<div class="aol-emoji">'+(o.emoji||'🏷️')+'</div>'
+      +'<div class="aol-info"><div class="aol-title">'+dEsc(o.title)+'</div><div class="aol-desc">'+dEsc(o.description||'')+'</div></div>'
+      +'<div class="aol-meta">'
+        +'<span class="aol-disc">'+disc+'</span>'
+        +'<span class="aol-code">🎟 '+dEsc(o.couponCode||'—')+'</span>'
+        +'<span class="aol-time'+(exp?' exp':'')+'">'+(exp?'⛔ Expired':live?'⏱ '+cd:'⏸ Paused')+'</span>'
+        +'<span class="aol-hp">'+(o.showOnHomepage?'🌐 Homepage':'🔒 Hidden')+'</span>'
+      +'</div>'
+      +'<div class="aol-actions">'
+        +'<button class="btn-aol-toggle">'+(live?'Pause':'Resume')+'</button>'
+        +'<button class="btn-aol-del">Delete</button>'
+      +'</div>'
+      +'</div>';
+  }
+
+  function dOfferCd(ms) {
+    if (ms<=0) return 'Expired';
+    var h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000);
+    return h>=24?Math.floor(h/24)+'d '+h%24+'h left':h>0?h+'h '+m+'m left':m+'m left';
+  }
+
+  async function dSaveOffer(offerData) {
+    var id = offerData.id||('offer_'+Date.now());
+    await fetch(dbUrl+'/offers/'+id+'.json?auth='+dbSecret,
+      {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},offerData,{id:id}))});
+    await dLoadOffers();
+  }
+
+  async function dToggleOffer(offerId) {
+    var o = dAllOffers.find(function (x) { return (x.id||x._fbKey)===offerId; }); if (!o||!dbUrl) return;
+    var newA = !(o.isActive&&(o.endTime||0)>Date.now());
+    await fetch(dbUrl+'/offers/'+o._fbKey+'.json?auth='+dbSecret,
+      {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({isActive:newA})});
+    await dLoadOffers();
+  }
+
+  async function dDeleteOffer(offerId) {
+    var o = dAllOffers.find(function (x) { return (x.id||x._fbKey)===offerId; }); if (!o||!dbUrl) return;
+    if (!confirm('Delete offer "'+o.title+'"? It will be removed from the homepage.')) return;
+    await fetch(dbUrl+'/offers/'+o._fbKey+'.json?auth='+dbSecret,{method:'DELETE'});
+    await dLoadOffers();
+  }
+
+  /* ── Offer modal ── */
+  function dOpenOfferModal(prefill) {
+    var p = prefill||{};
+    document.getElementById('ofModalTitle').textContent = 'Create Offer';
+    document.getElementById('ofEmo').value    = p.emoji  ||'🎉';
+    document.getElementById('ofTitle').value  = p.title  ||'';
+    document.getElementById('ofDesc').value   = p.desc   ||'';
+    document.getElementById('ofType').value   = p.type   ||'percent';
+    document.getElementById('ofValue').value  = p.value  ||'';
+    document.getElementById('ofCode').value   = (p.code  ||'').toUpperCase();
+    document.getElementById('ofDur').value    = String(p.hours||24);
+    document.getElementById('ofHomepage').checked = p.homepage!==false;
+    document.getElementById('offerCreateModal').style.display = 'flex';
+    document.getElementById('ofTitle').focus();
+  }
+
+  document.getElementById('ofModalClose').addEventListener('click',  function () { document.getElementById('offerCreateModal').style.display='none'; });
+  document.getElementById('ofModalCancel').addEventListener('click', function () { document.getElementById('offerCreateModal').style.display='none'; });
+  document.getElementById('offerCreateModal').addEventListener('click', function (e) { if (e.target===this) this.style.display='none'; });
+
+  document.getElementById('ofSaveBtn').addEventListener('click', async function () {
+    var title = document.getElementById('ofTitle').value.trim();
+    var value = parseFloat(document.getElementById('ofValue').value);
+    var code  = document.getElementById('ofCode').value.trim().toUpperCase();
+    if (!title) { showToast('Please enter an offer title.'); return; }
+    if (!value||value<=0) { showToast('Please enter a valid discount value.'); return; }
+    if (!code)  { showToast('Please enter a coupon code.'); return; }
+    var hours = parseInt(document.getElementById('ofDur').value)||24;
+    var now   = Date.now();
+    var btn   = this; btn.textContent='Saving…'; btn.disabled=true;
+    try {
+      await dSaveOffer({
+        emoji: document.getElementById('ofEmo').value.trim()||'🎉',
+        title, description: document.getElementById('ofDesc').value.trim(),
+        type: document.getElementById('ofType').value, value, couponCode: code,
+        startTime: now, endTime: now+hours*3600000, isActive: true,
+        showOnHomepage: document.getElementById('ofHomepage').checked, createdAt: now,
+      });
+      document.getElementById('offerCreateModal').style.display='none';
+      showToast('Offer saved and activated!','success');
+    } catch (e) { showToast('Failed to save offer. Check connection.'); }
+    btn.textContent='Save & Activate'; btn.disabled=false;
+  });
+
+  document.getElementById('btnNewOffer').addEventListener('click', function () { dOpenOfferModal(); });
+
+  document.querySelectorAll('.tpl-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var tpl = DTPLS[btn.dataset.tpl]; if (tpl) dOpenOfferModal(tpl);
+    });
+  });
 
   if (isLoggedIn()) showAdmin();
 }());

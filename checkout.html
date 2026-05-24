@@ -132,16 +132,38 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script>
   (function () {
 
-    /* ── coupon definitions ── */
+    /* ── coupon definitions (base hardcoded + dynamic from Firebase offers) ── */
     const COUPONS = {
       'FIRST10':  { type: 'percent', value: 10, desc: '10% off your order' },
       'WELCOME':  { type: 'flat',    value: 50, desc: '₹50 flat off' },
-      'Arora15': { type: 'percent', value: 15, desc: '15% off your order' },
+      'Arora15':  { type: 'percent', value: 15, desc: '15% off your order' },
       'SWEET20':  { type: 'percent', value: 20, desc: '20% off your order' },
     };
+
+    /* Load active Firebase offers and merge coupon codes */
+    if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+      fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
+        .then(r => r.json())
+        .then(data => {
+          if (!data) return;
+          const now = Date.now();
+          Object.values(data).forEach(o => {
+            if (o.isActive && o.couponCode && (o.endTime||0) > now) {
+              const code = String(o.couponCode).toUpperCase();
+              COUPONS[code] = {
+                type: o.type === 'flat' ? 'flat' : 'percent',
+                value: o.value,
+                desc: o.title || (o.type === 'percent' ? o.value+'% off' : '₹'+o.value+' off'),
+              };
+            }
+          });
+        })
+        .catch(() => {});
+    }
 
     /* ── state ── */
     let cart = {};

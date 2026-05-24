@@ -1206,7 +1206,7 @@
     } catch (e) {
       document.getElementById('dOrdersLoading').style.display = 'none';
       var emEl = document.getElementById('dOrdersEmpty');
-      emEl.style.display = '';
+      emEl.classList.remove('hidden');
       emEl.textContent = '⚠ Could not reach Firebase. Check your connection.';
       document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed';
     }
@@ -1266,8 +1266,8 @@
     var table   = document.getElementById('dOrdersTable');
     var list    = document.getElementById('dOrdersList');
     loading.style.display = 'none';
-    if (!f.length) { empty.style.display = ''; table.style.display = 'none'; return; }
-    empty.style.display = 'none'; table.style.display = '';
+    if (!f.length) { empty.classList.remove('hidden'); table.classList.add('hidden'); return; }
+    empty.classList.add('hidden'); table.classList.remove('hidden');
     list.innerHTML = f.map(dOrderRow).join('');
     list.querySelectorAll('.o-row').forEach(function (row) {
       var id = row.dataset.oid;

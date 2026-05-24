@@ -79,8 +79,8 @@
       <p class="success-sub" id="successEta"></p>
       <div class="order-id-badge" id="successOrderId">ORDER #AS-000000</div>
       <div class="success-actions">
-        <a href="#" id="successWaBtn" class="success-btn-primary" target="_blank" rel="noopener">Send on WhatsApp</a>
-        <a href="index.html" class="success-btn-secondary">Back to Home</a>
+        <a href="index.html" class="success-btn-primary">Back to Home</a>
+        <a href="menu.html" class="success-btn-secondary">Order More</a>
       </div>
     </div>
   </div>
@@ -410,7 +410,7 @@
     });
 
     /* ── Place order ── */
-    document.getElementById('placeOrderBtn').addEventListener('click', async () => {
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
       if (!validate()) {
         const firstInvalid = document.querySelector('.form-group input.invalid, .form-group textarea.invalid');
         if (firstInvalid) firstInvalid.focus();
@@ -452,23 +452,6 @@
         specialInstructions: document.getElementById('fInstructions')?.value.trim() || '',
       };
 
-      /* Save to Firebase dashboard */
-      try {
-        if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
-          await fetch(
-            ARORA_FB.dbUrl + 'orders/' + orderId + '.json?auth=' + ARORA_FB.secret,
-            {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(orderData),
-            }
-          );
-        }
-      } catch (e) {
-        /* Silently continue — order confirmed locally even if Firebase unreachable */
-        console.warn('Firebase save failed:', e);
-      }
-
       /* Save local confirmation data */
       localStorage.setItem('aroraLastOrder', JSON.stringify({
         orderId, total, eta, payMethod,
@@ -499,8 +482,18 @@
       waMsg += `*Total: ₹${total}*\n\n`;
       if (orderData.specialInstructions) waMsg += `*Note:* ${orderData.specialInstructions}\n\n`;
       waMsg += `_Ordered via Arora Sweets website_`;
-      document.getElementById('successWaBtn').href =
-        `https://wa.me/919934492744?text=${encodeURIComponent(waMsg)}`;
+      const waUrl = `https://wa.me/919934492744?text=${encodeURIComponent(waMsg)}`;
+
+      /* Fire-and-forget Firebase save (runs in background, doesn't block WhatsApp) */
+      if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+        fetch(
+          ARORA_FB.dbUrl + 'orders/' + orderId + '.json?auth=' + ARORA_FB.secret,
+          { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderData) }
+        ).catch(e => console.warn('Firebase save failed:', e));
+      }
+
+      /* Open WhatsApp immediately — synchronous in the click handler so popup blocker won't fire */
+      window.open(waUrl, '_blank', 'noopener');
 
       /* Show success modal */
       document.getElementById('successOrderId').textContent = 'ORDER #' + orderId;

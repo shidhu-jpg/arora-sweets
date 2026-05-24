@@ -1204,9 +1204,10 @@
       var now = new Date();
       document.getElementById('lastRefreshed').textContent = 'Updated ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     } catch (e) {
-      document.getElementById('dOrdersLoading').classList.add('hidden');
-      document.getElementById('dOrdersEmpty').classList.remove('hidden');
-      document.getElementById('dOrdersEmpty').textContent = '⚠ Could not reach Firebase. Check your connection.';
+      document.getElementById('dOrdersLoading').style.display = 'none';
+      var emEl = document.getElementById('dOrdersEmpty');
+      emEl.style.display = '';
+      emEl.textContent = '⚠ Could not reach Firebase. Check your connection.';
       document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed';
     }
   }
@@ -1264,9 +1265,9 @@
     var empty   = document.getElementById('dOrdersEmpty');
     var table   = document.getElementById('dOrdersTable');
     var list    = document.getElementById('dOrdersList');
-    loading.classList.add('hidden');
-    if (!f.length) { empty.classList.remove('hidden'); table.classList.add('hidden'); return; }
-    empty.classList.add('hidden'); table.classList.remove('hidden');
+    loading.style.display = 'none';
+    if (!f.length) { empty.style.display = ''; table.style.display = 'none'; return; }
+    empty.style.display = 'none'; table.style.display = '';
     list.innerHTML = f.map(dOrderRow).join('');
     list.querySelectorAll('.o-row').forEach(function (row) {
       var id = row.dataset.oid;

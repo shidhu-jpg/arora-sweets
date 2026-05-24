@@ -304,38 +304,110 @@
   color: #ff7070;
 }
 
-.offer-chips-label {
+/* ── Offer cards (checkout) ── */
+.offer-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.offer-card-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border: 1px dashed rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.04);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.offer-card-item:hover {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+
+.offer-card-item.oci-applied {
+  border: 1px solid #28a745;
+  background: rgba(40,167,69,0.07);
+}
+
+.oci-badge {
+  background: var(--gold);
+  color: var(--black);
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 5px 9px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.offer-card-item.oci-applied .oci-badge {
+  background: #28a745;
+  color: #fff;
+}
+
+.oci-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.oci-desc {
+  font-family: var(--font-sans);
+  font-size: 0.83rem;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+
+.oci-code {
+  font-family: monospace;
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+
+.oci-btn {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--font-sans);
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 7px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.oci-btn:hover:not([disabled]) {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.oci-btn[disabled] {
+  border-color: #28a745;
+  color: #6fcf97;
+  cursor: default;
+}
+
+/* ── Manual coupon entry ── */
+.coupon-manual-wrap { margin-top: 4px; }
+
+.coupon-manual-label {
+  display: block;
   font-family: var(--font-sans);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--white-50);
-  margin-bottom: 12px;
-}
-
-.offer-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.offer-chip {
-  background: transparent;
-  border: 1px dashed rgba(201,168,76,0.5);
-  color: var(--gold);
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-
-.offer-chip:hover {
-  background: rgba(201,168,76,0.12);
-  border-color: var(--gold);
+  margin-bottom: 10px;
 }
 
 /* ── Order type ── */

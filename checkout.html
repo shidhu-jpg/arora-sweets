@@ -161,6 +161,7 @@
               };
             }
           });
+          renderOfferCards();
         })
         .catch(() => {});
     }
@@ -302,6 +303,46 @@
         </div>`;
     }
 
+    /* ── offer cards ── */
+    function renderOfferCards() {
+      const list = document.getElementById('offerCardsList');
+      if (!list) return;
+      list.innerHTML = Object.entries(COUPONS).map(([code, c]) => {
+        const isApplied = appliedCoupon === code;
+        const badge = c.type === 'percent' ? c.value + '% OFF' : '₹' + c.value + ' OFF';
+        return `
+          <div class="offer-card-item${isApplied ? ' oci-applied' : ''}">
+            <div class="oci-badge">${esc(badge)}</div>
+            <div class="oci-body">
+              <div class="oci-desc">${esc(c.desc)}</div>
+              <div class="oci-code">${esc(code)}</div>
+            </div>
+            <button class="oci-btn"${isApplied ? ' disabled' : ''} data-code="${esc(code)}">${isApplied ? '✓ Applied' : 'Apply'}</button>
+          </div>`;
+      }).join('');
+      list.querySelectorAll('.oci-btn:not([disabled])').forEach(btn =>
+        btn.addEventListener('click', () => applyOfferCode(btn.dataset.code))
+      );
+    }
+
+    function applyOfferCode(code) {
+      const upperCode = code.toUpperCase();
+      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
+      const msg = document.getElementById('couponMsg');
+      if (matchKey) {
+        appliedCoupon = matchKey;
+        msg.className = 'coupon-msg success';
+        msg.textContent = '✓ "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
+      } else {
+        appliedCoupon = null;
+        msg.className = 'coupon-msg error';
+        msg.textContent = '✕ Offer not available.';
+      }
+      document.getElementById('couponInput').value = '';
+      renderOfferCards();
+      renderBill();
+    }
+
     /* ── build page ── */
     function buildPage() {
       if (!Object.keys(cart).length) { showEmpty(); return; }
@@ -319,20 +360,17 @@
               <a href="menu.html" class="add-more-link">+ Add more items</a>
             </div>
 
-            <!-- Coupon / Offers -->
+            <!-- Offers -->
             <div class="checkout-block">
-              <h2>Apply Offer</h2>
-              <div class="coupon-input-row">
-                <input type="text" id="couponInput" placeholder="Enter coupon code (e.g. FIRST10)" autocomplete="off" />
-                <button class="coupon-apply-btn" id="couponApplyBtn">Apply</button>
-              </div>
+              <h2>🏷️ Available Offers</h2>
+              <div id="offerCardsList" class="offer-cards-list"></div>
               <div class="coupon-msg" id="couponMsg"></div>
-              <div class="offer-chips-label">Available Offers</div>
-              <div class="offer-chips">
-                <button class="offer-chip" data-code="FIRST10">FIRST10 &mdash; 10% off</button>
-                <button class="offer-chip" data-code="WELCOME">WELCOME &mdash; ₹50 off</button>
-                <button class="offer-chip" data-code="Arora15">Arora15 &mdash; 15% off</button>
-                <button class="offer-chip" data-code="SWEET20">SWEET20 &mdash; 20% off</button>
+              <div class="coupon-manual-wrap">
+                <span class="coupon-manual-label">Have a different code?</span>
+                <div class="coupon-input-row">
+                  <input type="text" id="couponInput" placeholder="Enter coupon code" autocomplete="off" />
+                  <button class="coupon-apply-btn" id="couponApplyBtn">Apply</button>
+                </div>
               </div>
             </div>
 
@@ -420,13 +458,8 @@
         if (e.key === 'Enter') applyCoupon();
       });
 
-      /* Offer chips */
-      document.querySelectorAll('.offer-chip').forEach(chip =>
-        chip.addEventListener('click', () => {
-          document.getElementById('couponInput').value = chip.dataset.code;
-          applyCoupon();
-        })
-      );
+      /* Render offer cards */
+      renderOfferCards();
 
       /* Order type */
       document.getElementById('cardDelivery').addEventListener('click', () => setOrderType('delivery'));
@@ -437,21 +470,24 @@
     }
 
     function applyCoupon() {
-      const code = document.getElementById('couponInput').value.trim().toUpperCase();
-      const msg  = document.getElementById('couponMsg');
-      if (COUPONS[code]) {
-        appliedCoupon = code;
+      const raw = document.getElementById('couponInput').value.trim();
+      const upperCode = raw.toUpperCase();
+      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
+      const msg = document.getElementById('couponMsg');
+      if (matchKey) {
+        appliedCoupon = matchKey;
         msg.className = 'coupon-msg success';
-        msg.textContent = '✓ Coupon "' + code + '" applied — ' + COUPONS[code].desc;
-      } else if (code === '') {
+        msg.textContent = '✓ Coupon "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
+      } else if (!raw) {
         appliedCoupon = null;
         msg.className = 'coupon-msg error';
         msg.textContent = 'Please enter a coupon code.';
       } else {
         appliedCoupon = null;
         msg.className = 'coupon-msg error';
-        msg.textContent = '✕ Invalid code. Try: FIRST10, WELCOME, Arora15, SWEET20.';
+        msg.textContent = '✕ Invalid coupon code. Try one of the offers above.';
       }
+      renderOfferCards();
       renderBill();
     }
 

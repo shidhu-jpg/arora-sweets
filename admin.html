@@ -9,6 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/admin.css" />
   <style>
+    .hidden { display: none !important; }
+
     /* ── Setup banner ── */
     .setup-banner {
       background: #fff8e8; border: 1.5px solid #C9973B; border-radius: 10px;
@@ -1201,7 +1203,12 @@
       dUpdateStats(); dUpdateLocFilter(); dRenderOrders();
       var now = new Date();
       document.getElementById('lastRefreshed').textContent = 'Updated ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
-    } catch (e) { document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed'; }
+    } catch (e) {
+      document.getElementById('dOrdersLoading').classList.add('hidden');
+      document.getElementById('dOrdersEmpty').classList.remove('hidden');
+      document.getElementById('dOrdersEmpty').textContent = '⚠ Could not reach Firebase. Check your connection.';
+      document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed';
+    }
   }
 
   function dUpdateStats() {

@@ -74,7 +74,7 @@
     .o-table-wrap { overflow-x:auto; }
     .o-head, .o-row {
       display:grid;
-      grid-template-columns:110px 160px 110px 1fr 90px 110px 90px 130px 90px;
+      grid-template-columns:110px 160px 180px 1fr 90px 110px 90px 130px 90px;
       padding:11px 14px; align-items:center;
     }
     .o-head { background:#f8f5ef; border-bottom:1px solid var(--border); font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
@@ -86,6 +86,7 @@
     .o-cname { font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .o-phone { font-size:11px; color:var(--muted); margin-top:2px; }
     .o-loc { display:inline-block; padding:2px 8px; background:#f5ecd8; border:1px solid #e0c88a; border-radius:4px; font-size:11px; font-weight:700; color:#6a4810; }
+    .o-addr { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4; word-break:break-word; }
     .o-items-p { font-size:12px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .o-total { font-size:14px; font-weight:700; }
     .o-type { font-size:11px; padding:2px 8px; border-radius:4px; font-weight:600; white-space:nowrap; }
@@ -1294,13 +1295,20 @@
     var t    = new Date(o.timestamp||Date.now());
     var time = t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
     var date = t.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
-    var loc  = dEsc(o.location||(o.customer&&o.customer.city)||'—');
+    var city = dEsc(o.location||(o.customer&&o.customer.city)||'—');
+    var addrParts = [];
+    if (o.customer) {
+      if (o.customer.address)  addrParts.push(o.customer.address);
+      if (o.customer.landmark) addrParts.push(o.customer.landmark);
+      if (o.customer.pincode)  addrParts.push(o.customer.pincode);
+    }
+    var fullAddr = addrParts.map(dEsc).join(', ');
     var items= o.items||[];
     var prev = items.slice(0,2).map(function (i) { return i.name+' ×'+i.qty; }).join(', ')+(items.length>2?' +'+(items.length-2)+' more':'');
     return '<div class="o-row'+(o.status==='new'?' o-new':'')+'" data-oid="'+dEsc(o.id)+'">'
       +'<div><div class="o-id">'+dEsc(o.id)+'</div></div>'
       +'<div><div class="o-cname">'+dEsc((o.customer&&o.customer.name)||'—')+'</div><div class="o-phone">'+dEsc((o.customer&&o.customer.phone)||'')+'</div></div>'
-      +'<div><span class="o-loc">'+loc+'</span></div>'
+      +'<div><span class="o-loc">'+city+'</span>'+(fullAddr?'<div class="o-addr">'+fullAddr+'</div>':'')+'</div>'
       +'<div><div class="o-items-p">'+dEsc(prev||'—')+'</div></div>'
       +'<div><span class="o-total">₹'+(o.total||0)+'</span></div>'
       +'<div><span class="o-type '+(o.orderType==='pickup'?'o-pickup':'o-delivery')+'">'+(o.orderType==='pickup'?'🏪 Pickup':'🚴 Delivery')+'</span></div>'

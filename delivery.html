@@ -79,8 +79,8 @@
       <p class="success-sub" id="successEta"></p>
       <div class="order-id-badge" id="successOrderId">ORDER #AS-000000</div>
       <div class="success-actions">
-        <a href="index.html" class="success-btn-primary">Back to Home</a>
-        <a href="menu.html" class="success-btn-secondary">Order More</a>
+        <a href="#" id="successWaBtn" class="success-btn-primary" target="_blank" rel="noopener">Send on WhatsApp</a>
+        <a href="index.html" class="success-btn-secondary">Back to Home</a>
       </div>
     </div>
   </div>
@@ -479,6 +479,28 @@
       /* Clear cart + checkout state */
       localStorage.removeItem('aroraCart');
       localStorage.removeItem('aroraCheckout');
+
+      /* Build WhatsApp message */
+      const cust = orderData.customer;
+      const addrParts = [cust.address, cust.landmark, cust.city, cust.pincode].filter(Boolean);
+      const itemLines = items.map(i => `  • ${i.name} × ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      let waMsg =
+        `🛍️ *New Order — Arora Sweets*\n\n` +
+        `*Order ID:* #${orderId}\n` +
+        `*Name:* ${cust.name}\n` +
+        `*Phone:* ${cust.phone}\n` +
+        (addrParts.length ? `*Address:* ${addrParts.join(', ')}\n` : '') +
+        `*Type:* ${orderType === 'delivery' ? 'Delivery' : 'Pickup'}\n` +
+        `*Payment:* ${payMethod === 'cod' ? 'Cash on Delivery' : payMethod === 'upi' ? 'UPI' : 'Card/Online'}\n\n` +
+        `*Items:*\n${itemLines}\n\n`;
+      if (discount > 0) waMsg += `*Discount:* −₹${discount}\n`;
+      waMsg += `*Delivery:* ${delivery === 0 ? 'FREE' : '₹' + delivery}\n`;
+      waMsg += `*Tax (5%):* ₹${tax}\n`;
+      waMsg += `*Total: ₹${total}*\n\n`;
+      if (orderData.specialInstructions) waMsg += `*Note:* ${orderData.specialInstructions}\n\n`;
+      waMsg += `_Ordered via Arora Sweets website_`;
+      document.getElementById('successWaBtn').href =
+        `https://wa.me/919934492744?text=${encodeURIComponent(waMsg)}`;
 
       /* Show success modal */
       document.getElementById('successOrderId').textContent = 'ORDER #' + orderId;

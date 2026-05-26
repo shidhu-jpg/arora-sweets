@@ -490,6 +490,9 @@ body {
    ════════════════════════════════ */
 @media (max-width: 640px) {
 
+  /* Prevent page-level horizontal scroll caused by the wide orders table */
+  html, body { overflow-x: hidden; width: 100%; }
+
   /* Header */
   .admin-header { padding: 0 14px; height: 52px; }
   .admin-logo { font-size: 16px; }
@@ -526,16 +529,49 @@ body {
   .dp-stat-val { font-size: 18px; margin-bottom: 2px; }
   .dp-stat-lbl { font-size: 9.5px; }
 
-  /* Filter bar */
-  .dash-filter-bar { gap: 8px; margin-bottom: 14px; }
+  /* Filter bar — stack vertically */
+  .dash-filter-bar { gap: 8px; margin-bottom: 14px; flex-direction: column; align-items: stretch; }
   .dash-status-tabs { gap: 4px; order: 1; width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 2px; scrollbar-width: none; }
   .dash-status-tabs::-webkit-scrollbar { display: none; }
   .dst-btn { padding: 5px 11px; font-size: 11px; white-space: nowrap; flex-shrink: 0; }
   .dash-filter-sel { order: 2; width: 100%; }
   .dash-filter-search { order: 3; width: 100%; }
 
-  /* Orders table stays scrollable — add touch scroll */
-  .o-table-wrap { -webkit-overflow-scrolling: touch; }
+  /* Orders table → card layout on mobile */
+  .o-table-wrap { overflow-x: visible; width: 100%; }
+  .o-table { min-width: 0 !important; border-left: none; border-right: none; border-radius: 0; }
+  .o-head { display: none !important; }
+  .o-row {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 4px 10px !important;
+    padding: 13px 14px !important;
+    align-items: start;
+  }
+  /* child 1: Order ID — left, row 1 */
+  .o-row > div:nth-child(1) { grid-column: 1; grid-row: 1; align-self: center; }
+  /* child 2: Customer name + phone — left, row 2 */
+  .o-row > div:nth-child(2) { grid-column: 1; grid-row: 2; }
+  /* child 3: Location chip + address — left, row 3 */
+  .o-row > div:nth-child(3) { grid-column: 1; grid-row: 3; }
+  /* child 4: Items preview — full width, row 4 */
+  .o-row > div:nth-child(4) { grid-column: 1 / -1; grid-row: 4; }
+  /* child 5: Total — right, row 1 */
+  .o-row > div:nth-child(5) { grid-column: 2; grid-row: 1; text-align: right; align-self: center; }
+  /* child 6: Type badge — right, row 2 */
+  .o-row > div:nth-child(6) { grid-column: 2; grid-row: 2; justify-self: end; align-self: start; }
+  /* child 7: Time + date — right, row 3 */
+  .o-row > div:nth-child(7) { grid-column: 2; grid-row: 3; justify-self: end; align-self: start; text-align: right; }
+  /* child 8: Status select — full width, row 5 */
+  .o-row > div:nth-child(8) { grid-column: 1 / -1; grid-row: 5; margin-top: 4px; }
+  /* child 9: Action buttons — right-aligned, row 6 */
+  .o-row > div:nth-child(9) { grid-column: 1 / -1; grid-row: 6; display: flex; gap: 6px; justify-content: flex-end; margin-top: 2px; }
+  .o-id { font-size: 13px; }
+  .o-total { font-size: 15px; }
+  .o-items-p { white-space: normal; font-size: 12px; line-height: 1.4; }
+  .o-addr { display: none; }
+  .o-ssel { width: 100%; }
+  .o-aBtn { width: 36px; height: 36px; font-size: 15px; }
 
   /* Price management body */
   .admin-body { padding: 14px 10px 80px; }

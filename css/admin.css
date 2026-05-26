@@ -485,6 +485,101 @@ body {
 /* ── No results ── */
 .no-results { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
+/* ════════════════════════════════
+   MOBILE — ≤ 640px
+   ════════════════════════════════ */
+@media (max-width: 640px) {
+
+  /* Header */
+  .admin-header { padding: 0 14px; height: 52px; }
+  .admin-logo { font-size: 16px; }
+  .admin-badge { display: none; }
+  .price-only { display: none !important; }
+  .dash-lbl { display: none; }
+  .live-ind { font-size: 11px; gap: 5px; }
+  .live-dot-g { width: 6px; height: 6px; }
+  .admin-header-right { gap: 6px; }
+  .btn { padding: 6px 11px; font-size: 12px; }
+
+  /* Tab bar — scrollable */
+  .admin-tabs {
+    padding: 0 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+  }
+  .admin-tabs::-webkit-scrollbar { display: none; }
+  .admin-tab { padding: 11px 14px; font-size: 12px; white-space: nowrap; }
+
+  /* Orders panel */
+  .dash-panel { padding: 14px 12px 20px; }
+
+  /* Stats grid → 2×2 */
+  .dash-panel-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .dp-stat { padding: 12px 12px; gap: 10px; border-radius: 8px; }
+  .dp-stat-icon { font-size: 22px; }
+  .dp-stat-val { font-size: 18px; margin-bottom: 2px; }
+  .dp-stat-lbl { font-size: 9.5px; }
+
+  /* Filter bar */
+  .dash-filter-bar { gap: 8px; margin-bottom: 14px; }
+  .dash-status-tabs { gap: 4px; order: 1; width: 100%; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; padding-bottom: 2px; scrollbar-width: none; }
+  .dash-status-tabs::-webkit-scrollbar { display: none; }
+  .dst-btn { padding: 5px 11px; font-size: 11px; white-space: nowrap; flex-shrink: 0; }
+  .dash-filter-sel { order: 2; width: 100%; }
+  .dash-filter-search { order: 3; width: 100%; }
+
+  /* Orders table stays scrollable — add touch scroll */
+  .o-table-wrap { -webkit-overflow-scrolling: touch; }
+
+  /* Price management body */
+  .admin-body { padding: 14px 10px 80px; }
+  .admin-toolbar h2 { font-size: 16px; }
+  .toolbar-right { gap: 8px; }
+  .search-input { width: 100%; }
+
+  /* Category items */
+  .cat-title { font-size: 14px; }
+  .item-row { padding: 10px 12px; gap: 10px; }
+  .item-name { font-size: 13px; }
+  .item-desc { font-size: 11px; }
+  .price-input { width: 70px; font-size: 13px; }
+  .unit-select { max-width: 80px; font-size: 11px; }
+
+  /* Offers panel */
+  .offers-sec-hdr { flex-direction: column; gap: 10px; }
+  .btn-new-offer { width: 100%; text-align: center; }
+  .tpl-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tpl-card { padding: 14px; }
+  .tpl-emoji { font-size: 22px; }
+  .tpl-name { font-size: 13px; }
+  .tpl-desc { font-size: 11px; margin-bottom: 10px; }
+
+  .aol-row { gap: 10px; padding: 11px 12px; }
+  .aol-emoji { font-size: 22px; }
+  .aol-title { font-size: 13px; }
+  .aol-desc { font-size: 11px; }
+  .aol-actions { gap: 5px; }
+  .btn-aol-toggle, .btn-aol-del { padding: 5px 9px; font-size: 10px; }
+
+  /* Offer form modal */
+  .of-row { flex-direction: column; }
+  .odm-grid { grid-template-columns: 1fr; }
+  .odm-items-head,
+  .odm-item-row { grid-template-columns: 1fr 50px 70px 70px; font-size: 12px; }
+
+  /* Toast */
+  .toast { right: 10px; left: 10px; text-align: center; }
+
+  /* Save banner */
+  .save-banner { left: 12px; right: 12px; transform: none; width: auto; }
+}
+
 /* ── Add Item Modal ── */
 .modal-overlay {
   position: fixed; inset: 0;

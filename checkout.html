@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -131,45 +131,17 @@
     </div>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
   <script src="js/main.js"></script>
   <script src="js/firebase-config.js"></script>
+  <script src="js/customer-auth.js"></script>
   <script>
   (function () {
-
-    /* ── coupon definitions (base hardcoded + dynamic from Firebase offers) ── */
-    const COUPONS = {
-      'FIRST10':  { type: 'percent', value: 10, desc: '10% off your order' },
-      'WELCOME':  { type: 'flat',    value: 50, desc: '₹50 flat off' },
-      'Arora15':  { type: 'percent', value: 15, desc: '15% off your order' },
-      'SWEET20':  { type: 'percent', value: 20, desc: '20% off your order' },
-    };
-
-    /* Load active Firebase offers and merge coupon codes */
-    if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
-      fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
-        .then(r => r.json())
-        .then(data => {
-          if (!data) return;
-          const now = Date.now();
-          Object.values(data).forEach(o => {
-            if (o.isActive && o.couponCode && (o.endTime||0) > now) {
-              const code = String(o.couponCode).toUpperCase();
-              COUPONS[code] = {
-                type: o.type === 'flat' ? 'flat' : 'percent',
-                value: o.value,
-                desc: o.title || (o.type === 'percent' ? o.value+'% off' : '₹'+o.value+' off'),
-              };
-            }
-          });
-          renderOfferCards();
-        })
-        .catch(() => {});
-    }
 
     /* ── state ── */
     let cart = {};
     try { cart = JSON.parse(localStorage.getItem('aroraCart') || '{}'); } catch (e) {}
-    let appliedCoupon = null;
     let orderType = 'delivery';
 
     /* ── helpers ── */
@@ -183,15 +155,9 @@
       return Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
     }
 
-    function getDiscount(sub) {
-      if (!appliedCoupon || !COUPONS[appliedCoupon]) return 0;
-      const c = COUPONS[appliedCoupon];
-      return c.type === 'percent' ? Math.round(sub * c.value / 100) : c.value;
-    }
-
-    function getDelivery(sub, disc) {
+    function getDelivery(sub) {
       if (orderType === 'pickup') return 0;
-      return (sub - disc) >= 500 ? 0 : 40;
+      return sub >= 500 ? 0 : 40;
     }
 
     function getTax(amount) { return Math.round(amount * 0.05); }
@@ -199,22 +165,12 @@
     /* ── render bill ── */
     function renderBill() {
       const sub     = getSubtotal();
-      const disc    = getDiscount(sub);
-      const del     = getDelivery(sub, disc);
-      const taxBase = sub - disc + del;
+      const del     = getDelivery(sub);
+      const taxBase = sub + del;
       const tax     = getTax(taxBase);
       const total   = taxBase + tax;
 
       document.getElementById('billSubtotal').textContent = '₹' + sub;
-
-      const discRow = document.getElementById('discountRow');
-      if (disc > 0) {
-        discRow.style.display = 'flex';
-        document.getElementById('billDiscountLabel').textContent = appliedCoupon;
-        document.getElementById('billDiscountAmt').textContent   = '−₹' + disc;
-      } else {
-        discRow.style.display = 'none';
-      }
 
       const delEl   = document.getElementById('billDelivery');
       const delRow  = document.getElementById('deliveryRow');
@@ -234,14 +190,6 @@
 
       document.getElementById('billTax').textContent   = '₹' + tax;
       document.getElementById('billTotal').textContent = '₹' + total;
-
-      const savingsEl = document.getElementById('savingsNote');
-      if (disc > 0) {
-        savingsEl.textContent = '🎉 You are saving ₹' + disc + ' on this order!';
-        savingsEl.classList.add('visible');
-      } else {
-        savingsEl.classList.remove('visible');
-      }
     }
 
     /* ── render item list ── */
@@ -303,46 +251,6 @@
         </div>`;
     }
 
-    /* ── offer cards ── */
-    function renderOfferCards() {
-      const list = document.getElementById('offerCardsList');
-      if (!list) return;
-      list.innerHTML = Object.entries(COUPONS).map(([code, c]) => {
-        const isApplied = appliedCoupon === code;
-        const badge = c.type === 'percent' ? c.value + '% OFF' : '₹' + c.value + ' OFF';
-        return `
-          <div class="offer-card-item${isApplied ? ' oci-applied' : ''}">
-            <div class="oci-badge">${esc(badge)}</div>
-            <div class="oci-body">
-              <div class="oci-desc">${esc(c.desc)}</div>
-              <div class="oci-code">${esc(code)}</div>
-            </div>
-            <button class="oci-btn"${isApplied ? ' disabled' : ''} data-code="${esc(code)}">${isApplied ? '✓ Applied' : 'Apply'}</button>
-          </div>`;
-      }).join('');
-      list.querySelectorAll('.oci-btn:not([disabled])').forEach(btn =>
-        btn.addEventListener('click', () => applyOfferCode(btn.dataset.code))
-      );
-    }
-
-    function applyOfferCode(code) {
-      const upperCode = code.toUpperCase();
-      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
-      const msg = document.getElementById('couponMsg');
-      if (matchKey) {
-        appliedCoupon = matchKey;
-        msg.className = 'coupon-msg success';
-        msg.textContent = '✓ "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
-      } else {
-        appliedCoupon = null;
-        msg.className = 'coupon-msg error';
-        msg.textContent = '✕ Offer not available.';
-      }
-      document.getElementById('couponInput').value = '';
-      renderOfferCards();
-      renderBill();
-    }
-
     /* ── build page ── */
     function buildPage() {
       if (!Object.keys(cart).length) { showEmpty(); return; }
@@ -358,20 +266,6 @@
               <h2>Your Order</h2>
               <div id="checkoutItemsList"></div>
               <a href="menu.html" class="add-more-link">+ Add more items</a>
-            </div>
-
-            <!-- Offers -->
-            <div class="checkout-block">
-              <h2>🏷️ Available Offers</h2>
-              <div id="offerCardsList" class="offer-cards-list"></div>
-              <div class="coupon-msg" id="couponMsg"></div>
-              <div class="coupon-manual-wrap">
-                <span class="coupon-manual-label">Have a different code?</span>
-                <div class="coupon-input-row">
-                  <input type="text" id="couponInput" placeholder="Enter coupon code" autocomplete="off" />
-                  <button class="coupon-apply-btn" id="couponApplyBtn">Apply</button>
-                </div>
-              </div>
             </div>
 
             <!-- Order type -->
@@ -403,13 +297,6 @@
               <div class="bill-row">
                 <span class="bill-label">Item Total</span>
                 <span class="bill-value" id="billSubtotal">₹0</span>
-              </div>
-
-              <div class="bill-row discount-row" id="discountRow" style="display:none">
-                <span class="bill-label">Discount
-                  (<span id="billDiscountLabel"></span>)
-                </span>
-                <span class="bill-value" id="billDiscountAmt">−₹0</span>
               </div>
 
               <div class="bill-row" id="deliveryRow">
@@ -451,44 +338,12 @@
 
     /* ── bind interactive events ── */
     function bindEvents() {
-
-      /* Coupon apply */
-      document.getElementById('couponApplyBtn').addEventListener('click', applyCoupon);
-      document.getElementById('couponInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter') applyCoupon();
-      });
-
-      /* Render offer cards */
-      renderOfferCards();
-
       /* Order type */
       document.getElementById('cardDelivery').addEventListener('click', () => setOrderType('delivery'));
       document.getElementById('cardPickup').addEventListener('click',   () => setOrderType('pickup'));
 
       /* Proceed */
       document.getElementById('proceedBtn').addEventListener('click', proceedToDelivery);
-    }
-
-    function applyCoupon() {
-      const raw = document.getElementById('couponInput').value.trim();
-      const upperCode = raw.toUpperCase();
-      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
-      const msg = document.getElementById('couponMsg');
-      if (matchKey) {
-        appliedCoupon = matchKey;
-        msg.className = 'coupon-msg success';
-        msg.textContent = '✓ Coupon "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
-      } else if (!raw) {
-        appliedCoupon = null;
-        msg.className = 'coupon-msg error';
-        msg.textContent = 'Please enter a coupon code.';
-      } else {
-        appliedCoupon = null;
-        msg.className = 'coupon-msg error';
-        msg.textContent = '✕ Invalid coupon code. Try one of the offers above.';
-      }
-      renderOfferCards();
-      renderBill();
     }
 
     function setOrderType(type) {
@@ -502,13 +357,12 @@
 
     function proceedToDelivery() {
       const sub   = getSubtotal();
-      const disc  = getDiscount(sub);
-      const del   = getDelivery(sub, disc);
-      const tax   = getTax(sub - disc + del);
-      const total = sub - disc + del + tax;
+      const del   = getDelivery(sub);
+      const tax   = getTax(sub + del);
+      const total = sub + del + tax;
       localStorage.setItem('aroraCheckout', JSON.stringify({
-        subtotal: sub, discount: disc, delivery: del, tax, total,
-        coupon: appliedCoupon, orderType,
+        subtotal: sub, delivery: del, tax, total,
+        orderType,
         items: Object.values(cart)
       }));
       window.location.href = 'delivery.html';

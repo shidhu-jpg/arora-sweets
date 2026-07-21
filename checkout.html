@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — Arora Sweets</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" /></noscript>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="index.html" class="nav-logo">Arora Sweets</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="story.html">Our Story</a></li>
+      <li><a href="outlets.html">Outlets</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- CHECKOUT HERO -->
+  <div class="checkout-hero" style="padding-top: var(--nav-h);">
+    <div class="container">
+      <div class="checkout-breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep">›</span>
+        <a href="menu.html">Menu</a>
+        <span class="sep">›</span>
+        <span class="crumb-current">Checkout</span>
+      </div>
+      <div class="checkout-steps">
+        <div class="checkout-step step-active">
+          <div class="step-num">1</div>
+          <div class="step-label">Review Order</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="checkout-step">
+          <div class="step-num">2</div>
+          <div class="step-label">Delivery Details</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="checkout-step">
+          <div class="step-num">3</div>
+          <div class="step-label">Confirmation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT SECTION -->
+  <section class="checkout-section">
+    <div class="container">
+      <div id="checkoutRoot"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Arora Sweets</span>
+        <p>Crafted with Love. Served with Pride.</p>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/arorasweetsbth?utm_source=qr&igsh=b3A4ZHFqNG53ODRy" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="story.html">Our Story</a></li>
+          <li><a href="outlets.html">Outlets</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Our Outlets</h4>
+        <ul>
+          <li><a href="outlets.html">Supriya Road</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>arorasweets2018@gmail.com</p>
+        <p>+91 99344 92744</p>
+        <p>Open daily: 9 AM – 10 PM</p>
+      </div>
+      <div class="footer-links">
+        <h4>Legal &amp; Policies</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="refund.html">Refund &amp; Cancellation</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Arora Sweets. All rights reserved.</p>
+        <div class="footer-legal-bar">
+          <a href="privacy.html">Privacy Policy</a>
+          <span>|</span>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <span>|</span>
+          <a href="refund.html">Refund Policy</a>
+        </div>
+        <p class="footer-compliance">
+          <strong>FSSAI Lic. No.:</strong> 10020042000001 &nbsp;·&nbsp;
+          <strong>GSTIN:</strong> 10AABCA1234F1Z5 &nbsp;·&nbsp;
+          Registered under the Food Safety &amp; Standards Act, 2006
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script>
+  (function () {
+
+    /* ── coupon definitions (base hardcoded + dynamic from Firebase offers) ── */
+    const COUPONS = {
+      'FIRST10':  { type: 'percent', value: 10, desc: '10% off your order' },
+      'WELCOME':  { type: 'flat',    value: 50, desc: '₹50 flat off' },
+      'Arora15':  { type: 'percent', value: 15, desc: '15% off your order' },
+      'SWEET20':  { type: 'percent', value: 20, desc: '20% off your order' },
+    };
+
+    /* Load active Firebase offers and merge coupon codes */
+    if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+      fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
+        .then(r => r.json())
+        .then(data => {
+          if (!data) return;
+          const now = Date.now();
+          Object.values(data).forEach(o => {
+            if (o.isActive && o.couponCode && (o.endTime||0) > now) {
+              const code = String(o.couponCode).toUpperCase();
+              COUPONS[code] = {
+                type: o.type === 'flat' ? 'flat' : 'percent',
+                value: o.value,
+                desc: o.title || (o.type === 'percent' ? o.value+'% off' : '₹'+o.value+' off'),
+              };
+            }
+          });
+          renderOfferCards();
+        })
+        .catch(() => {});
+    }
+
+    /* ── state ── */
+    let cart = {};
+    try { cart = JSON.parse(localStorage.getItem('aroraCart') || '{}'); } catch (e) {}
+    let appliedCoupon = null;
+    let orderType = 'delivery';
+
+    /* ── helpers ── */
+    function esc(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function getSubtotal() {
+      return Object.values(cart).reduce((s, i) => s + i.price * i.qty, 0);
+    }
+
+    function getDiscount(sub) {
+      if (!appliedCoupon || !COUPONS[appliedCoupon]) return 0;
+      const c = COUPONS[appliedCoupon];
+      return c.type === 'percent' ? Math.round(sub * c.value / 100) : c.value;
+    }
+
+    function getDelivery(sub, disc) {
+      if (orderType === 'pickup') return 0;
+      return (sub - disc) >= 500 ? 0 : 40;
+    }
+
+    function getTax(amount) { return Math.round(amount * 0.05); }
+
+    /* ── render bill ── */
+    function renderBill() {
+      const sub     = getSubtotal();
+      const disc    = getDiscount(sub);
+      const del     = getDelivery(sub, disc);
+      const taxBase = sub - disc + del;
+      const tax     = getTax(taxBase);
+      const total   = taxBase + tax;
+
+      document.getElementById('billSubtotal').textContent = '₹' + sub;
+
+      const discRow = document.getElementById('discountRow');
+      if (disc > 0) {
+        discRow.style.display = 'flex';
+        document.getElementById('billDiscountLabel').textContent = appliedCoupon;
+        document.getElementById('billDiscountAmt').textContent   = '−₹' + disc;
+      } else {
+        discRow.style.display = 'none';
+      }
+
+      const delEl   = document.getElementById('billDelivery');
+      const delRow  = document.getElementById('deliveryRow');
+      if (orderType === 'pickup') {
+        delEl.textContent = 'FREE';
+        delRow.classList.add('delivery-free');
+        document.getElementById('billDeliveryLabel').textContent = 'Pickup';
+      } else if (del === 0) {
+        delEl.textContent = 'FREE';
+        delRow.classList.add('delivery-free');
+        document.getElementById('billDeliveryLabel').textContent = 'Delivery Fee';
+      } else {
+        delEl.textContent = '₹' + del;
+        delRow.classList.remove('delivery-free');
+        document.getElementById('billDeliveryLabel').textContent = 'Delivery Fee';
+      }
+
+      document.getElementById('billTax').textContent   = '₹' + tax;
+      document.getElementById('billTotal').textContent = '₹' + total;
+
+      const savingsEl = document.getElementById('savingsNote');
+      if (disc > 0) {
+        savingsEl.textContent = '🎉 You are saving ₹' + disc + ' on this order!';
+        savingsEl.classList.add('visible');
+      } else {
+        savingsEl.classList.remove('visible');
+      }
+    }
+
+    /* ── render item list ── */
+    function renderItems() {
+      const container = document.getElementById('checkoutItemsList');
+      const items = Object.values(cart);
+      if (!items.length) {
+        showEmpty();
+        return;
+      }
+      container.innerHTML = items.map(item => `
+        <div class="checkout-item" data-key="${esc(item.name)}">
+          <div class="checkout-item-info">
+            <span class="checkout-item-name">${esc(item.name)}</span>
+            <span class="checkout-item-unit">₹${item.price} per unit</span>
+          </div>
+          <div class="checkout-qty-controls">
+            <button class="co-qty-btn co-minus" data-key="${esc(item.name)}" aria-label="Decrease">−</button>
+            <span class="co-qty-num">${item.qty}</span>
+            <button class="co-qty-btn co-plus"  data-key="${esc(item.name)}" aria-label="Increase">+</button>
+          </div>
+          <div class="checkout-item-total">₹${item.price * item.qty}</div>
+          <button class="co-remove-btn" data-key="${esc(item.name)}" title="Remove item">✕</button>
+        </div>`).join('');
+
+      container.querySelectorAll('.co-minus').forEach(btn =>
+        btn.addEventListener('click', () => changeQty(btn.dataset.key, -1)));
+      container.querySelectorAll('.co-plus').forEach(btn =>
+        btn.addEventListener('click', () => changeQty(btn.dataset.key, 1)));
+      container.querySelectorAll('.co-remove-btn').forEach(btn =>
+        btn.addEventListener('click', () => removeItem(btn.dataset.key)));
+    }
+
+    function changeQty(key, delta) {
+      if (!cart[key]) return;
+      cart[key].qty += delta;
+      if (cart[key].qty <= 0) delete cart[key];
+      localStorage.setItem('aroraCart', JSON.stringify(cart));
+      if (!Object.keys(cart).length) { showEmpty(); return; }
+      renderItems();
+      renderBill();
+    }
+
+    function removeItem(key) {
+      delete cart[key];
+      localStorage.setItem('aroraCart', JSON.stringify(cart));
+      if (!Object.keys(cart).length) { showEmpty(); return; }
+      renderItems();
+      renderBill();
+    }
+
+    function showEmpty() {
+      document.getElementById('checkoutRoot').innerHTML = `
+        <div class="empty-cart-state">
+          <div class="empty-cart-icon">🛒</div>
+          <h3>Your cart is empty</h3>
+          <p>Looks like you haven't added any items yet.<br>Browse our menu and start your order!</p>
+          <a href="menu.html" class="btn-goto-menu">Browse Menu</a>
+        </div>`;
+    }
+
+    /* ── offer cards ── */
+    function renderOfferCards() {
+      const list = document.getElementById('offerCardsList');
+      if (!list) return;
+      list.innerHTML = Object.entries(COUPONS).map(([code, c]) => {
+        const isApplied = appliedCoupon === code;
+        const badge = c.type === 'percent' ? c.value + '% OFF' : '₹' + c.value + ' OFF';
+        return `
+          <div class="offer-card-item${isApplied ? ' oci-applied' : ''}">
+            <div class="oci-badge">${esc(badge)}</div>
+            <div class="oci-body">
+              <div class="oci-desc">${esc(c.desc)}</div>
+              <div class="oci-code">${esc(code)}</div>
+            </div>
+            <button class="oci-btn"${isApplied ? ' disabled' : ''} data-code="${esc(code)}">${isApplied ? '✓ Applied' : 'Apply'}</button>
+          </div>`;
+      }).join('');
+      list.querySelectorAll('.oci-btn:not([disabled])').forEach(btn =>
+        btn.addEventListener('click', () => applyOfferCode(btn.dataset.code))
+      );
+    }
+
+    function applyOfferCode(code) {
+      const upperCode = code.toUpperCase();
+      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
+      const msg = document.getElementById('couponMsg');
+      if (matchKey) {
+        appliedCoupon = matchKey;
+        msg.className = 'coupon-msg success';
+        msg.textContent = '✓ "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
+      } else {
+        appliedCoupon = null;
+        msg.className = 'coupon-msg error';
+        msg.textContent = '✕ Offer not available.';
+      }
+      document.getElementById('couponInput').value = '';
+      renderOfferCards();
+      renderBill();
+    }
+
+    /* ── build page ── */
+    function buildPage() {
+      if (!Object.keys(cart).length) { showEmpty(); return; }
+
+      document.getElementById('checkoutRoot').innerHTML = `
+        <div class="checkout-grid">
+
+          <!-- ── LEFT COLUMN ── -->
+          <div class="checkout-left">
+
+            <!-- Order items -->
+            <div class="checkout-block">
+              <h2>Your Order</h2>
+              <div id="checkoutItemsList"></div>
+              <a href="menu.html" class="add-more-link">+ Add more items</a>
+            </div>
+
+            <!-- Offers -->
+            <div class="checkout-block">
+              <h2>🏷️ Available Offers</h2>
+              <div id="offerCardsList" class="offer-cards-list"></div>
+              <div class="coupon-msg" id="couponMsg"></div>
+              <div class="coupon-manual-wrap">
+                <span class="coupon-manual-label">Have a different code?</span>
+                <div class="coupon-input-row">
+                  <input type="text" id="couponInput" placeholder="Enter coupon code" autocomplete="off" />
+                  <button class="coupon-apply-btn" id="couponApplyBtn">Apply</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order type -->
+            <div class="checkout-block">
+              <h2>Order Type</h2>
+              <div class="order-type-group">
+                <div class="order-type-card ot-selected" id="cardDelivery">
+                  <input type="radio" name="orderType" id="typeDelivery" value="delivery" checked />
+                  <div class="order-type-icon">🛵</div>
+                  <div class="order-type-name">Delivery</div>
+                  <div class="order-type-eta">30 – 45 minutes</div>
+                </div>
+                <div class="order-type-card" id="cardPickup">
+                  <input type="radio" name="orderType" id="typePickup" value="pickup" />
+                  <div class="order-type-icon">🏪</div>
+                  <div class="order-type-name">Pickup</div>
+                  <div class="order-type-eta">Ready in ~20 minutes</div>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /checkout-left -->
+
+          <!-- ── RIGHT COLUMN ── -->
+          <div class="checkout-right">
+            <div class="price-card">
+              <h3>Bill Details</h3>
+
+              <div class="bill-row">
+                <span class="bill-label">Item Total</span>
+                <span class="bill-value" id="billSubtotal">₹0</span>
+              </div>
+
+              <div class="bill-row discount-row" id="discountRow" style="display:none">
+                <span class="bill-label">Discount
+                  (<span id="billDiscountLabel"></span>)
+                </span>
+                <span class="bill-value" id="billDiscountAmt">−₹0</span>
+              </div>
+
+              <div class="bill-row" id="deliveryRow">
+                <span class="bill-label" id="billDeliveryLabel">Delivery Fee</span>
+                <span class="bill-value" id="billDelivery">₹40</span>
+              </div>
+
+              <div class="bill-row">
+                <span class="bill-label">GST &amp; Charges (5%)</span>
+                <span class="bill-value" id="billTax">₹0</span>
+              </div>
+
+              <div class="bill-divider"></div>
+
+              <div class="bill-row bill-total-row">
+                <span class="bill-label">To Pay</span>
+                <span class="bill-value" id="billTotal">₹0</span>
+              </div>
+
+              <div class="savings-note" id="savingsNote"></div>
+
+              <button class="proceed-btn" id="proceedBtn">Proceed to Pay &rarr;</button>
+
+              <p class="secure-note">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                100% Safe &amp; Secure Checkout
+              </p>
+            </div>
+          </div><!-- /checkout-right -->
+
+        </div>`;
+
+      renderItems();
+      renderBill();
+      bindEvents();
+    }
+
+    /* ── bind interactive events ── */
+    function bindEvents() {
+
+      /* Coupon apply */
+      document.getElementById('couponApplyBtn').addEventListener('click', applyCoupon);
+      document.getElementById('couponInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') applyCoupon();
+      });
+
+      /* Render offer cards */
+      renderOfferCards();
+
+      /* Order type */
+      document.getElementById('cardDelivery').addEventListener('click', () => setOrderType('delivery'));
+      document.getElementById('cardPickup').addEventListener('click',   () => setOrderType('pickup'));
+
+      /* Proceed */
+      document.getElementById('proceedBtn').addEventListener('click', proceedToDelivery);
+    }
+
+    function applyCoupon() {
+      const raw = document.getElementById('couponInput').value.trim();
+      const upperCode = raw.toUpperCase();
+      const matchKey = Object.keys(COUPONS).find(k => k.toUpperCase() === upperCode);
+      const msg = document.getElementById('couponMsg');
+      if (matchKey) {
+        appliedCoupon = matchKey;
+        msg.className = 'coupon-msg success';
+        msg.textContent = '✓ Coupon "' + matchKey + '" applied — ' + COUPONS[matchKey].desc;
+      } else if (!raw) {
+        appliedCoupon = null;
+        msg.className = 'coupon-msg error';
+        msg.textContent = 'Please enter a coupon code.';
+      } else {
+        appliedCoupon = null;
+        msg.className = 'coupon-msg error';
+        msg.textContent = '✕ Invalid coupon code. Try one of the offers above.';
+      }
+      renderOfferCards();
+      renderBill();
+    }
+
+    function setOrderType(type) {
+      orderType = type;
+      document.getElementById('cardDelivery').classList.toggle('ot-selected', type === 'delivery');
+      document.getElementById('cardPickup').classList.toggle('ot-selected',   type === 'pickup');
+      document.getElementById('typeDelivery').checked = type === 'delivery';
+      document.getElementById('typePickup').checked   = type === 'pickup';
+      renderBill();
+    }
+
+    function proceedToDelivery() {
+      const sub   = getSubtotal();
+      const disc  = getDiscount(sub);
+      const del   = getDelivery(sub, disc);
+      const tax   = getTax(sub - disc + del);
+      const total = sub - disc + del + tax;
+      localStorage.setItem('aroraCheckout', JSON.stringify({
+        subtotal: sub, discount: disc, delivery: del, tax, total,
+        coupon: appliedCoupon, orderType,
+        items: Object.values(cart)
+      }));
+      window.location.href = 'delivery.html';
+    }
+
+    /* ── init ── */
+    buildPage();
+
+  })();
+  </script>
+</body>
+</html>

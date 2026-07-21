@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#F8F5EF" />
+  <title>Arora Sweets — Crafted with Love. Served with Pride.</title>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" /></noscript>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+  <!-- PAGE LOADER -->
+  <div id="page-loader" aria-hidden="true">
+    <div class="loader-inner">
+      <img src="images/logoori.webp" alt="Arora Sweets" class="loader-logo" />
+      <div class="loader-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANNOUNCEMENT BANNER -->
+  <div class="announce-bar" id="announceBar">
+    <div class="announce-track">
+      <span class="announce-item">🎉 Free delivery on orders above ₹500 &nbsp;·&nbsp;</span>
+      <span class="announce-item">📦 Fresh sweets made daily — order by 6 PM for same-day pickup &nbsp;·&nbsp;</span>
+      <span class="announce-item">💐 Wedding &amp; bulk orders available — WhatsApp us! &nbsp;·&nbsp;</span>
+      <span class="announce-item">🎁 Festival hampers now available — order in advance &nbsp;·&nbsp;</span>
+      <span class="announce-item">🎉 Free delivery on orders above ₹500 &nbsp;·&nbsp;</span>
+      <span class="announce-item">📦 Fresh sweets made daily — order by 6 PM for same-day pickup &nbsp;·&nbsp;</span>
+      <span class="announce-item">💐 Wedding &amp; bulk orders available — WhatsApp us! &nbsp;·&nbsp;</span>
+      <span class="announce-item">🎁 Festival hampers now available — order in advance &nbsp;·&nbsp;</span>
+    </div>
+    <button class="announce-close" id="announceClose" aria-label="Close banner">✕</button>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+
+    <a href="index.html" class="nav-logo">
+      <img src="images/logoori.webp" alt="Arora Sweets" class="nav-logo-img" fetchpriority="high" />
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="story.html">Our Story</a></li>
+       
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-cart-btn" id="navCartBtn" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="22" height="22">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      <span class="nav-cart-badge" id="navCartBadge" style="display:none">0</span>
+    </button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- Logo overlay on video — mobile only, stays on video, disappears on scroll -->
+    <a href="index.html" class="mobile-fixed-logo">
+      <img src="images/logoori.webp" alt="Arora Sweets" class="mobile-fixed-logo-img" />
+    </a>
+    <div class="hero-bg">
+      <div class="vimeo-bg-wrapper">
+        <video id="heroBgVideo" poster="images/homeimg.jpeg" muted playsinline loop preload="none"></video>
+      </div>
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="hero-content">
+       <!-- <a href="index.html"><img src="images/logoori.webp" alt="Arora Sweets" class="nav-cart-btn"></a> -->
+      <div class="hero-text-box">
+        <p class="hero-eyebrow">Est. 2018 &nbsp;</p>
+
+        <p class="hero-tagline">Fresh Sweets Made Daily </p>
+        <div class="hero-ctas">
+          <a href="menu.html" class="btn-outline-gold">Explore Menu</a>
+          <a href="https://wa.me/919934492744?text=Hi%20Arora%20Sweets%2C%20I%20would%20like%20to%20place%20an%20order!" class="btn-outline-gold btn-whatsapp-styled" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Order on WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- FEATURED SWEETS -->
+  <section class="section featured">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Our Signatures</p>
+        <h2 class="section-title">Featured Sweets</h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="featured-grid">
+        <article class="sweet-card">
+          <div class="sweet-card-img">
+            <img src="images/kajukatli.webp" alt="Kaju Katli" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Kaju Katli</h3>
+            <p>Pure cashew, pure luxury</p>
+            <span class="price">₹ 1100 / kg</span>
+          </div>
+        </article>
+        <article class="sweet-card featured-main">
+          <div class="sweet-card-img">
+            <img src="images/gulabjamun.webp" alt="Gulab Jamun" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Gulab Jamun</h3>
+            <p>Rose-infused, saffron-kissed</p>
+            <span class="price">₹ 400 / kg</span>
+          </div>
+        </article>
+        <article class="sweet-card">
+          <div class="sweet-card-img">
+            <img src="images/rasgulla.webp" alt="Rasgulla" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Rasgulla</h3>
+            <p>Melt-in-mouth, Bengal's finest</p>
+            <span class="price">₹ 280 / kg</span>
+          </div>
+        </article>
+        <article class="sweet-card">
+          <div class="sweet-card-img">
+            <img src="images/motichoorladdu.webp" alt="Motichoor Ladoo" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Motichoor Ladoo</h3>
+            <p>Bless every celebration</p>
+            <span class="price">₹ 320 / kg</span>
+          </div>
+        </article>
+        <article class="sweet-card">
+          <div class="sweet-card-img">
+            <img src="images/barfi.webp" alt="Barfi" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Special Barfi</h3>
+            <p>Pistachios, cardamom, silver leaf</p>
+            <span class="price">₹ 1200 / kg</span>
+          </div>
+        </article>
+        <article class="sweet-card">
+          <div class="sweet-card-img">
+            <img src="images/jalebi.webp" alt="Jalebi" loading="lazy" />
+            <div class="card-overlay"></div>
+          </div>
+          <div class="sweet-card-body">
+            <h3>Fresh Jalebi</h3>
+            <p>Crisp, syrupy, made daily</p>
+            <span class="price">₹ 450 / kg</span>
+          </div>
+        </article>
+      </div>
+      <div class="center-cta">
+        <a href="menu.html" class="btn btn-outline">View Full Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STATS BAR -->
+  <section class="stats-bar">
+    <div class="container stats-inner">
+      <div class="stat-item reveal">
+        <span class="stat-number" data-target="10000" data-suffix="+">0</span>
+        <span class="stat-label">Happy Customers</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-target="100" data-suffix="+">0</span>
+        <span class="stat-label">Sweet Varieties</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-target="25" data-suffix="+">0</span>
+        <span class="stat-label">Years of Excellence</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item reveal">
+        <span class="stat-number" data-target="100" data-suffix="%">0</span>
+        <span class="stat-label">Fresh Every Day</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIAL OFFERS (hidden until Firebase returns active offers) -->
+  <section class="section offers-strip" id="offersStrip" style="display:none">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Limited Time</p>
+        <h2 class="section-title">🔥 Special Offers<br /><em>&amp; Deals</em></h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="offers-cards-grid" id="offersCardsGrid"></div>
+    </div>
+  </section>
+  <script src="js/firebase-config.js"></script>
+  <script>
+  (function () {
+    if (typeof ARORA_FB === 'undefined' || !ARORA_FB.dbUrl) return;
+    fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
+      .then(r => r.json())
+      .then(data => {
+        if (!data) return;
+        const now = Date.now();
+        const active = Object.values(data).filter(o => o.isActive && o.showOnHomepage && (o.endTime||0) > now);
+        if (!active.length) return;
+        active.sort((a,b) => (a.endTime||0)-(b.endTime||0));
+        const grid = document.getElementById('offersCardsGrid');
+        grid.innerHTML = active.map(o => {
+          const ms  = (o.endTime||0) - now;
+          const h   = Math.floor(ms/3600000);
+          const m   = Math.floor((ms%3600000)/60000);
+          const cd  = h >= 24 ? Math.floor(h/24)+'d '+h%24+'h left' : h > 0 ? h+'h '+m+'m left' : m+'m left';
+          const disc = o.type==='percent' ? o.value+'% OFF' : '₹'+o.value+' OFF';
+          return `
+            <div class="offer-card">
+              <div class="offer-card-badge">${disc}</div>
+              <div class="offer-card-emoji">${o.emoji||'🏷️'}</div>
+              <h3 class="offer-card-title">${String(o.title||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</h3>
+              <p class="offer-card-desc">${String(o.description||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
+              <div class="offer-card-code">
+                <span class="offer-code-label">Use code</span>
+                <span class="offer-code-val">${String(o.couponCode||'').replace(/&/g,'&amp;')}</span>
+              </div>
+              <div class="offer-card-countdown">⏱ ${cd}</div>
+              <a href="menu.html" class="offer-card-cta">Order Now →</a>
+            </div>`;
+        }).join('');
+        document.getElementById('offersStrip').style.display = '';
+      })
+      .catch(() => {});
+  })();
+  </script>
+
+  <!-- BRAND INTRO -->
+  <section class="section brand-intro">
+    <div class="container brand-intro-inner">
+      <div class="brand-intro-text">
+        <p class="section-eyebrow">Who We Are</p>
+        <h2 class="section-title">A Legacy of<br /><em>Sweet Excellence</em></h2>
+        <div class="gold-rule"></div>
+        <p>Founded on the values of tradition, quality, and hospitality, the journey of Arora Sweets began in 1980 with a simple vision — to serve authentic taste with honesty and care.</p>
+        <p>Over the years, our family earned the trust of generations through dedication, hard work, and a passion for quality food. In 2011, four brothers came together with a modern vision and started a new chapter by establishing their own workshop, focusing on purity, consistency, and customer satisfaction.</p>
+        <p>The journey continued with K Lal Restaurant, known for its delicious food and warm hospitality. In 2018, we proudly launched Arora Sweets, blending traditional flavors with modern standards of hygiene and service. With the love and support of our customers, the brand quickly became a trusted name among families and food lovers.</p>
+        <p>In 2023, we expanded with our biggest branch yet, offering a premium experience while preserving the authentic taste of Indian sweets and snacks. Alongside it, we introduced Gupshup Restaurant — a 100% pure vegetarian family restaurant designed for memorable dining experiences.</p>
+        <p>Today, Arora Sweets also proudly serves outdoor catering for weddings, festivals, parties, and special occasions, carrying forward the same promise of quality, taste, and hospitality.</p>
+        <p>More than just a sweets shop, Arora Sweets is a symbol of trust, tradition, and family values.</p>
+        <p class="brand-tagline">Pure Taste &bull; Honest Quality &bull; Memorable Hospitality</p>
+        <a href="story.html" class="btn btn-gold" style="margin-top:2rem">Our Full Story</a>
+      </div>
+      <div class="brand-intro-visual">
+        <div class="brand-img-wrap">
+          <img src="images/hotelimage.jpg" alt="Handcrafted sweets" loading="lazy" />
+          <div class="brand-img-badge">
+            <span class="badge-number">25+</span>
+            <span class="badge-text">Years of<br/>Excellence</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">What Our Customers Say</p>
+        <h2 class="section-title">Loved by Families<br /><em>Across Bettiah</em></h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card reveal">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Best kaju katli I've ever had. We order for every occasion — Diwali, Eid, birthdays. Arora Sweets never disappoints. Pure quality, every single time."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">R</div>
+            <div>
+              <span class="testimonial-name">Renu Sharma</span>
+              <span class="testimonial-city">Bettiah, Bihar</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Ordered 10 kg of sweets for my daughter's wedding through WhatsApp. The delivery was on time and every piece was fresh and beautifully packed. Highly recommended!"</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">A</div>
+            <div>
+              <span class="testimonial-name">Amit Gupta</span>
+              <span class="testimonial-city">Bettiah, Bihar</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"The gulab jamun melts in your mouth. My kids refuse to eat sweets from anywhere else now! We've been loyal customers for over 8 years."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">P</div>
+            <div>
+              <span class="testimonial-name">Priya Singh</span>
+              <span class="testimonial-city">Bettiah, Bihar</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card reveal">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Ordered fresh jalebi every Sunday morning — it's become a family ritual. So crisp and syrupy. Nothing beats Arora Sweets for authentic taste."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">S</div>
+            <div>
+              <span class="testimonial-name">Suresh Pandey</span>
+              <span class="testimonial-city">Bettiah, Bihar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPECIAL OCCASIONS -->
+  <section class="section occasions-section">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">We Celebrate With You</p>
+        <h2 class="section-title">Special Occasions &amp;<br /><em>Bulk Orders</em></h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="occasions-grid">
+        <div class="occasion-card reveal">
+          <div class="occasion-icon">💍</div>
+          <h3>Weddings &amp; Events</h3>
+          <p>Custom mithai trays, baraat sweets, shagun boxes — curated with love for your most important day. Minimum order: 5 kg.</p>
+          <a href="https://wa.me/919934492744?text=Hi%20Arora%20Sweets%2C%20I%20need%20sweets%20for%20a%20wedding%20event!" class="occasion-cta" target="_blank" rel="noopener">Enquire Now →</a>
+        </div>
+        <div class="occasion-card occasion-card--featured reveal">
+          <div class="occasion-icon">🎁</div>
+          <h3>Festival Hampers</h3>
+          <p>Diwali, Holi, Eid, Christmas — premium gift boxes packed with assorted sweets. Pre-order required. Delivery across Bettiah.</p>
+          <a href="https://wa.me/919934492744?text=Hi%20Arora%20Sweets%2C%20I%20would%20like%20to%20order%20a%20festival%20hamper!" class="occasion-cta" target="_blank" rel="noopener">Pre-Order Now →</a>
+        </div>
+        <div class="occasion-card reveal">
+          <div class="occasion-icon">🏢</div>
+          <h3>Corporate Gifting</h3>
+          <p>Branded sweet boxes for your employees, clients &amp; partners. Bulk pricing available. Logos, custom cards &amp; packaging on request.</p>
+          <a href="https://wa.me/919934492744?text=Hi%20Arora%20Sweets%2C%20I%20need%20corporate%20gift%20boxes%20for%20my%20company!" class="occasion-cta" target="_blank" rel="noopener">Get Quote →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTLETS TEASER -->
+  <section class="section outlets-teaser">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Find Us</p>
+        <h2 class="section-title">Our Location</h2>
+        <div class="gold-rule"></div>
+      </div>
+      <div class="outlets-strip">
+        <div class="outlet-strip-item">
+          <span class="outlet-number">01</span>
+          <h3>Supriya Road</h3>
+          <p>In front of Sameer Honda, Bettiah</p>
+          <a href="outlets.html" class="link-gold">View Details →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE STRIP -->
+  <section class="quote-strip">
+    <div class="container">
+      <blockquote>
+        <span class="quote-mark">"</span>
+        Every sweet tells a story. We make sure it's one worth savouring.
+        <cite>— Arora Family, Founders</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Arora Sweets</span>
+        <p>Crafted with Love. Served with Pride.</p>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/arorasweetsbth?utm_source=qr&igsh=b3A4ZHFqNG53ODRy" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="story.html">Our Story</a></li>
+          <li><a href="outlets.html">Outlets</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Our Outlets</h4>
+        <ul>
+          <li><a href="outlets.html">Supriya Road</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>arorasweets2018@gmail.com</p>
+        <p>+91 99344 92744</p>
+        <p>Open daily: 9 AM – 10 PM</p>
+      </div>
+      <div class="footer-links">
+        <h4>Legal & Policies</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="refund.html">Refund &amp; Cancellation</a></li>
+          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+          <li><a href="terms.html#allergens">Allergen Information</a></li>
+          <li><a href="terms.html#grievance">Grievance Officer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Arora Sweets. All rights reserved.</p>
+        <div class="footer-legal-bar">
+          <a href="privacy.html">Privacy Policy</a>
+          <span>|</span>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <span>|</span>
+          <a href="refund.html">Refund Policy</a>
+          <span>|</span>
+          <a href="privacy.html#cookies">Cookie Policy</a>
+          <span>|</span>
+          <a href="admin.html">Owner Login</a>
+        </div>
+        <p class="footer-compliance">
+          <strong>FSSAI Lic. No.:</strong> 10020042000001 &nbsp;·&nbsp;
+          <strong>GSTIN:</strong> 10AABCA1234F1Z5 &nbsp;·&nbsp;
+          Registered under the Food Safety &amp; Standards Act, 2006 &nbsp;·&nbsp;
+          Consumer disputes: consumerhelpline.gov.in
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/919934492744" class="whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/price-overrides.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var loader = document.getElementById('page-loader');
+      var MIN_TIME = 3000;
+      var start = Date.now();
+      var hidden = false;
+
+      function hideLoader() {
+        if (hidden) return;
+        hidden = true;
+        var elapsed = Date.now() - start;
+        var remaining = Math.max(0, MIN_TIME - elapsed);
+        setTimeout(function () {
+          loader.classList.add('hidden');
+          loader.addEventListener('transitionend', function () {
+            loader.remove();
+          }, { once: true });
+        }, remaining);
+      }
+
+      /* Lazy-load the background video after page is interactive */
+      var bgVideo = document.getElementById('heroBgVideo');
+      if (bgVideo) {
+        bgVideo.addEventListener('playing', hideLoader, { once: true });
+        bgVideo.addEventListener('error', hideLoader, { once: true });
+        function startVideo() {
+          bgVideo.src = 'images/homepagevideo.mp4';
+          bgVideo.play().catch(function(){});
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(startVideo, { timeout: 2000 });
+        } else {
+          window.addEventListener('load', startVideo);
+        }
+      } else {
+        window.addEventListener('load', hideLoader);
+      }
+
+      setTimeout(hideLoader, 6000);
+    })();
+  </script>
+</body>
+</html>

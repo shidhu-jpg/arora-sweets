@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delivery Details — Arora Sweets</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+  <link rel="stylesheet" href="css/checkout.css" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap" /></noscript>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <a href="index.html" class="nav-logo">Arora Sweets</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="story.html">Our Story</a></li>
+      <li><a href="outlets.html">Outlets</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- CHECKOUT HERO -->
+  <div class="checkout-hero" style="padding-top: var(--nav-h);">
+    <div class="container">
+      <div class="checkout-breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep">›</span>
+        <a href="menu.html">Menu</a>
+        <span class="sep">›</span>
+        <a href="checkout.html">Checkout</a>
+        <span class="sep">›</span>
+        <span class="crumb-current">Delivery Details</span>
+      </div>
+      <div class="checkout-steps">
+        <div class="checkout-step step-done">
+          <div class="step-num">✓</div>
+          <div class="step-label">Review Order</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="checkout-step step-active">
+          <div class="step-num">2</div>
+          <div class="step-label">Delivery Details</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="checkout-step">
+          <div class="step-num">3</div>
+          <div class="step-label">Confirmation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELIVERY SECTION -->
+  <section class="delivery-section">
+    <div class="container">
+      <div id="deliveryRoot"></div>
+    </div>
+  </section>
+
+  <!-- ORDER SUCCESS MODAL -->
+  <div class="order-success-overlay" id="successOverlay">
+    <div class="order-success-card">
+      <div class="success-checkmark">✓</div>
+      <h2>Order Placed!</h2>
+      <p class="success-sub">Thank you for your order. We've received it and our kitchen is already at work.</p>
+      <p class="success-sub" id="successEta"></p>
+      <div class="order-id-badge" id="successOrderId">ORDER #AS-000000</div>
+      <div class="success-actions">
+        <a href="index.html" class="success-btn-primary">Back to Home</a>
+        <a href="menu.html" class="success-btn-secondary">Order More</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">Arora Sweets</span>
+        <p>Crafted with Love. Served with Pride.</p>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/arorasweetsbth?utm_source=qr&igsh=b3A4ZHFqNG53ODRy" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="menu.html">Menu</a></li>
+          <li><a href="story.html">Our Story</a></li>
+          <li><a href="outlets.html">Outlets</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Our Outlets</h4>
+        <ul>
+          <li><a href="outlets.html">Supriya Road</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <p>arorasweets2018@gmail.com</p>
+        <p>+91 99344 92744</p>
+        <p>Open daily: 9 AM – 10 PM</p>
+      </div>
+      <div class="footer-links">
+        <h4>Legal &amp; Policies</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><a href="refund.html">Refund &amp; Cancellation</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>© 2026 Arora Sweets. All rights reserved.</p>
+        <div class="footer-legal-bar">
+          <a href="privacy.html">Privacy Policy</a>
+          <span>|</span>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <span>|</span>
+          <a href="refund.html">Refund Policy</a>
+        </div>
+        <p class="footer-compliance">
+          <strong>FSSAI Lic. No.:</strong> 10020042000001 &nbsp;·&nbsp;
+          <strong>GSTIN:</strong> 10AABCA1234F1Z5 &nbsp;·&nbsp;
+          Registered under the Food Safety &amp; Standards Act, 2006
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/customer-auth.js"></script>
+  <script>
+  (function () {
+
+    /* ── read state from localStorage ── */
+    let cart     = {};
+    let checkout = {};
+    try { cart     = JSON.parse(localStorage.getItem('aroraCart')     || '{}'); } catch (e) {}
+    try { checkout = JSON.parse(localStorage.getItem('aroraCheckout') || '{}'); } catch (e) {}
+
+    const orderType   = checkout.orderType   || 'delivery';
+    const isDelivery  = orderType === 'delivery';
+    const total       = checkout.total       || 0;
+    const subtotal    = checkout.subtotal    || 0;
+    const delivery    = checkout.delivery    || 0;
+    const tax         = checkout.tax         || 0;
+    const items       = checkout.items       || Object.values(cart);
+
+    /* ── redirect guard ── */
+    if (!items.length) {
+      document.getElementById('deliveryRoot').innerHTML = `
+        <div class="empty-cart-state">
+          <div class="empty-cart-icon">🛒</div>
+          <h3>No order found</h3>
+          <p>Please start from the menu and add items to your cart.</p>
+          <a href="menu.html" class="btn-goto-menu">Browse Menu</a>
+        </div>`;
+      return;
+    }
+
+    /* ── helpers ── */
+    function esc(s) {
+      return String(s)
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function validate() {
+      let valid = true;
+      const required = ['fName', 'fPhone'];
+      if (isDelivery) required.push('fAddress', 'fCity', 'fPincode');
+      required.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (!el.value.trim()) {
+          el.classList.add('invalid');
+          valid = false;
+        } else {
+          el.classList.remove('invalid');
+        }
+      });
+      const phone = document.getElementById('fPhone').value.trim();
+      if (phone && !/^[6-9]\d{9}$/.test(phone)) {
+        document.getElementById('fPhone').classList.add('invalid');
+        valid = false;
+      }
+      const email = document.getElementById('fEmail').value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('fEmail').classList.add('invalid');
+        valid = false;
+      }
+      return valid;
+    }
+
+    /* ── build summary items HTML ── */
+    function summaryItemsHTML() {
+      return items.map(item => `
+        <div class="summary-item">
+          <span class="summary-item-name">
+            ${esc(item.name)}
+            <span class="summary-item-qty">×${item.qty}</span>
+          </span>
+          <span class="summary-item-price">₹${item.price * item.qty}</span>
+        </div>`).join('');
+    }
+
+    /* ── build the delivery page ── */
+    document.getElementById('deliveryRoot').innerHTML = `
+      <div class="delivery-grid">
+
+        <!-- ── LEFT: Forms ── -->
+        <div class="delivery-left">
+
+          <!-- Contact info -->
+          <div class="form-block">
+            <h2>Contact Information</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fName">Full Name <span class="req">*</span></label>
+                <input type="text" id="fName" placeholder="Ravi Kumar" autocomplete="name" />
+              </div>
+              <div class="form-group">
+                <label for="fPhone">Mobile Number <span class="req">*</span></label>
+                <input type="tel" id="fPhone" placeholder="10-digit mobile" autocomplete="tel" maxlength="10" />
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="fEmail">Email Address <span style="color:var(--white-50);font-size:0.8em">(optional)</span></label>
+                <input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email" />
+              </div>
+            </div>
+          </div>
+
+          ${isDelivery ? `
+          <!-- Delivery address (only shown for delivery orders) -->
+          <div class="form-block" id="addressBlock">
+            <h2>Delivery Address</h2>
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="fAddress">Street Address <span class="req">*</span></label>
+                <input type="text" id="fAddress" placeholder="House no., Street, Area" autocomplete="street-address" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fCity">City <span class="req">*</span></label>
+                <input type="text" id="fCity" placeholder="City" autocomplete="address-level2" />
+              </div>
+              <div class="form-group">
+                <label for="fPincode">Pincode <span class="req">*</span></label>
+                <input type="text" id="fPincode" placeholder="6-digit pincode" maxlength="6" />
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="fLandmark">Landmark <span style="color:var(--white-50);font-style:italic;font-size:0.65rem;">(optional)</span></label>
+                <input type="text" id="fLandmark" placeholder="Near temple, opposite park, etc." />
+              </div>
+            </div>
+          </div>` : `
+          <!-- Pickup info -->
+          <div class="form-block">
+            <h2>Pickup Location</h2>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="border:1px solid var(--gold);padding:16px 20px;background:rgba(201,168,76,0.05);">
+                <div style="font-family:var(--font-sans);font-size:0.88rem;font-weight:600;color:var(--white);margin-bottom:6px;">Arora Sweets — Supriya Road</div>
+                <div style="font-size:0.8rem;color:var(--white-50);">Supriya road, in front of Sameer Honda, Bettiah</div>
+                <div style="font-size:0.78rem;color:var(--gold);margin-top:6px;">Open 9 AM – 10 PM</div>
+              </div>
+            </div>
+          </div>`}
+
+          <!-- Special instructions -->
+          <div class="form-block">
+            <h2>Special Instructions</h2>
+            <div class="form-row full">
+              <div class="form-group">
+                <label for="fInstructions">Note for restaurant <span style="color:var(--white-50);font-style:italic;font-size:0.65rem;">(optional)</span></label>
+                <textarea id="fInstructions" placeholder="Allergies, spice level, special packaging, etc."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment method -->
+          <div class="form-block">
+            <h2>Payment Method</h2>
+            <div class="payment-options" id="paymentOptions">
+
+              <label class="payment-option pay-selected" id="payOptionCOD">
+                <input type="radio" name="payment" value="cod" checked />
+                <div class="pay-option-icon">💵</div>
+                <div class="pay-option-info">
+                  <strong>Cash on Delivery</strong>
+                  <small>Pay in cash when your order arrives</small>
+                </div>
+              </label>
+
+              <label class="payment-option" id="payOptionUPI">
+                <input type="radio" name="payment" value="upi" />
+                <div class="pay-option-icon">📱</div>
+                <div class="pay-option-info">
+                  <strong>UPI / Online Payment</strong>
+                  <small>GPay, PhonePe, Paytm, BHIM UPI</small>
+                </div>
+              </label>
+
+              <label class="payment-option" id="payOptionCard">
+                <input type="radio" name="payment" value="card" />
+                <div class="pay-option-icon">💳</div>
+                <div class="pay-option-info">
+                  <strong>Credit / Debit Card</strong>
+                  <small>Visa, Mastercard, RuPay</small>
+                </div>
+              </label>
+
+            </div>
+          </div>
+
+        </div><!-- /delivery-left -->
+
+        <!-- ── RIGHT: Order summary ── -->
+        <div class="delivery-right">
+          <div class="price-card">
+            <h3>Order Summary</h3>
+
+            <div class="order-summary-items">
+              ${summaryItemsHTML()}
+            </div>
+
+            <div class="bill-divider"></div>
+
+            <div class="bill-row">
+              <span class="bill-label">Item Total</span>
+              <span class="bill-value">₹${subtotal}</span>
+            </div>
+            <div class="bill-row ${delivery === 0 ? 'delivery-free' : ''}">
+              <span class="bill-label">${isDelivery ? 'Delivery Fee' : 'Pickup'}</span>
+              <span class="bill-value">${delivery === 0 ? 'FREE' : '₹' + delivery}</span>
+            </div>
+            <div class="bill-row">
+              <span class="bill-label">GST &amp; Charges (5%)</span>
+              <span class="bill-value">₹${tax}</span>
+            </div>
+
+            <div class="bill-divider"></div>
+
+            <div class="bill-row bill-total-row">
+              <span class="bill-label">To Pay</span>
+              <span class="bill-value">₹${total}</span>
+            </div>
+
+            <button class="place-order-btn" id="placeOrderBtn">
+              Place Order &rarr;
+            </button>
+
+            <p class="secure-note">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="13" height="13">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              100% Safe &amp; Secure Checkout
+            </p>
+          </div>
+        </div><!-- /delivery-right -->
+
+      </div>`;
+
+    /* ── Prefill contact info for signed-in customers ── */
+    let signedInUid = null;
+
+    function prefillFromUser(user) {
+      if (!user) { signedInUid = null; return; }
+      signedInUid = user.uid;
+      const nameEl  = document.getElementById('fName');
+      const emailEl = document.getElementById('fEmail');
+      if (nameEl && !nameEl.value.trim() && user.displayName) nameEl.value = user.displayName;
+      if (emailEl && !emailEl.value.trim() && user.email) emailEl.value = user.email;
+
+      if (window._aroraAuth) {
+        window._aroraAuth.getCustomerProfile(user.uid).then(profile => {
+          const phoneEl = document.getElementById('fPhone');
+          if (phoneEl && !phoneEl.value.trim() && profile && profile.phone) {
+            phoneEl.value = profile.phone;
+          }
+        }).catch(() => {});
+      }
+    }
+
+    if (window._aroraAuth && window._aroraAuth.currentUser) prefillFromUser(window._aroraAuth.currentUser);
+    document.addEventListener('arora-auth-changed', e => prefillFromUser(e.detail.user));
+
+    /* ── Payment option selection ── */
+    document.querySelectorAll('.payment-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('pay-selected'));
+        opt.classList.add('pay-selected');
+        opt.querySelector('input[type="radio"]').checked = true;
+      });
+    });
+
+    /* ── Clear invalid state on input ── */
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(el => {
+      el.addEventListener('input', () => el.classList.remove('invalid'));
+    });
+
+    /* ── Place order ── */
+    document.getElementById('placeOrderBtn').addEventListener('click', () => {
+      if (!validate()) {
+        const firstInvalid = document.querySelector('.form-group input.invalid, .form-group textarea.invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      const btn = document.getElementById('placeOrderBtn');
+      btn.textContent = 'Placing Order…';
+      btn.disabled = true;
+
+      const payMethod = document.querySelector('input[name="payment"]:checked')?.value || 'cod';
+      const orderId   = 'AS-' + Math.floor(100000 + Math.random() * 900000);
+      const eta       = isDelivery ? '35 – 45 minutes' : '~20 minutes';
+      const city      = isDelivery ? (document.getElementById('fCity')?.value.trim() || '') : 'Bettiah';
+
+      const orderData = {
+        id:            orderId,
+        timestamp:     Date.now(),
+        status:        'new',
+        orderType,
+        paymentMethod: payMethod,
+        customer: {
+          uid:      signedInUid || '',
+          name:     document.getElementById('fName').value.trim(),
+          phone:    document.getElementById('fPhone').value.trim(),
+          email:    document.getElementById('fEmail')?.value.trim() || '',
+          address:  isDelivery ? (document.getElementById('fAddress')?.value.trim() || '') : '',
+          city,
+          pincode:  isDelivery ? (document.getElementById('fPincode')?.value.trim() || '') : '',
+          landmark: isDelivery ? (document.getElementById('fLandmark')?.value.trim() || '') : '',
+        },
+        location:            city || 'Bettiah',
+        items,
+        subtotal,
+        deliveryFee:         delivery,
+        tax,
+        total,
+        specialInstructions: document.getElementById('fInstructions')?.value.trim() || '',
+      };
+
+      /* Save local confirmation data */
+      localStorage.setItem('aroraLastOrder', JSON.stringify({
+        orderId, total, eta, payMethod,
+        name:  orderData.customer.name,
+        phone: orderData.customer.phone,
+      }));
+
+      /* Clear cart + checkout state */
+      localStorage.removeItem('aroraCart');
+      localStorage.removeItem('aroraCheckout');
+
+      /* Build WhatsApp message */
+      const cust = orderData.customer;
+      const addrParts = [cust.address, cust.landmark, cust.city, cust.pincode].filter(Boolean);
+      const itemLines = items.map(i => `  • ${i.name} × ${i.qty} = ₹${i.price * i.qty}`).join('\n');
+      let waMsg =
+        `🛍️ *New Order — Arora Sweets*\n\n` +
+        `*Order ID:* #${orderId}\n` +
+        `*Name:* ${cust.name}\n` +
+        `*Phone:* ${cust.phone}\n` +
+        (addrParts.length ? `*Address:* ${addrParts.join(', ')}\n` : '') +
+        `*Type:* ${orderType === 'delivery' ? 'Delivery' : 'Pickup'}\n` +
+        `*Payment:* ${payMethod === 'cod' ? 'Cash on Delivery' : payMethod === 'upi' ? 'UPI' : 'Card/Online'}\n\n` +
+        `*Items:*\n${itemLines}\n\n`;
+      waMsg += `*Delivery:* ${delivery === 0 ? 'FREE' : '₹' + delivery}\n`;
+      waMsg += `*Tax (5%):* ₹${tax}\n`;
+      waMsg += `*Total: ₹${total}*\n\n`;
+      if (orderData.specialInstructions) waMsg += `*Note:* ${orderData.specialInstructions}\n\n`;
+      waMsg += `_Ordered via Arora Sweets website_`;
+      const waUrl = `https://wa.me/919934492744?text=${encodeURIComponent(waMsg)}`;
+
+      /* Fire-and-forget Firebase save (runs in background, doesn't block WhatsApp) */
+      if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+        fetch(
+          ARORA_FB.dbUrl + 'orders/' + orderId + '.json',
+          { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderData) }
+        ).catch(e => console.warn('Firebase save failed:', e));
+
+        /* Mirror into the signed-in customer's own order history + save their phone number */
+        if (signedInUid) {
+          fetch(
+            ARORA_FB.dbUrl + 'customers/' + signedInUid + '/orders/' + orderId + '.json',
+            { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderData) }
+          ).catch(e => console.warn('Firebase order history save failed:', e));
+
+          fetch(
+            ARORA_FB.dbUrl + 'customers/' + signedInUid + '.json',
+            { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone: cust.phone }) }
+          ).catch(e => console.warn('Firebase phone save failed:', e));
+        }
+      }
+
+      /* Open WhatsApp immediately — synchronous in the click handler so popup blocker won't fire */
+      window.open(waUrl, '_blank', 'noopener');
+
+      /* Show success modal */
+      document.getElementById('successOrderId').textContent = 'ORDER #' + orderId;
+      document.getElementById('successEta').textContent =
+        isDelivery
+          ? 'Estimated delivery time: ' + eta
+          : 'Your order will be ready for pickup in ' + eta;
+      document.getElementById('successOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+  })();
+  </script>
+</body>
+</html>

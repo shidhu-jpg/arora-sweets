@@ -18,6 +18,15 @@
     return '₹ ' + numeric + (unit ? ' ' + unit : ' per piece');
   }
 
+  /* Must match fbKey() in admin.html — item names can contain characters
+     ( . # $ [ ] / ) that Firebase forbids as object keys, so admin.html
+     escapes them when saving. No-op for names without special chars. */
+  function fbKey(name) {
+    return String(name).replace(/[.#$\[\]\/]/g, function (c) {
+      return '~' + c.charCodeAt(0).toString(16);
+    });
+  }
+
   /* Patch all .price spans in menu and homepage cards */
   function applyToDom(data) {
     var prices = getPrices(data);
@@ -29,12 +38,13 @@
         var nameEl = el.querySelector('h3');
         if (!nameEl) return;
         var name = nameEl.textContent.trim();
-        var ov   = prices[name];
+        var key  = fbKey(name);
+        var ov   = prices[key];
         if (!ov || ov.numeric === undefined) return;
         var priceEl = el.querySelector('.price');
         if (!priceEl) return;
         /* Rebuild display from numeric + units so "per piece" appears correctly */
-        var unit = units.hasOwnProperty(name) ? units[name] : null;
+        var unit = units.hasOwnProperty(key) ? units[key] : null;
         priceEl.textContent = unit !== null
           ? buildDisplay(ov.numeric, unit)
           : (ov.display || ('₹ ' + ov.numeric));
@@ -54,12 +64,13 @@
       var nameEl = card.querySelector('h3');
       if (!nameEl) return;
       var name = nameEl.textContent.trim();
-      var ov   = prices[name];
+      var key  = fbKey(name);
+      var ov   = prices[key];
       if (!ov || !window._aroraCartAdd) return;
 
       var priceEl = card.querySelector('.price');
       if (priceEl) {
-        var unit = units.hasOwnProperty(name) ? units[name] : null;
+        var unit = units.hasOwnProperty(key) ? units[key] : null;
         priceEl.textContent = unit !== null
           ? buildDisplay(ov.numeric, unit)
           : (ov.display || ('₹ ' + ov.numeric));

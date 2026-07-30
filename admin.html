@@ -625,6 +625,17 @@
 
   function saveDataLocal(data) { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
+  /* ── Firebase key helper ──
+     Firebase Realtime DB keys can't contain . # $ [ ] or / — but item names
+     like "P.G.T" or "Lassi (Sweet / Salt)" do. Escape those chars so the
+     prices/units/names objects always get valid keys; harmless no-op for
+     names without special chars. */
+  function fbKey(name) {
+    return String(name).replace(/[.#$\[\]\/]/g, function (c) {
+      return '~' + c.charCodeAt(0).toString(16);
+    });
+  }
+
   /* ── Price helpers ── */
   function parsePriceStr(str) {
     var m = (str || '').trim().match(/₹\s*([\d,]+)\s*(.*)/);
@@ -698,8 +709,9 @@
       var catItems = catMap[cat];
       var label    = CAT_LABELS[cat] || cat;
       var modCount = catItems.filter(function (i) {
-        return !!(data.prices[i.name] || data.units.hasOwnProperty(i.name) ||
-                  data.names[i.name]  || pendingChanges[i.name]);
+        var k = fbKey(i.name);
+        return !!(data.prices[k] || data.units.hasOwnProperty(k) ||
+                  data.names[k]  || pendingChanges[i.name]);
       }).length;
 
       var section = document.createElement('div');
@@ -729,9 +741,10 @@
 
   function buildRow(item, data) {
     var parsed  = parsePriceStr(item.priceStr);
-    var ovPrice = data.prices[item.name];
-    var ovUnit  = data.units.hasOwnProperty(item.name) ? data.units[item.name] : null;
-    var ovName  = data.names[item.name] || null;
+    var key     = fbKey(item.name);
+    var ovPrice = data.prices[key];
+    var ovUnit  = data.units.hasOwnProperty(key) ? data.units[key] : null;
+    var ovName  = data.names[key] || null;
     var pend    = pendingChanges[item.name] || {};
 
     var defNum  = parsed.numeric;
@@ -919,22 +932,23 @@
     }
 
     Object.keys(pendingChanges).forEach(function (itemName) {
-      var ch = pendingChanges[itemName];
+      var key = fbKey(itemName);
+      var ch  = pendingChanges[itemName];
       if (ch.deleted) {
         if (ch.isCustom) {
           data.custom = (data.custom || []).filter(function (c) { return c.name !== itemName; });
         } else {
           if (!(data.deleted || []).includes(itemName)) data.deleted.push(itemName);
         }
-        delete data.prices[itemName]; delete data.units[itemName]; delete data.names[itemName];
+        delete data.prices[key]; delete data.units[key]; delete data.names[key];
       } else {
         if (ch.numeric !== undefined || ch.unit !== undefined) {
-          var num  = ch.numeric !== undefined ? ch.numeric : (data.prices[itemName] ? data.prices[itemName].numeric : 0);
-          var unit = ch.unit    !== undefined ? ch.unit    : (data.units[itemName] || '');
-          data.prices[itemName] = { numeric: num, display: buildDisplay(num, unit) };
+          var num  = ch.numeric !== undefined ? ch.numeric : (data.prices[key] ? data.prices[key].numeric : 0);
+          var unit = ch.unit    !== undefined ? ch.unit    : (data.units[key] || '');
+          data.prices[key] = { numeric: num, display: buildDisplay(num, unit) };
         }
-        if (ch.unit    !== undefined) data.units[itemName] = ch.unit;
-        if (ch.newName)               data.names[itemName] = ch.newName;
+        if (ch.unit    !== undefined) data.units[key] = ch.unit;
+        if (ch.newName)               data.names[key] = ch.newName;
       }
     });
 

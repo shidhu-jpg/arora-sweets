@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu | Om Sai Sweets</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#fcf9f8",
+              "secondary": "#51606b",
+              "primary-fixed": "#ffdbcc",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f3f0f0",
+              "primary-container": "#ff9762",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#b2b39c",
+              "on-secondary-fixed-variant": "#3a4953",
+              "tertiary": "#5e604d",
+              "secondary-fixed": "#d5e5f1",
+              "on-error-container": "#93000a",
+              "secondary-container": "#d2e2ee",
+              "inverse-primary": "#ffb693",
+              "secondary-fixed-dim": "#b9c9d5",
+              "surface-variant": "#e4e2e1",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed-variant": "#474836",
+              "surface-container-high": "#eae7e7",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#762e00",
+              "error": "#ba1a1a",
+              "on-surface": "#1b1c1c",
+              "on-error": "#ffffff",
+              "on-secondary-container": "#55656f",
+              "on-secondary-fixed": "#0e1d26",
+              "inverse-surface": "#303030",
+              "surface-dim": "#dcd9d9",
+              "surface-container-highest": "#e4e2e1",
+              "on-background": "#1b1c1c",
+              "surface-container-low": "#f6f3f2",
+              "surface-container": "#f0eded",
+              "on-tertiary-container": "#444534",
+              "primary-fixed-dim": "#ffb693",
+              "surface-tint": "#a04100",
+              "surface": "#fcf9f8",
+              "tertiary-fixed-dim": "#c8c8b0",
+              "on-primary-fixed-variant": "#7a3000",
+              "on-tertiary-fixed": "#1b1d0e",
+              "outline-variant": "#dbc2b0",
+              "on-surface-variant": "#554336",
+              "tertiary-fixed": "#e4e4cc",
+              "surface-bright": "#fcf9f8",
+              "outline": "#887364",
+              "on-primary-fixed": "#351000",
+              "surface-container-lowest": "#ffffff",
+              "primary": "#a04100"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .bg-gradient-primary {
+        background: linear-gradient(135deg, #a04100 0%, #ff9762 100%);
+      }
+      /* Cart Styles */
+      .cart-btn-fab {
+        position: fixed; bottom: 28px; right: 28px; z-index: 60;
+        background: linear-gradient(135deg, #a04100 0%, #ff9762 100%);
+        color: white; border: none; border-radius: 50px; padding: 14px 22px;
+        font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 0.95rem;
+        cursor: pointer; display: flex; align-items: center; gap: 10px;
+        box-shadow: 0 8px 24px rgba(160,65,0,0.35); transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .cart-btn-fab:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(160,65,0,0.4); }
+      .cart-badge {
+        background: white; color: #a04100; border-radius: 50%;
+        width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+        font-size: 0.75rem; font-weight: 800; line-height: 1;
+      }
+      .cart-overlay {
+        position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 70;
+        display: none; justify-content: flex-end;
+      }
+      .cart-overlay.open { display: flex; }
+      .cart-drawer {
+        background: #fcf9f8; width: 100%; max-width: 420px; height: 100%;
+        display: flex; flex-direction: column; box-shadow: -8px 0 40px rgba(0,0,0,0.15);
+        animation: slideIn 0.25s ease;
+      }
+      @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+      .cart-drawer-header {
+        padding: 24px; border-bottom: 1px solid #dbc2b0;
+        display: flex; align-items: center; justify-content: space-between;
+        background: white;
+      }
+      .cart-items-list { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+      .cart-item {
+        background: white; border-radius: 12px; padding: 14px 16px;
+        display: flex; align-items: center; gap: 14px; border: 1px solid #e4e2e1;
+      }
+      .cart-item-img { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; background: #f0eded; flex-shrink: 0; }
+      .cart-qty-btn {
+        width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid #dbc2b0;
+        background: white; cursor: pointer; font-size: 1.1rem; font-weight: 700;
+        display: flex; align-items: center; justify-content: center; color: #a04100;
+        transition: background 0.15s;
+      }
+      .cart-qty-btn:hover { background: #f0eded; }
+      .cart-footer {
+        padding: 20px 24px; border-top: 1px solid #dbc2b0; background: white;
+      }
+      .add-cart-btn {
+        background: white; border: 2px solid #a04100; color: #a04100;
+        padding: 8px 18px; border-radius: 8px; font-family: 'Manrope', sans-serif;
+        font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex;
+        align-items: center; gap: 6px; transition: all 0.15s; white-space: nowrap;
+      }
+      .add-cart-btn:hover { background: #a04100; color: white; }
+      .add-cart-btn.added { background: #a04100; color: white; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif font-bold text-orange-700 dark:text-orange-500">Om Sai Sweets</div>
+<!-- Desktop Links -->
+<div class="hidden md:flex items-center space-x-8 font-label font-medium tracking-wide">
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-500 transition-colors" href="index.html">Home</a>
+<a class="text-orange-700 dark:text-orange-400 border-b-2 border-orange-600 pb-1" href="menu.html">Menu</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-500 transition-colors" href="banquet.html">Banquet</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-500 transition-colors" href="contactus.html">Contact</a>
+</div>
+<button onclick="openCart()" id="nav-cart-btn" class="relative bg-surface-container-high text-on-surface px-5 py-2 rounded-md font-medium hover:bg-surface-variant transition-all flex items-center gap-2" style="display:none!important">
+              <span class="material-symbols-outlined text-primary" style="font-size:22px">shopping_cart</span>
+              <span id="nav-cart-badge" class="bg-primary text-on-primary text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center">0</span>
+            </button>
+<button onclick="window.location='contactus.html'" class="bg-gradient-primary text-on-primary px-8 py-2 rounded-md font-medium hover:opacity-90 active:scale-95 transition-all">
+                Book Now
+            </button>
+</div>
+</nav>
+<!-- Hero Header Section -->
+<header class="pt-32 pb-16 px-8 max-w-7xl mx-auto text-center">
+<span class="label-md uppercase tracking-widest text-primary font-bold mb-4 block">Our Culinary Heritage</span>
+<h1 class="font-headline text-5xl md:text-7xl text-on-surface mb-6 leading-tight">Our Delicious Menu</h1>
+<p class="max-w-2xl mx-auto text-secondary text-lg leading-relaxed">
+            Experience the finest selection of hand-crafted traditional Indian sweets and savory delicacies, made with heirloom recipes and pure ingredients.
+        </p>
+</header>
+<!-- Main Menu Canvas -->
+<main class="max-w-7xl mx-auto px-8 pb-24 space-y-24">
+<!-- Category 1: Traditional Sweets -->
+<section>
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div class="space-y-2">
+<h2 class="font-headline text-4xl text-on-surface">Traditional Sweets</h2>
+<p class="text-secondary max-w-md">The heart of our heritage, crafted with pure desi ghee and love.</p>
+</div>
+<div class="h-[1px] flex-grow bg-outline-variant/20 mx-8 hidden md:block mb-4"></div>
+</div>
+<!-- Bento Grid for Sweets -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Large Feature Card -->
+<div class="md:col-span-7 bg-surface-container-low rounded-xl overflow-hidden flex flex-col md:flex-row items-center group">
+<div class="w-full md:w-1/2 h-80 overflow-hidden">
+<img alt="Gulab Jamun" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Close-up of golden brown Gulab Jamuns soaking in rose-scented syrup, garnished with silver leaf and crushed pistachios, warm studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-pojAMNp_KAOvVoCDo557TxgyK_xPktFIbhRJwL-rbrUwDYArngGwQ0F4yJGPRPYohOrN7qDA93NQD6J4NiR8bv98kh4wxZVl6Ldj8c-kXxWy0JVcv3Cp-GgOe3mf3o85GF0BhgLapUk94AfMrVLvdQQtn_jezCGHgkpXNDy5UhJhqksjnK4FafNTBB7E9A6m0SAZfdEPbgCtvOsTeMrLLSS7fwCK7c2jx8sbmJvCUMqstVfMLDqkpsHz6tX-tMFU0r99L2zZ_yZP"/>
+</div>
+<div class="p-10 w-full md:w-1/2 flex flex-col justify-center">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-headline text-2xl text-on-surface">Shahi Gulab Jamun</h3>
+<span class="text-primary font-bold text-xl">₹180</span>
+</div>
+<p class="text-secondary mb-8 leading-relaxed">Soft, melt-in-the-mouth milk solid spheres deep-fried and soaked in an aromatic saffron and rosewater syrup.</p>
+<button class="add-cart-btn" onclick="addToCart('Shahi Gulab Jamun', 180, 'https://lh3.googleusercontent.com/aida-public/AB6AXuB-pojAMNp_KAOvVoCDo557TxgyK_xPktFIbhRJwL-rbrUwDYArngGwQ0F4yJGPRPYohOrN7qDA93NQD6J4NiR8bv98kh4wxZVl6Ldj8c-kXxWy0JVcv3Cp-GgOe3mf3o85GF0BhgLapUk94AfMrVLvdQQtn_jezCGHgkpXNDy5UhJhqksjnK4FafNTBB7E9A6m0SAZfdEPbgCtvOsTeMrLLSS7fwCK7c2jx8sbmJvCUMqstVfMLDqkpsHz6tX-tMFU0r99L2zZ_yZP', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+<!-- Standard Cards -->
+<div class="md:col-span-5 grid grid-cols-1 gap-8">
+<div class="bg-surface-container-low rounded-xl p-8 flex gap-6 items-center">
+<div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+<img alt="Ladoo" class="w-full h-full object-cover" data-alt="Round yellow Motichoor Ladoos piled on a decorative brass plate with scattered rose petals, soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIWm5dWAbcgbBsK60I3WjMXa_SZHobM03HtrQhI45-6kMY4bLfU-pDawbmkrmXKadtvTj6XFJQ3km5FJi3ABE0_oyKP4AEYhNWbG6-G6X8g5NLJRgBxw_SDQZc3w20OBpvMvlhJhJwra9Ivm_-IwRgBm0XQQ4m6gbzdbG0YAgTeNTblHrFkqRrkbYq6fWgF4IsxqucdGLV2UEMggsyD2YYx7hFkGSVKKwBCYWxK4-925Y8E2CZoAyhnLomj6fe9HOV-VW_LnyZOWIg"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-headline text-xl text-on-surface">Motichoor Ladoo</h4>
+<span class="text-primary font-bold">₹160</span>
+</div>
+<p class="text-secondary text-sm mt-2">Fine gram flour pearls cooked in pure ghee and cardamom.</p>
+<button class="add-cart-btn mt-3" onclick="addToCart('Motichoor Ladoo', 160, 'https://lh3.googleusercontent.com/aida-public/AB6AXuBIWm5dWAbcgbBsK60I3WjMXa_SZHobM03HtrQhI45-6kMY4bLfU-pDawbmkrmXKadtvTj6XFJQ3km5FJi3ABE0_oyKP4AEYhNWbG6-G6X8g5NLJRgBxw_SDQZc3w20OBpvMvlhJhJwra9Ivm_-IwRgBm0XQQ4m6gbzdbG0YAgTeNTblHrFkqRrkbYq6fWgF4IsxqucdGLV2UEMggsyD2YYx7hFkGSVKKwBCYWxK4-925Y8E2CZoAyhnLomj6fe9HOV-VW_LnyZOWIg', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-8 flex gap-6 items-center">
+<div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
+<img alt="Kaju Katli" class="w-full h-full object-cover" data-alt="Diamond-shaped silver-topped Kaju Katli arranged in a geometric pattern on a dark stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9Iy6papoYAYxwkFQBP_UiEPFInaE_9yZa0FZx4fTPjJaPS1RkOzpbzs4nOIibMbML1izTVbHepxllx0iRsj51TbWVrp0gHmDP79Gl20NRvS-jxVK4iLQny0VJfu7koUlnTFjK6IOrKmRdz5GZgjl9qHGs8KVPtEVOEPFLMqdq-vExsXjQQ6ix460XjDirFrYKvcKyh1dv_-3sB_7qAAPGRX8K27jSSC5o7CQtNpxabV7JQbMqX9yQ61w1fN1MOP99ovweFRmBRfWH"/>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between">
+<h4 class="font-headline text-xl text-on-surface">Kaju Katli</h4>
+<span class="text-primary font-bold">₹240</span>
+</div>
+<p class="text-secondary text-sm mt-2">Premium cashew nut fudge with a hint of silver vark.</p>
+<button class="add-cart-btn mt-3" onclick="addToCart('Kaju Katli', 240, 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9Iy6papoYAYxwkFQBP_UiEPFInaE_9yZa0FZx4fTPjJaPS1RkOzpbzs4nOIibMbML1izTVbHepxllx0iRsj51TbWVrp0gHmDP79Gl20NRvS-jxVK4iLQhy0VJfu7koUlnTFjK6IOrKmRdz5GgjL9qHGs8KVPtEVOEPFLMqdq-vExsXjQQ6ix460XjDirFrYKvcKyh1dv_-3sB_7qAAPGRX8K27jSSC5o7CQtNpxabV7JQbMqX9yQ61w1fN1MOP99ovweFRmBRfWH', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+</div>
+<!-- Asymmetric Row -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-8 group">
+<div class="h-48 rounded-lg overflow-hidden mb-6 -mt-12 shadow-lg">
+<img alt="Barfi" class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Square pieces of Pista Barfi with layers of white and green, garnished with chopped nuts, overhead perspective" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv34NM6ZDPp5y5tuMNi0GVoKizYlvlu4xmraH9p9zyIVW2WVuWZzzyNta4JKpaLe2qRvBsBANge6URgmI0VNo1jTgeivAp0H7VLUQP5DaoxKJZFrN5ywSZ99yd3g1JraQlTpaVvO7xCFB3H-HHaudWkE8IKjVm3DSeUCgx_abdtmz3wAIPG1QS-KxrAlMTg56DSk0a9ebizOzbgKwHCRTbxiFiLQIzTR9-BdQZdH0j5wuKNNkgMW0to2Wi8-SnCLmzxDBOGeiijuwx"/>
+</div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-xl text-on-surface">Premium Pista Barfi</h3>
+<span class="text-primary font-bold">₹210</span>
+</div>
+<p class="text-secondary text-sm leading-relaxed">Concentrated milk fudge infused with roasted Iranian pistachios and organic saffron.</p>
+<button class="add-cart-btn mt-4" onclick="addToCart('Premium Pista Barfi', 210, 'https://lh3.googleusercontent.com/aida-public/AB6AXuBv34NM6ZDPp5y5tuMNi0GVoKizYlvlu4xmraH9p9zyIVW2WVuWZzzyNta4JKpaLe2qRvBsBANge6URgmI0VNo1jTgeivAp0H7VLUQP5DaoxKJZFrN5ywSZ99yd3g1JraQlTpaVvO7xCFB3H-HHaudWkE8IKjVm3DSeUCgx_abdtmz3wAIPG1QS-KxrAlMTg56DSk0a9ebizOzbgKwHCRTbxiFiLQIzTR9-BdQZdH0j5wuKNNkgMW0to2Wi8-SnCLmzxDBOGeiijuwx', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-8 group">
+<div class="h-48 rounded-lg overflow-hidden mb-6 -mt-12 shadow-lg">
+<img alt="Rasgulla" class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Spongy white Rasgullas in a clear glass bowl with light syrup, mint garnish, bright high-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6R28BxdXsb_MTpTsPvlWILx9zoIQZGjJFxglPM--vvY25ZRutXZjm1x6jKmc1FLxSgbFvfTkkUpVWwwTL7AcAAgcbie_Jv-63yN6dQJeorydYOe88bgPetY-CXPdedYpZwnX0opYNsMRBuvC3ZnZbhYIiVHd750Xi6YPwzP2o4jTN37OEyqNsRJeYiKBOyiWHvLb9l54FT38XFf3EZGYg7hCfN9q_w-d_hDiplVVp_ZAh3jX6nHlh-QWcmb_pVSeOxko1AZWgOWQO"/>
+</div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-xl text-on-surface">Bengali Rasgulla</h3>
+<span class="text-primary font-bold">₹150</span>
+</div>
+<p class="text-secondary text-sm leading-relaxed">Spongy, lightweight cottage cheese balls cooked in light sugar syrup for a refreshing finish.</p>
+<button class="add-cart-btn mt-4" onclick="addToCart('Bengali Rasgulla', 150, 'https://lh3.googleusercontent.com/aida-public/AB6AXuA6R28BxdXsb_MTpTsPvlWILx9zoIQZGjJFxglPM--vvY25ZRutXZjm1x6jKmc1FLxSgbFvfTkkUpVWwwTL7AcAAgcbie_Jv-63yN6dQJeorydYOe88bgPetY-CXPdedYpZwnX0opYNsMRBuvC3ZnZbhYIiVHd750Xi6YPwzP2o4jTN37OEyqNsRJeYiKBOyiWHvLb9l54FT38XFf3EZGEg7hCfN9q_w-d_hDiplVVp_ZAh3jX6nHlh-QWcmb_pVSeOxko1AZWgOWQO', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-8 group">
+<div class="h-48 rounded-lg overflow-hidden mb-6 -mt-12 shadow-lg">
+<img alt="Jalebi" class="w-full h-full object-cover group-hover:scale-105 transition-transform" data-alt="Bright orange crispy Jalebi spirals stacked on a banana leaf, hot and glistening with syrup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZGmZb0L5Wsptdo3KeYK2ElLykdwgza0vx6JOSB8eya4fTMX8XqLnEWloG9F6IunssiWHscvSBGFYowln76eK_pvCztfU9LWEZ9AHohxiUzzfs00qRywbK-mTOpkJ5-dywqbkk1WQ_LeMv8evxuAbKt5ZBFpuNwEPQ_GHe5UVL1GzPPl-ULq0EX_bCTM6irSW45nyZC6HB9W5YlSA4cbQb7UheGYKoyWiDr1oYA3ro8gpxrVsVf7EmsD4n7uFKB7H09NLavKmEkHG7"/>
+</div>
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline text-xl text-on-surface">Kesari Jalebi</h3>
+<span class="text-primary font-bold">₹140</span>
+</div>
+<p class="text-secondary text-sm leading-relaxed">Crispy, fermented batter spirals deep fried and immersed in saffron syrup, served hot.</p>
+<button class="add-cart-btn mt-4" onclick="addToCart('Kesari Jalebi', 140, 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZGmZb0L5Wsptdo3KeYK2ElLykdwgza0vx6JOSB8eya4fTMX8XqLnEWloG9F6IunssiWHscvSBGFYowln76eK_pvCztfU9LWEZ9AHohxiUzzfs00qRywbK-mTOpkJ5-dywqbkk1WQ_LeMv8evxuAbKt5ZBFpuNwEPQ_GHe5UVL1GzPPl-ULq0EX_bCTM6irSW45nyZC6HB9W5YlSA4cbQb7UheGYKoyWiDr1oYA3ro8gpxrVsVf7EmsD4n7uFKB7H09NLavKmEkHG7', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+</section>
+<!-- Category 2: Savory Snacks -->
+<section>
+<div class="flex flex-col md:flex-row-reverse justify-between items-end mb-12 gap-6">
+<div class="space-y-2 text-right">
+<h2 class="font-headline text-4xl text-on-surface">Savory Snacks</h2>
+<p class="text-secondary max-w-md">Bold spices and crunchy textures for the perfect afternoon indulgence.</p>
+</div>
+<div class="h-[1px] flex-grow bg-outline-variant/20 mx-8 hidden md:block mb-4"></div>
+</div>
+<!-- Mosaic Layout for Savories -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+<!-- Samosa Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden group">
+<div class="relative h-64">
+<img alt="Samosa" class="w-full h-full object-cover" data-alt="Three crispy triangular samosas on a rustic wooden platter with green chutney and fried green chili, warm earthy tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA1zppMaYsbE1JQk6zNQWhp3uHqUBaqy4AjwCGh8TnlC-EA9JmAcKF6jsgaM8wVR0i43oT8Jv2H41dc3AalzAzG1D8hV_Cb3ZPkTAwvq8f9SFl28itWRazZXIk0-oQ2nqJjDmM_H4TaOk3VDjmOf6qDCvjJgYTnPxPAcbsUB4qNP_vp7wE1-IUouC-UToYiE0wWKTFinxuUbtsjG6NftbqU45UalDXKX0v3hR-TBoTvGeOiYGtxlrtZ0T448B242FV6juJzLuZ9zvy"/>
+<div class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Bestseller</div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="font-headline text-2xl text-on-surface">Cocktail Samosas</h3>
+<span class="text-primary font-bold">₹80</span>
+</div>
+<p class="text-secondary leading-relaxed mb-4">Traditional flaky pastry crust filled with spiced potatoes, peas, and roasted peanuts. Served with tangy tamarind chutney.</p>
+<div class="flex gap-4 mb-5">
+<span class="flex items-center gap-1 text-xs text-secondary"><span class="material-symbols-outlined text-sm">local_fire_department</span> Mild Spice</span>
+<span class="flex items-center gap-1 text-xs text-secondary"><span class="material-symbols-outlined text-sm">eco</span> Vegan</span>
+</div>
+<button class="add-cart-btn" onclick="addToCart('Cocktail Samosas', 80, 'https://lh3.googleusercontent.com/aida-public/AB6AXuDA1zppMaYsbE1JQk6zNQWhp3uHqUBaqy4AjwCGh8TnlC-EA9JmAcKF6jsgaM8wVR0i43oT8Jv2H41dc3AalzAzG1D8hV_Cb3ZPkTAwvq8f9SFl28itWRazZXIk0-oQ2nqJjDmM_H4TaOk3VDjmOf6qDCvjJgYTnPxPAcbsUB4qNP_vp7wE1-IUouC-UToYiE0wWKTFinxuUbtsjG6NftbqU45UalDXKX0v3hR-TBoTvGeOiYGtxlrtZ0T448B242FV6juJzLuZ9zvy', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+<!-- Chaat Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden group">
+<div class="relative h-64">
+<img alt="Chaat" class="w-full h-full object-cover" data-alt="Papdi Chaat in a ceramic bowl topped with yogurt, red and green chutneys, pomegranate seeds, and fine sev, vibrant colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABvtq30KEKBAARBb5tUpC8MxHcEYPBDbTdjQsIZwvXHAaoSRuoC3pBRUHOnp8VHYpSsf7gwG4j9pkqFQQ9GT-VfRqKc7IXWdZH8dGCHpYG3nvG_Pzv0MRTKTKGGHWls2fiBjOt2vxadgLOJf9DE8fxrTfYuWJT1ZOVlTcK-cvZv2BKzF0dpdeEajVCtQJImbmdk7kX3i17E-jBTPOWHRlQw1h0MSZDAdZUDc82iK8B1qYQOkGt2wsBeOgmJb1L-_a5u40uWB5McHpc"/>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="font-headline text-2xl text-on-surface">Dilli Ki Papdi Chaat</h3>
+<span class="text-primary font-bold">₹120</span>
+</div>
+<p class="text-secondary leading-relaxed mb-4">Crispy flour wafers topped with chilled yogurt, boiled potatoes, sprouted moong, and our signature spice blend.</p>
+<div class="flex gap-4 mb-5">
+<span class="flex items-center gap-1 text-xs text-secondary"><span class="material-symbols-outlined text-sm">local_fire_department</span> Medium Spice</span>
+</div>
+<button class="add-cart-btn" onclick="addToCart('Dilli Ki Papdi Chaat', 120, 'https://lh3.googleusercontent.com/aida-public/AB6AXuABvtq30KEKBAARBb5tUpC8MxHcEYPBDbTdjQsIZwvXHAaoSRuoC3pBRUHOnp8VHYpSsf7gwG4j9pkqFQQ9GT-VfRqKc7IXWdZH8dGCHpYG3nvG_Pzv0MRTKTKGGHWls2fiBjOt2vxadgLOJf9DE8fxrTfYuWJT1ZOVlTcK-cvZv2BKzF0dpdeEajVCtQJImbmdk7kX3i17E-jBTPOWHRlQw1h0MSZDAdZUDc82iK8B1qYQOkGt2wsBeOgmJb1L-_a5u40uWB5McHpc', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+<!-- Pakora Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden group">
+<div class="relative h-64">
+<img alt="Pakoras" class="w-full h-full object-cover" data-alt="Assorted vegetable pakoras including onion, spinach, and potato fried to golden brown, served with coriander chutney" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX5l-IXhbFGZ2RuFe24ZFq1pbXmTaT5eD0Nwry2naaJH_J1nX9Y9Op-qO3n3ajJrxUygxBlZswHlcfAaLyp-0x98NSoexg6fZT-RTk3uxyy3AeSp6t--_7cWLkliuic5806ldcKcwsydNpb0SEhC-bH7OX9ukj6pjntYooEWBIRclk52QT0TJbLjbCy75PTZjKpKO1l5xVOOeZ3SKmVUClJN7tx4njey7-kNdeC3xNEn8fX3QV0k_HtuWD5Tu4cMTu-wAwGO18a3TK"/>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-baseline mb-3">
+<h3 class="font-headline text-2xl text-on-surface">Mix Veg Pakora</h3>
+<span class="text-primary font-bold">₹100</span>
+</div>
+<p class="text-secondary leading-relaxed mb-4">Deep-fried gram flour fritters with seasonal vegetables, hand-ground spices, and garden-fresh coriander.</p>
+<div class="flex gap-4 mb-5">
+<span class="flex items-center gap-1 text-xs text-secondary"><span class="material-symbols-outlined text-sm">local_fire_department</span> Spicy</span>
+<span class="flex items-center gap-1 text-xs text-secondary"><span class="material-symbols-outlined text-sm">eco</span> Gluten-Free</span>
+</div>
+<button class="add-cart-btn" onclick="addToCart('Mix Veg Pakora', 100, 'https://lh3.googleusercontent.com/aida-public/AB6AXuCX5l-IXhbFGZ2RuFe24ZFq1pbXmTaT5eD0Nwry2naaJH_J1nX9Y9Op-qO3n3ajJrxUygxBlZswHlcfAaLyp-0x98NSoexg6fZT-RTk3uxyy3AeSp6t--_7cWLkliuic5806ldcKcwsydNpb0SEhC-bH7OX9ukj6pjntYooEWBIRclk52QT0TJbLjbCy75PTZjKpKO1l5xVOOeZ3SKmVUClJN7tx4njey7-kNdeC3xNEn8fX3QV0k_HtuWD5Tu4cMTu-wAwGO18a3TK', this)">
+  <span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / Footer CTA -->
+<section class="bg-primary-container/10 rounded-2xl p-12 text-center space-y-8">
+<h3 class="font-headline text-3xl text-on-surface">Want to Order in Bulk?</h3>
+<p class="text-secondary max-w-xl mx-auto">From corporate gifting to wedding banquets, our traditional flavors make every occasion special. Get a custom quote for your event today.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button onclick="window.location='contactus.html'" class="bg-gradient-primary text-on-primary px-10 py-4 rounded-md font-bold shadow-lg shadow-primary/20 hover:-translate-y-1 transition-all">
+                    Inquire for Events
+                </button>
+<button class="bg-surface-container-highest text-on-surface px-10 py-4 rounded-md font-bold hover:bg-surface-variant transition-all">
+                    Download Full PDF Menu
+                </button>
+</div>
+</section>
+</main>
+<!-- Cart FAB -->
+<button class="cart-btn-fab" id="cart-fab" onclick="openCart()" style="display:none">
+  <span class="material-symbols-outlined" style="font-size:22px">shopping_cart</span>
+  <span id="cart-fab-label">Cart</span>
+  <span class="cart-badge" id="cart-fab-badge">0</span>
+</button>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cart-overlay" onclick="handleOverlayClick(event)">
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <div>
+        <h2 style="font-family:'Noto Serif',serif;font-size:1.3rem;font-weight:700;color:#1b1c1c">Your Cart</h2>
+        <p style="font-size:0.8rem;color:#887364;margin-top:2px" id="cart-item-count">0 items</p>
+      </div>
+      <button onclick="closeCart()" style="background:none;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#f0eded">
+        <span class="material-symbols-outlined" style="color:#554336">close</span>
+      </button>
+    </div>
+
+    <div class="cart-items-list" id="cart-items-list">
+      <div id="cart-empty" style="text-align:center;padding:48px 24px;color:#887364">
+        <span class="material-symbols-outlined" style="font-size:48px;display:block;margin-bottom:12px;color:#dbc2b0">shopping_cart</span>
+        <p style="font-weight:600;margin-bottom:4px">Your cart is empty</p>
+        <p style="font-size:0.82rem">Add items from the menu to get started.</p>
+      </div>
+    </div>
+
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-weight:600;color:#554336">Total</span>
+        <span style="font-size:1.3rem;font-weight:800;color:#a04100">₹<span id="cart-total">0</span></span>
+      </div>
+      <button onclick="goToCheckout()" style="width:100%;background:linear-gradient(135deg,#a04100,#ff9762);color:white;border:none;padding:14px;border-radius:10px;font-family:'Manrope',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity 0.2s" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'">
+        <span class="material-symbols-outlined">shopping_bag</span> Proceed to Checkout
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-stone-100 dark:bg-stone-950 w-full mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-12 py-16 w-full max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="text-xl font-serif text-stone-800 dark:text-stone-200">Om Sai Sweets</div>
+<p class="text-stone-500 dark:text-stone-400 text-sm leading-relaxed max-w-xs">
+                    Preserving the rich culinary heritage of India through authentic recipes and uncompromising quality since 1994.
+                </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<span class="label-md uppercase tracking-widest text-primary font-bold block mb-4">Quick Links</span>
+<a class="block text-stone-500 dark:text-stone-400 text-sm hover:text-orange-500 underline-offset-4 hover:underline transition-all" href="#">Privacy Policy</a>
+<a class="block text-stone-500 dark:text-stone-400 text-sm hover:text-orange-500 underline-offset-4 hover:underline transition-all" href="#">Terms of Service</a>
+</div>
+<div class="space-y-2">
+<span class="label-md uppercase tracking-widest text-primary font-bold block mb-4">Support</span>
+<a class="block text-stone-500 dark:text-stone-400 text-sm hover:text-orange-500 underline-offset-4 hover:underline transition-all" href="contactus.html">Location</a>
+<a class="block text-stone-500 dark:text-stone-400 text-sm hover:text-orange-500 underline-offset-4 hover:underline transition-all" href="contactus.html">Contact Us</a>
+</div>
+</div>
+<div class="space-y-4">
+<span class="label-md uppercase tracking-widest text-primary font-bold block">Visit Us</span>
+<p class="text-stone-500 dark:text-stone-400 text-sm">
+                    123 Culinary Heritage Lane<br/>
+                    Food District, Metropolis 40001
+                </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-secondary hover:text-primary cursor-pointer">share</span>
+<span class="material-symbols-outlined text-secondary hover:text-primary cursor-pointer">location_on</span>
+<span class="material-symbols-outlined text-secondary hover:text-primary cursor-pointer">mail</span>
+</div>
+</div>
+</div>
+<div class="px-12 py-6 border-t border-stone-200 dark:border-stone-800 flex flex-col md:flex-row justify-between items-center text-stone-500 text-xs gap-4">
+<span>© 2024 Om Sai Sweets &amp; Banquets. All rights reserved.</span>
+<div class="flex gap-8">
+<span>Designed for Excellence</span>
+<span>FSSAI Certified</span>
+</div>
+</div>
+</footer>
+<script>
+// ===== CART SYSTEM =====
+const CART_KEY = 'omsai_cart';
+
+function getCart() { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+function saveCart(cart) { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+
+function addToCart(name, price, imgUrl, btn) {
+  let cart = getCart();
+  const idx = cart.findIndex(i => i.name === name);
+  if (idx >= 0) {
+    cart[idx].qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1, img: imgUrl });
+  }
+  saveCart(cart);
+  updateCartUI();
+  // Animate button
+  if (btn) {
+    btn.classList.add('added');
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">check</span> Added!';
+    setTimeout(() => {
+      btn.classList.remove('added');
+      btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:18px">add_shopping_cart</span> Add to Cart';
+    }, 1500);
+  }
+  openCart();
+}
+
+function changeQty(name, delta) {
+  let cart = getCart();
+  const idx = cart.findIndex(i => i.name === name);
+  if (idx < 0) return;
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx, 1);
+  saveCart(cart);
+  updateCartUI();
+}
+
+function removeFromCart(name) {
+  let cart = getCart().filter(i => i.name !== name);
+  saveCart(cart);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const cart = getCart();
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s, i) => s + i.qty, 0);
+
+  // FAB badge
+  const fab = document.getElementById('cart-fab');
+  const badge = document.getElementById('cart-fab-badge');
+  if (fab) {
+    fab.style.display = count > 0 ? 'flex' : 'none';
+    if (badge) badge.textContent = count;
+  }
+
+  // Items list
+  const list = document.getElementById('cart-items-list');
+  const empty = document.getElementById('cart-empty');
+  const footer = document.getElementById('cart-footer');
+  const countEl = document.getElementById('cart-item-count');
+  const totalEl = document.getElementById('cart-total');
+
+  if (countEl) countEl.textContent = count + (count === 1 ? ' item' : ' items');
+  if (totalEl) totalEl.textContent = total.toLocaleString('en-IN');
+
+  if (cart.length === 0) {
+    if (empty) empty.style.display = 'block';
+    if (footer) footer.style.display = 'none';
+    if (list) { list.innerHTML = ''; list.appendChild(empty); }
+  } else {
+    if (empty) empty.style.display = 'none';
+    if (footer) footer.style.display = 'block';
+    if (list) {
+      list.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img class="cart-item-img" src="${item.img}" alt="${item.name}" onerror="this.style.display='none'"/>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;font-size:0.9rem;color:#1b1c1c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
+            <div style="color:#a04100;font-weight:700;font-size:0.9rem;margin-top:2px">₹${item.price} × ${item.qty} = <strong>₹${(item.price*item.qty).toLocaleString('en-IN')}</strong></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <button class="cart-qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', -1)">−</button>
+            <span style="font-weight:700;min-width:20px;text-align:center">${item.qty}</span>
+            <button class="cart-qty-btn" onclick="changeQty('${item.name.replace(/'/g,"\\'")}', 1)">+</button>
+            <button onclick="removeFromCart('${item.name.replace(/'/g,"\\'")}') " style="background:none;border:none;cursor:pointer;margin-left:4px;color:#ba1a1a" title="Remove">
+              <span class="material-symbols-outlined" style="font-size:18px">delete</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+}
+
+function openCart() {
+  document.getElementById('cart-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCart() {
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('cart-overlay')) closeCart();
+}
+
+function goToCheckout() {
+  closeCart();
+  window.location.href = 'contactus.html?checkout=1';
+}
+
+// Init on page load
+updateCartUI();
+</script>
+</body></html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Admin Dashboard | Om Sai Sweets</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a04100",
+            "on-primary": "#ffffff",
+            "primary-container": "#ff9762",
+            "surface": "#fcf9f8",
+            "surface-container": "#f0eded",
+            "surface-container-high": "#eae7e7",
+            "surface-container-highest": "#e4e2e1",
+            "on-surface": "#1b1c1c",
+            "on-surface-variant": "#554336",
+            "outline": "#887364",
+            "outline-variant": "#dbc2b0",
+            "secondary": "#51606b",
+            "surface-tint": "#a04100",
+          },
+          fontFamily: {
+            "serif": ["Noto Serif", "serif"],
+            "sans": ["Manrope", "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Manrope', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    .nav-link { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s; color: #554336; font-size: 0.9rem; font-weight: 500; }
+    .nav-link:hover { background: #f0eded; color: #a04100; }
+    .nav-link.active { background: #ff9762; color: #a04100; font-weight: 700; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .stat-card { background: white; border-radius: 12px; padding: 20px 24px; border: 1px solid #dbc2b0; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge-confirmed { background: #dcfce7; color: #166534; }
+    .badge-pending { background: #fef9c3; color: #854d0e; }
+    .badge-cancelled { background: #fee2e2; color: #991b1b; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .modal-box { background: white; border-radius: 16px; padding: 32px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; }
+    .form-input { width: 100%; border: 1px solid #dbc2b0; border-radius: 8px; padding: 10px 14px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: 'Manrope', sans-serif; }
+    .form-input:focus { border-color: #a04100; box-shadow: 0 0 0 3px rgba(160,65,0,0.1); }
+    .btn-primary { background: #a04100; color: white; padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-primary:hover { background: #7a3000; }
+    .btn-secondary { background: #f0eded; color: #554336; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-secondary:hover { background: #e4e2e1; }
+    .btn-danger { background: #fee2e2; color: #991b1b; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-danger:hover { background: #fecaca; }
+    .btn-edit { background: #fef9c3; color: #854d0e; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; border: none; cursor: pointer; transition: background 0.2s; }
+    .btn-edit:hover { background: #fef08a; }
+    .btn-confirm { background: #dcfce7; color: #166534; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; border: none; cursor: pointer; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #1b1c1c; color: white; padding: 14px 22px; border-radius: 10px; z-index: 100; font-size: 0.9rem; display: none; align-items: center; gap: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .img-preview { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
+    .card-img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px 8px 0 0; background: #f0eded; display: flex; align-items: center; justify-content: center; }
+    .sidebar { height: 100vh; position: sticky; top: 0; overflow-y: auto; }
+    table { border-collapse: collapse; width: 100%; }
+    th { background: #f6f3f2; color: #554336; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 12px 16px; text-align: left; border-bottom: 1px solid #dbc2b0; }
+    td { padding: 12px 16px; border-bottom: 1px solid #e4e2e1; font-size: 0.875rem; color: #1b1c1c; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fcf9f8; }
+  </style>
+</head>
+<body class="bg-[#fcf9f8] text-[#1b1c1c]">
+
+<!-- Password Gate -->
+<div id="password-gate" style="position:fixed;inset:0;z-index:200;background:#fcf9f8;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:white;border-radius:16px;border:1px solid #dbc2b0;padding:40px 36px;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 32px rgba(160,65,0,0.08)">
+    <div style="width:56px;height:56px;background:#ff9762;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+      <span class="material-symbols-outlined" style="color:#a04100;font-size:28px">lock</span>
+    </div>
+    <div style="font-family:'Noto Serif',serif;font-size:1.4rem;font-weight:700;margin-bottom:6px">Admin Panel</div>
+    <div style="font-size:0.85rem;color:#554336;margin-bottom:28px">Enter the password to continue</div>
+    <input id="gate-input" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()"
+      style="width:100%;border:1px solid #dbc2b0;border-radius:8px;padding:12px 16px;font-size:1rem;outline:none;font-family:'Manrope',sans-serif;margin-bottom:10px;text-align:center;letter-spacing:0.15em"/>
+    <div id="gate-error" style="color:#ba1a1a;font-size:0.8rem;min-height:18px;margin-bottom:12px"></div>
+    <button onclick="checkPassword()" style="width:100%;background:#a04100;color:white;padding:12px;border-radius:8px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;font-family:'Manrope',sans-serif">
+      Enter
+    </button>
+    <a href="index.html" style="display:block;margin-top:16px;font-size:0.8rem;color:#887364;text-decoration:none">Back to website</a>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="material-symbols-outlined" style="font-size:18px">check_circle</span>
+  <span id="toast-msg">Done</span>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-bg" id="delete-modal" style="display:none">
+  <div class="modal-box" style="max-width:380px;text-align:center">
+    <span class="material-symbols-outlined" style="font-size:48px;color:#ba1a1a">delete_forever</span>
+    <h3 class="text-lg font-bold mt-3 mb-2">Confirm Delete</h3>
+    <p class="text-sm text-[#554336] mb-6" id="delete-modal-msg">Are you sure you want to delete this item?</p>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button class="btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+      <button class="btn-primary" style="background:#ba1a1a" id="delete-confirm-btn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Modal -->
+<div class="modal-bg" id="booking-modal" style="display:none">
+  <div class="modal-box">
+    <h2 class="text-xl font-bold mb-6" id="booking-modal-title">Add Booking</h2>
+    <div style="display:grid;gap:14px">
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Customer Name</label><input class="form-input" id="b-name" placeholder="Full name"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Phone</label><input class="form-input" id="b-phone" placeholder="+91 00000 00000"/></div>
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Type</label>
+          <select class="form-input" id="b-type">
+            <option value="Banquet Hall">Banquet Hall</option>
+            <option value="Food Order">Food Order</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Date</label><input class="form-input" id="b-date" type="date"/></div>
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Guests</label><input class="form-input" id="b-guests" placeholder="e.g. 150" type="number"/></div>
+      </div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Package / Item</label><input class="form-input" id="b-package" placeholder="Package or menu item name"/></div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Amount (₹)</label><input class="form-input" id="b-amount" placeholder="Total amount" type="number"/></div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Status</label>
+        <select class="form-input" id="b-status">
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Notes</label><textarea class="form-input" id="b-notes" placeholder="Any special instructions..." rows="2" style="resize:vertical"></textarea></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal('booking-modal')">Cancel</button>
+      <button class="btn-primary" id="booking-save-btn" onclick="saveBooking()">Save Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- Menu Item Modal -->
+<div class="modal-bg" id="menu-modal" style="display:none">
+  <div class="modal-box">
+    <h2 class="text-xl font-bold mb-6" id="menu-modal-title">Add Menu Item</h2>
+    <div style="display:grid;gap:14px">
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Item Name</label><input class="form-input" id="m-name" placeholder="e.g. Gulab Jamun"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Price (₹)</label><input class="form-input" id="m-price" placeholder="e.g. 120" type="number"/></div>
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Category</label>
+          <select class="form-input" id="m-category">
+            <option value="Sweets">Sweets</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Thali">Thali</option>
+            <option value="Beverages">Beverages</option>
+            <option value="Biryani & Rice">Biryani & Rice</option>
+            <option value="Breads">Breads</option>
+            <option value="Desserts">Desserts</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Description</label><textarea class="form-input" id="m-desc" placeholder="Short description of the item..." rows="2" style="resize:vertical"></textarea></div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Tags (comma separated)</label><input class="form-input" id="m-tags" placeholder="e.g. Veg, Popular, Bestseller"/></div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Product Image</label>
+        <input accept="image/*" class="form-input" id="m-image-input" style="padding:6px" type="file" onchange="previewImage('m-image-input','m-img-preview')"/>
+        <img class="img-preview" id="m-img-preview" alt="Preview"/>
+        <input type="hidden" id="m-image-data"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal('menu-modal')">Cancel</button>
+      <button class="btn-primary" id="menu-save-btn" onclick="saveMenuItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Banquet Package Modal -->
+<div class="modal-bg" id="banquet-modal" style="display:none">
+  <div class="modal-box">
+    <h2 class="text-xl font-bold mb-6" id="banquet-modal-title">Add Banquet Package</h2>
+    <div style="display:grid;gap:14px">
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Package Name</label><input class="form-input" id="bp-name" placeholder="e.g. Royal Wedding Package"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Price per Head (₹)</label><input class="form-input" id="bp-price" placeholder="e.g. 850" type="number"/></div>
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Category</label>
+          <select class="form-input" id="bp-category">
+            <option value="Wedding">Wedding</option>
+            <option value="Corporate">Corporate</option>
+            <option value="Birthday">Birthday</option>
+            <option value="Social">Social</option>
+            <option value="Religious">Religious</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Min Guests</label><input class="form-input" id="bp-min" placeholder="e.g. 100" type="number"/></div>
+        <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Max Guests</label><input class="form-input" id="bp-max" placeholder="e.g. 500" type="number"/></div>
+      </div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Description</label><textarea class="form-input" id="bp-desc" placeholder="Brief description of the package..." rows="2" style="resize:vertical"></textarea></div>
+      <div><label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Includes (one per line)</label><textarea class="form-input" id="bp-includes" placeholder="Decorated Hall&#10;Welcome Drinks&#10;Full Catering" rows="4" style="resize:vertical"></textarea></div>
+      <div>
+        <label class="text-xs font-bold uppercase tracking-widest text-[#554336] block mb-1">Package Image</label>
+        <input accept="image/*" class="form-input" id="bp-image-input" style="padding:6px" type="file" onchange="previewImage('bp-image-input','bp-img-preview')"/>
+        <img class="img-preview" id="bp-img-preview" alt="Preview"/>
+        <input type="hidden" id="bp-image-data"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:24px;justify-content:flex-end">
+      <button class="btn-secondary" onclick="closeModal('banquet-modal')">Cancel</button>
+      <button class="btn-primary" id="banquet-save-btn" onclick="saveBanquetPackage()">Save Package</button>
+    </div>
+  </div>
+</div>
+
+<!-- Layout -->
+<div style="display:flex;min-height:100vh">
+
+  <!-- Sidebar -->
+  <aside class="sidebar bg-white border-r border-[#dbc2b0]" style="width:240px;flex-shrink:0;padding:24px 16px;display:flex;flex-direction:column;gap:8px">
+    <div style="padding:8px 16px;margin-bottom:16px">
+      <div style="font-family:'Noto Serif',serif;font-size:1.1rem;font-weight:700;color:#a04100">Om Sai Sweets</div>
+      <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.12em;color:#887364;margin-top:2px">Admin Panel</div>
+    </div>
+
+    <div class="nav-link active" id="nav-dashboard" onclick="showTab('dashboard')">
+      <span class="material-symbols-outlined">dashboard</span> Dashboard
+    </div>
+    <div class="nav-link" id="nav-bookings" onclick="showTab('bookings')">
+      <span class="material-symbols-outlined">event_note</span> Bookings
+    </div>
+    <div class="nav-link" id="nav-menu" onclick="showTab('menu')">
+      <span class="material-symbols-outlined">restaurant_menu</span> Menu Items
+    </div>
+    <div class="nav-link" id="nav-banquet" onclick="showTab('banquet')">
+      <span class="material-symbols-outlined">celebration</span> Banquet Packages
+    </div>
+    <div class="nav-link" id="nav-orders" onclick="showTab('orders')" style="position:relative">
+      <span class="material-symbols-outlined">receipt_long</span> Food Orders
+      <span id="orders-badge" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#a04100;color:white;border-radius:50%;width:20px;height:20px;display:none;align-items:center;justify-content:center;font-size:0.7rem;font-weight:800">0</span>
+    </div>
+
+    <div style="flex:1"></div>
+
+    <div style="border-top:1px solid #dbc2b0;padding-top:16px;margin-top:8px">
+      <div style="font-size:0.72rem;color:#887364;text-transform:uppercase;letter-spacing:0.08em;padding:0 16px;margin-bottom:8px">Restaurant</div>
+      <div style="font-size:0.78rem;color:#554336;padding:0 16px;line-height:1.6">
+        <span class="material-symbols-outlined" style="font-size:15px;color:#a04100">location_on</span>
+        Areraj, East Champaran, Bihar
+      </div>
+    </div>
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:8px;color:#554336;font-size:0.85rem;font-weight:500;text-decoration:none;margin-top:8px;transition:background 0.2s" onmouseover="this.style.background='#f0eded'" onmouseout="this.style.background='transparent'">
+      <span class="material-symbols-outlined">arrow_back</span> Back to Website
+    </a>
+  </aside>
+
+  <!-- Main Content -->
+  <main style="flex:1;overflow-y:auto;padding:32px">
+
+    <!-- DASHBOARD TAB -->
+    <div class="tab-content active" id="tab-dashboard">
+      <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;margin-bottom:6px">Dashboard</h1>
+      <p style="color:#554336;font-size:0.9rem;margin-bottom:28px">Welcome back! Here's an overview of Om Sai Sweets.</p>
+
+      <!-- Stat Cards -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:32px">
+        <div class="stat-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#554336">Total Bookings</span>
+            <span class="material-symbols-outlined" style="color:#a04100;font-size:22px">event_note</span>
+          </div>
+          <div style="font-size:2rem;font-weight:800;color:#a04100" id="stat-bookings">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#554336">Confirmed</span>
+            <span class="material-symbols-outlined" style="color:#166534;font-size:22px">check_circle</span>
+          </div>
+          <div style="font-size:2rem;font-weight:800;color:#166534" id="stat-confirmed">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#554336">Menu Items</span>
+            <span class="material-symbols-outlined" style="color:#a04100;font-size:22px">restaurant_menu</span>
+          </div>
+          <div style="font-size:2rem;font-weight:800;color:#a04100" id="stat-menu">0</div>
+        </div>
+        <div class="stat-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#554336">Banquet Packages</span>
+            <span class="material-symbols-outlined" style="color:#a04100;font-size:22px">celebration</span>
+          </div>
+          <div style="font-size:2rem;font-weight:800;color:#a04100" id="stat-packages">0</div>
+        </div>
+        <div class="stat-card" style="cursor:pointer" onclick="showTab('orders')">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#554336">New Orders</span>
+            <span class="material-symbols-outlined" style="color:#854d0e;font-size:22px">receipt_long</span>
+          </div>
+          <div style="font-size:2rem;font-weight:800;color:#854d0e" id="stat-orders">0</div>
+        </div>
+      </div>
+
+      <!-- Recent Bookings -->
+      <div style="background:white;border-radius:12px;border:1px solid #dbc2b0;overflow:hidden">
+        <div style="padding:20px 24px;border-bottom:1px solid #dbc2b0;display:flex;align-items:center;justify-content:space-between">
+          <h2 style="font-weight:700;font-size:1rem">Recent Bookings</h2>
+          <button class="btn-primary" onclick="showTab('bookings')" style="font-size:0.8rem;padding:7px 16px">View All</button>
+        </div>
+        <div style="overflow-x:auto">
+          <table id="dashboard-table">
+            <thead><tr><th>Customer</th><th>Type</th><th>Date</th><th>Guests</th><th>Status</th></tr></thead>
+            <tbody id="dashboard-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKINGS TAB -->
+    <div class="tab-content" id="tab-bookings">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;margin-bottom:4px">Bookings</h1>
+          <p style="color:#554336;font-size:0.9rem">Manage banquet hall and food bookings</p>
+        </div>
+        <button class="btn-primary" onclick="openBookingModal()">
+          <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:4px">add</span> Add Booking
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+        <input class="form-input" id="booking-search" oninput="renderBookings()" placeholder="Search by name or package..." style="max-width:280px"/>
+        <select class="form-input" id="booking-filter-type" onchange="renderBookings()" style="max-width:180px">
+          <option value="">All Types</option>
+          <option value="Banquet Hall">Banquet Hall</option>
+          <option value="Food Order">Food Order</option>
+        </select>
+        <select class="form-input" id="booking-filter-status" onchange="renderBookings()" style="max-width:180px">
+          <option value="">All Statuses</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Pending">Pending</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div style="background:white;border-radius:12px;border:1px solid #dbc2b0;overflow:hidden">
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Customer</th><th>Phone</th><th>Type</th><th>Date</th><th>Guests</th><th>Package</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="bookings-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- MENU TAB -->
+    <div class="tab-content" id="tab-menu">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;margin-bottom:4px">Menu Items</h1>
+          <p style="color:#554336;font-size:0.9rem">Add, edit or remove items from the menu</p>
+        </div>
+        <button class="btn-primary" onclick="openMenuModal()">
+          <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:4px">add</span> Add Item
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px" id="menu-grid"></div>
+    </div>
+
+    <!-- BANQUET TAB -->
+    <div class="tab-content" id="tab-banquet">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;margin-bottom:4px">Banquet Packages</h1>
+          <p style="color:#554336;font-size:0.9rem">Manage packages, pricing, and inclusions</p>
+        </div>
+        <button class="btn-primary" onclick="openBanquetModal()">
+          <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;margin-right:4px">add</span> Add Package
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px" id="banquet-grid"></div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="tab-content" id="tab-orders">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <h1 style="font-family:'Noto Serif',serif;font-size:1.8rem;font-weight:700;margin-bottom:4px">Food Orders</h1>
+          <p style="color:#554336;font-size:0.9rem">Orders placed by customers via the website</p>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">
+        <input class="form-input" id="order-search" oninput="renderOrders()" placeholder="Search by name or phone..." style="max-width:280px"/>
+        <select class="form-input" id="order-filter-status" onchange="renderOrders()" style="max-width:180px">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <div style="background:white;border-radius:12px;border:1px solid #dbc2b0;overflow:hidden">
+        <div style="overflow-x:auto">
+          <table>
+            <thead><tr><th>Order #</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="orders-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ========== DATA STORE ==========
+const STORE = {
+  get: (key) => JSON.parse(localStorage.getItem('omsai_' + key) || 'null'),
+  set: (key, val) => localStorage.setItem('omsai_' + key, JSON.stringify(val)),
+};
+
+function getData(key) { return STORE.get(key) || []; }
+function setData(key, val) { STORE.set(key, val); }
+
+// ========== SEED DATA ==========
+function seedData() {
+  if (!STORE.get('seeded')) {
+    setData('bookings', [
+      { id: uid(), name: 'Ramesh Kumar', phone: '+91 98100 11111', type: 'Banquet Hall', date: '2026-04-15', guests: 200, package: 'Royal Wedding Package', amount: 170000, status: 'Confirmed', notes: 'Decoration in red and gold' },
+      { id: uid(), name: 'Sunita Devi', phone: '+91 97200 22222', type: 'Banquet Hall', date: '2026-04-20', guests: 150, package: 'Silver Celebration', amount: 112500, status: 'Pending', notes: 'Vegetarian menu only' },
+      { id: uid(), name: 'Anil Prasad', phone: '+91 96300 33333', type: 'Food Order', date: '2026-04-10', guests: 50, package: 'Catering – Thali Lunch', amount: 25000, status: 'Confirmed', notes: '' },
+      { id: uid(), name: 'Priya Singh', phone: '+91 95400 44444', type: 'Banquet Hall', date: '2026-05-05', guests: 300, package: 'Grand Banquet', amount: 270000, status: 'Pending', notes: 'Birthday celebration' },
+      { id: uid(), name: 'Mohan Tiwari', phone: '+91 94500 55555', type: 'Food Order', date: '2026-04-08', guests: 80, package: 'Snack & Sweets Box', amount: 16000, status: 'Cancelled', notes: 'Event cancelled' },
+    ]);
+    setData('menu', [
+      { id: uid(), name: 'Gulab Jamun', price: 120, category: 'Sweets', desc: 'Soft milk-solid dumplings soaked in rose-flavoured sugar syrup.', tags: 'Veg, Bestseller', image: '' },
+      { id: uid(), name: 'Jalebi', price: 80, category: 'Sweets', desc: 'Crispy deep-fried spirals soaked in saffron sugar syrup.', tags: 'Veg, Popular', image: '' },
+      { id: uid(), name: 'Samosa', price: 25, category: 'Snacks', desc: 'Golden fried pastry filled with spiced potatoes and peas.', tags: 'Veg, Popular', image: '' },
+      { id: uid(), name: 'Veg Thali', price: 180, category: 'Thali', desc: 'Complete meal with roti, dal, sabzi, rice, and dessert.', tags: 'Veg, Full Meal', image: '' },
+      { id: uid(), name: 'Lassi', price: 60, category: 'Beverages', desc: 'Thick sweet yogurt-based drink, chilled and refreshing.', tags: 'Veg, Cold', image: '' },
+      { id: uid(), name: 'Biryani (Veg)', price: 220, category: 'Biryani & Rice', desc: 'Fragrant basmati rice cooked with mixed vegetables and whole spices.', tags: 'Veg, Popular', image: '' },
+    ]);
+    setData('packages', [
+      { id: uid(), name: 'Silver Celebration', price: 750, category: 'Social', minGuests: 100, maxGuests: 250, desc: 'Perfect for mid-scale celebrations and gatherings.', includes: 'Decorated Hall\nWelcome Drinks\nVeg Thali Dinner\nBasic Sound System\nParking', image: '' },
+      { id: uid(), name: 'Royal Wedding Package', price: 850, category: 'Wedding', minGuests: 150, maxGuests: 500, desc: 'Our premium wedding package with full décor and multi-cuisine catering.', includes: 'Floral Decorated Hall\nWelcome Gate\nGrand Buffet (Veg + Non-Veg)\nSound & Lighting\nPhotography Standby\nBridal Room\nParking for 100 Vehicles', image: '' },
+      { id: uid(), name: 'Corporate Lunch', price: 650, category: 'Corporate', minGuests: 50, maxGuests: 200, desc: 'Professional setup for corporate events, meetings, and lunches.', includes: 'Conference-style Seating\nProjector & Screen\nLunch Buffet\nTea & Coffee\nHigh-speed WiFi', image: '' },
+    ]);
+    STORE.set('seeded', true);
+  }
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+// ========== TABS ==========
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'bookings') renderBookings();
+  if (name === 'menu') renderMenu();
+  if (name === 'banquet') renderBanquet();
+  if (name === 'orders') renderOrders();
+}
+
+// ========== TOAST ==========
+function toast(msg, icon='check_circle') {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.style.display = 'flex';
+  setTimeout(() => el.style.display = 'none', 2800);
+}
+
+// ========== MODAL HELPERS ==========
+function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+let deleteCallback = null;
+function confirmDelete(msg, cb) {
+  document.getElementById('delete-modal-msg').textContent = msg;
+  deleteCallback = cb;
+  document.getElementById('delete-modal').style.display = 'flex';
+}
+function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; deleteCallback = null; }
+document.getElementById('delete-confirm-btn').onclick = function() {
+  if (deleteCallback) deleteCallback();
+  closeDeleteModal();
+};
+
+// ========== IMAGE PREVIEW ==========
+function previewImage(inputId, previewId) {
+  const file = document.getElementById(inputId).files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById(previewId);
+    img.src = e.target.result;
+    img.style.display = 'block';
+    // store base64 in hidden input
+    const hiddenKey = inputId.replace('-input', '-data');
+    document.getElementById(hiddenKey).value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ========== DASHBOARD ==========
+function renderDashboard() {
+  const bookings = getData('bookings');
+  const menu = getData('menu');
+  const packages = getData('packages');
+  const orders = JSON.parse(localStorage.getItem('omsai_orders') || '[]');
+  const pendingOrders = orders.filter(o => o.status === 'Pending').length;
+  document.getElementById('stat-bookings').textContent = bookings.length;
+  document.getElementById('stat-confirmed').textContent = bookings.filter(b => b.status === 'Confirmed').length;
+  document.getElementById('stat-menu').textContent = menu.length;
+  document.getElementById('stat-packages').textContent = packages.length;
+  document.getElementById('stat-orders').textContent = pendingOrders;
+  // Orders badge in sidebar
+  const badge = document.getElementById('orders-badge');
+  if (badge) { badge.textContent = pendingOrders; badge.style.display = pendingOrders > 0 ? 'flex' : 'none'; }
+
+  const recent = [...bookings].slice(-5).reverse();
+  const tbody = document.getElementById('dashboard-tbody');
+  tbody.innerHTML = recent.length ? recent.map(b => `
+    <tr>
+      <td><strong>${esc(b.name)}</strong></td>
+      <td>${esc(b.type)}</td>
+      <td>${formatDate(b.date)}</td>
+      <td>${b.guests || '-'}</td>
+      <td><span class="badge badge-${b.status.toLowerCase()}">${b.status}</span></td>
+    </tr>
+  `).join('') : '<tr><td colspan="5" style="text-align:center;color:#887364;padding:32px">No bookings yet</td></tr>';
+}
+
+// ========== BOOKINGS ==========
+let editingBookingId = null;
+
+function renderBookings() {
+  let bookings = getData('bookings');
+  const search = document.getElementById('booking-search').value.toLowerCase();
+  const typeFilter = document.getElementById('booking-filter-type').value;
+  const statusFilter = document.getElementById('booking-filter-status').value;
+
+  if (search) bookings = bookings.filter(b => b.name.toLowerCase().includes(search) || b.package.toLowerCase().includes(search));
+  if (typeFilter) bookings = bookings.filter(b => b.type === typeFilter);
+  if (statusFilter) bookings = bookings.filter(b => b.status === statusFilter);
+
+  const tbody = document.getElementById('bookings-tbody');
+  tbody.innerHTML = bookings.length ? bookings.map(b => `
+    <tr>
+      <td><strong>${esc(b.name)}</strong></td>
+      <td>${esc(b.phone)}</td>
+      <td>${esc(b.type)}</td>
+      <td>${formatDate(b.date)}</td>
+      <td>${b.guests || '-'}</td>
+      <td>${esc(b.package)}</td>
+      <td>₹${Number(b.amount).toLocaleString('en-IN')}</td>
+      <td><span class="badge badge-${b.status.toLowerCase()}">${b.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${b.status !== 'Confirmed' ? `<button class="btn-confirm" onclick="confirmBooking('${b.id}')">Confirm</button>` : ''}
+          <button class="btn-edit" onclick="editBooking('${b.id}')">Edit</button>
+          <button class="btn-danger" onclick="deleteBooking('${b.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="9" style="text-align:center;color:#887364;padding:32px">No bookings found</td></tr>';
+}
+
+function openBookingModal(id) {
+  editingBookingId = id || null;
+  document.getElementById('booking-modal-title').textContent = id ? 'Edit Booking' : 'Add Booking';
+  if (!id) {
+    ['b-name','b-phone','b-package','b-notes'].forEach(f => document.getElementById(f).value = '');
+    document.getElementById('b-type').value = 'Banquet Hall';
+    document.getElementById('b-status').value = 'Pending';
+    document.getElementById('b-date').value = '';
+    document.getElementById('b-guests').value = '';
+    document.getElementById('b-amount').value = '';
+  } else {
+    const b = getData('bookings').find(x => x.id === id);
+    if (!b) return;
+    document.getElementById('b-name').value = b.name;
+    document.getElementById('b-phone').value = b.phone;
+    document.getElementById('b-type').value = b.type;
+    document.getElementById('b-date').value = b.date;
+    document.getElementById('b-guests').value = b.guests;
+    document.getElementById('b-package').value = b.package;
+    document.getElementById('b-amount').value = b.amount;
+    document.getElementById('b-status').value = b.status;
+    document.getElementById('b-notes').value = b.notes;
+  }
+  openModal('booking-modal');
+}
+
+function editBooking(id) { openBookingModal(id); }
+
+function saveBooking() {
+  const name = document.getElementById('b-name').value.trim();
+  if (!name) { alert('Customer name is required.'); return; }
+  const booking = {
+    id: editingBookingId || uid(),
+    name,
+    phone: document.getElementById('b-phone').value.trim(),
+    type: document.getElementById('b-type').value,
+    date: document.getElementById('b-date').value,
+    guests: document.getElementById('b-guests').value,
+    package: document.getElementById('b-package').value.trim(),
+    amount: document.getElementById('b-amount').value,
+    status: document.getElementById('b-status').value,
+    notes: document.getElementById('b-notes').value.trim(),
+  };
+  let bookings = getData('bookings');
+  if (editingBookingId) {
+    bookings = bookings.map(b => b.id === editingBookingId ? booking : b);
+  } else {
+    bookings.push(booking);
+  }
+  setData('bookings', bookings);
+  closeModal('booking-modal');
+  renderBookings();
+  toast(editingBookingId ? 'Booking updated' : 'Booking added');
+}
+
+function confirmBooking(id) {
+  let bookings = getData('bookings').map(b => b.id === id ? {...b, status: 'Confirmed'} : b);
+  setData('bookings', bookings);
+  renderBookings();
+  toast('Booking confirmed');
+}
+
+function deleteBooking(id) {
+  confirmDelete('Delete this booking? This cannot be undone.', () => {
+    setData('bookings', getData('bookings').filter(b => b.id !== id));
+    renderBookings();
+    toast('Booking deleted');
+  });
+}
+
+// ========== MENU ==========
+let editingMenuId = null;
+
+function renderMenu() {
+  const items = getData('menu');
+  const grid = document.getElementById('menu-grid');
+  grid.innerHTML = items.length ? items.map(item => `
+    <div style="background:white;border-radius:12px;border:1px solid #dbc2b0;overflow:hidden;display:flex;flex-direction:column">
+      ${item.image
+        ? `<img src="${item.image}" alt="${esc(item.name)}" style="width:100%;height:140px;object-fit:cover"/>`
+        : `<div style="width:100%;height:140px;background:#f0eded;display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="font-size:40px;color:#dbc2b0">restaurant</span></div>`
+      }
+      <div style="padding:16px;flex:1;display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <span style="font-weight:700;font-size:0.95rem">${esc(item.name)}</span>
+          <span style="font-weight:800;color:#a04100;font-size:0.95rem;white-space:nowrap">₹${item.price}</span>
+        </div>
+        <span style="font-size:0.72rem;background:#f0eded;color:#554336;padding:2px 8px;border-radius:4px;display:inline-block;width:fit-content">${esc(item.category)}</span>
+        <p style="font-size:0.8rem;color:#554336;line-height:1.5;flex:1">${esc(item.desc)}</p>
+        ${item.tags ? `<div style="font-size:0.72rem;color:#887364">${esc(item.tags)}</div>` : ''}
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn-edit" style="flex:1" onclick="editMenuItem('${item.id}')">Edit</button>
+          <button class="btn-danger" style="flex:1" onclick="deleteMenuItem('${item.id}')">Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('') : '<div style="color:#887364;grid-column:1/-1;text-align:center;padding:48px">No menu items yet. Click "Add Item" to get started.</div>';
+}
+
+function openMenuModal(id) {
+  editingMenuId = id || null;
+  document.getElementById('menu-modal-title').textContent = id ? 'Edit Menu Item' : 'Add Menu Item';
+  document.getElementById('m-img-preview').style.display = 'none';
+  document.getElementById('m-image-data').value = '';
+  document.getElementById('m-image-input').value = '';
+  if (!id) {
+    ['m-name','m-desc','m-tags'].forEach(f => document.getElementById(f).value = '');
+    document.getElementById('m-price').value = '';
+    document.getElementById('m-category').value = 'Sweets';
+  } else {
+    const item = getData('menu').find(x => x.id === id);
+    if (!item) return;
+    document.getElementById('m-name').value = item.name;
+    document.getElementById('m-price').value = item.price;
+    document.getElementById('m-category').value = item.category;
+    document.getElementById('m-desc').value = item.desc;
+    document.getElementById('m-tags').value = item.tags;
+    if (item.image) {
+      document.getElementById('m-img-preview').src = item.image;
+      document.getElementById('m-img-preview').style.display = 'block';
+      document.getElementById('m-image-data').value = item.image;
+    }
+  }
+  openModal('menu-modal');
+}
+
+function editMenuItem(id) { openMenuModal(id); }
+
+function saveMenuItem() {
+  const name = document.getElementById('m-name').value.trim();
+  if (!name) { alert('Item name is required.'); return; }
+  const item = {
+    id: editingMenuId || uid(),
+    name,
+    price: document.getElementById('m-price').value,
+    category: document.getElementById('m-category').value,
+    desc: document.getElementById('m-desc').value.trim(),
+    tags: document.getElementById('m-tags').value.trim(),
+    image: document.getElementById('m-image-data').value,
+  };
+  let menu = getData('menu');
+  if (editingMenuId) {
+    menu = menu.map(m => m.id === editingMenuId ? item : m);
+  } else {
+    menu.push(item);
+  }
+  setData('menu', menu);
+  closeModal('menu-modal');
+  renderMenu();
+  toast(editingMenuId ? 'Menu item updated' : 'Menu item added');
+}
+
+function deleteMenuItem(id) {
+  confirmDelete('Remove this menu item permanently?', () => {
+    setData('menu', getData('menu').filter(m => m.id !== id));
+    renderMenu();
+    toast('Item removed');
+  });
+}
+
+// ========== BANQUET PACKAGES ==========
+let editingBanquetId = null;
+
+function renderBanquet() {
+  const pkgs = getData('packages');
+  const grid = document.getElementById('banquet-grid');
+  grid.innerHTML = pkgs.length ? pkgs.map(p => `
+    <div style="background:white;border-radius:12px;border:1px solid #dbc2b0;overflow:hidden;display:flex;flex-direction:column">
+      ${p.image
+        ? `<img src="${p.image}" alt="${esc(p.name)}" style="width:100%;height:160px;object-fit:cover"/>`
+        : `<div style="width:100%;height:160px;background:#f0eded;display:flex;align-items:center;justify-content:center"><span class="material-symbols-outlined" style="font-size:48px;color:#dbc2b0">celebration</span></div>`
+      }
+      <div style="padding:20px;flex:1;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+          <span style="font-weight:700;font-size:1rem;font-family:'Noto Serif',serif">${esc(p.name)}</span>
+          <span style="font-weight:800;color:#a04100;font-size:1rem;white-space:nowrap">₹${p.price}<span style="font-size:0.72rem;font-weight:500;color:#887364">/head</span></span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:0.72rem;background:#f0eded;color:#554336;padding:2px 8px;border-radius:4px">${esc(p.category)}</span>
+          <span style="font-size:0.72rem;background:#f0eded;color:#554336;padding:2px 8px;border-radius:4px">${p.minGuests}–${p.maxGuests} guests</span>
+        </div>
+        <p style="font-size:0.82rem;color:#554336;line-height:1.5;flex:1">${esc(p.desc)}</p>
+        ${p.includes ? `
+          <div style="font-size:0.78rem;color:#554336">
+            <div style="font-weight:700;margin-bottom:4px;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em">Includes</div>
+            <ul style="padding-left:16px;line-height:1.8">${p.includes.split('\n').filter(Boolean).map(i => `<li>${esc(i.trim())}</li>`).join('')}</ul>
+          </div>
+        ` : ''}
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn-edit" style="flex:1" onclick="editBanquetPackage('${p.id}')">Edit</button>
+          <button class="btn-danger" style="flex:1" onclick="deleteBanquetPackage('${p.id}')">Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('') : '<div style="color:#887364;grid-column:1/-1;text-align:center;padding:48px">No packages yet. Click "Add Package" to get started.</div>';
+}
+
+function openBanquetModal(id) {
+  editingBanquetId = id || null;
+  document.getElementById('banquet-modal-title').textContent = id ? 'Edit Package' : 'Add Banquet Package';
+  document.getElementById('bp-img-preview').style.display = 'none';
+  document.getElementById('bp-image-data').value = '';
+  document.getElementById('bp-image-input').value = '';
+  if (!id) {
+    ['bp-name','bp-desc','bp-includes'].forEach(f => document.getElementById(f).value = '');
+    document.getElementById('bp-price').value = '';
+    document.getElementById('bp-min').value = '';
+    document.getElementById('bp-max').value = '';
+    document.getElementById('bp-category').value = 'Wedding';
+  } else {
+    const p = getData('packages').find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('bp-name').value = p.name;
+    document.getElementById('bp-price').value = p.price;
+    document.getElementById('bp-category').value = p.category;
+    document.getElementById('bp-min').value = p.minGuests;
+    document.getElementById('bp-max').value = p.maxGuests;
+    document.getElementById('bp-desc').value = p.desc;
+    document.getElementById('bp-includes').value = p.includes;
+    if (p.image) {
+      document.getElementById('bp-img-preview').src = p.image;
+      document.getElementById('bp-img-preview').style.display = 'block';
+      document.getElementById('bp-image-data').value = p.image;
+    }
+  }
+  openModal('banquet-modal');
+}
+
+function editBanquetPackage(id) { openBanquetModal(id); }
+
+function saveBanquetPackage() {
+  const name = document.getElementById('bp-name').value.trim();
+  if (!name) { alert('Package name is required.'); return; }
+  const pkg = {
+    id: editingBanquetId || uid(),
+    name,
+    price: document.getElementById('bp-price').value,
+    category: document.getElementById('bp-category').value,
+    minGuests: document.getElementById('bp-min').value,
+    maxGuests: document.getElementById('bp-max').value,
+    desc: document.getElementById('bp-desc').value.trim(),
+    includes: document.getElementById('bp-includes').value.trim(),
+    image: document.getElementById('bp-image-data').value,
+  };
+  let packages = getData('packages');
+  if (editingBanquetId) {
+    packages = packages.map(p => p.id === editingBanquetId ? pkg : p);
+  } else {
+    packages.push(pkg);
+  }
+  setData('packages', packages);
+  closeModal('banquet-modal');
+  renderBanquet();
+  toast(editingBanquetId ? 'Package updated' : 'Package added');
+}
+
+function deleteBanquetPackage(id) {
+  confirmDelete('Remove this banquet package permanently?', () => {
+    setData('packages', getData('packages').filter(p => p.id !== id));
+    renderBanquet();
+    toast('Package removed');
+  });
+}
+
+// ========== UTILS ==========
+// ========== FOOD ORDERS (from website cart) ==========
+function getOrders() { return JSON.parse(localStorage.getItem('omsai_orders') || '[]'); }
+function setOrders(val) { localStorage.setItem('omsai_orders', JSON.stringify(val)); }
+
+function renderOrders() {
+  let orders = getOrders();
+  const search = (document.getElementById('order-search') || {}).value || '';
+  const statusFilter = (document.getElementById('order-filter-status') || {}).value || '';
+
+  if (search) orders = orders.filter(o => o.name.toLowerCase().includes(search.toLowerCase()) || o.phone.includes(search));
+  if (statusFilter) orders = orders.filter(o => o.status === statusFilter);
+
+  // Sort newest first
+  orders = [...orders].reverse();
+
+  const tbody = document.getElementById('orders-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = orders.length ? orders.map((o, idx) => `
+    <tr>
+      <td style="font-family:monospace;font-size:0.78rem;color:#887364">#${o.id.slice(-6).toUpperCase()}</td>
+      <td><strong>${esc(o.name)}</strong>${o.email ? `<br><span style="font-size:0.78rem;color:#887364">${esc(o.email)}</span>` : ''}</td>
+      <td>${esc(o.phone)}</td>
+      <td style="max-width:220px">
+        <div style="font-size:0.82rem;line-height:1.7">
+          ${(o.items || []).map(i => `${esc(i.name)} × ${i.qty}`).join('<br>')}
+        </div>
+        ${o.notes ? `<div style="font-size:0.75rem;color:#887364;margin-top:4px;font-style:italic">${esc(o.notes)}</div>` : ''}
+      </td>
+      <td style="font-weight:800;color:#a04100">₹${Number(o.total).toLocaleString('en-IN')}</td>
+      <td style="font-size:0.82rem">${o.orderedAt ? new Date(o.orderedAt).toLocaleString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '-'}</td>
+      <td><span class="badge badge-${(o.status||'pending').toLowerCase()}">${o.status}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          ${o.status === 'Pending' ? `<button class="btn-confirm" onclick="confirmOrder('${o.id}')">Confirm</button>` : ''}
+          ${o.status !== 'Cancelled' ? `<button class="btn-danger" onclick="cancelOrder('${o.id}')">Cancel</button>` : ''}
+          <button class="btn-danger" onclick="deleteOrder('${o.id}')">Delete</button>
+        </div>
+      </td>
+    </tr>
+  `).join('') : '<tr><td colspan="8" style="text-align:center;color:#887364;padding:40px">No food orders yet. Orders placed via the website will appear here.</td></tr>';
+
+  // Update sidebar badge
+  const allOrders = getOrders();
+  const pending = allOrders.filter(o => o.status === 'Pending').length;
+  const badge = document.getElementById('orders-badge');
+  if (badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'flex' : 'none'; }
+  const statEl = document.getElementById('stat-orders');
+  if (statEl) statEl.textContent = pending;
+}
+
+function confirmOrder(id) {
+  setOrders(getOrders().map(o => o.id === id ? {...o, status: 'Confirmed'} : o));
+  renderOrders();
+  toast('Order confirmed');
+}
+
+function cancelOrder(id) {
+  setOrders(getOrders().map(o => o.id === id ? {...o, status: 'Cancelled'} : o));
+  renderOrders();
+  toast('Order cancelled');
+}
+
+function deleteOrder(id) {
+  confirmDelete('Delete this order? This cannot be undone.', () => {
+    setOrders(getOrders().filter(o => o.id !== id));
+    renderOrders();
+    toast('Order deleted');
+  });
+}
+
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(d) {
+  if (!d) return '-';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// ========== PASSWORD GATE ==========
+function checkPassword() {
+  const val = document.getElementById('gate-input').value;
+  if (val === 'om') {
+    sessionStorage.setItem('omsai_auth', '1');
+    document.getElementById('password-gate').style.display = 'none';
+    seedData();
+    renderDashboard();
+  } else {
+    document.getElementById('gate-error').textContent = 'Incorrect password. Try again.';
+    document.getElementById('gate-input').value = '';
+    document.getElementById('gate-input').focus();
+  }
+}
+
+// ========== INIT ==========
+if (sessionStorage.getItem('omsai_auth') === '1') {
+  document.getElementById('password-gate').style.display = 'none';
+  seedData();
+  renderDashboard();
+} else {
+  document.getElementById('gate-input').focus();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+ <!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#dbdddd",
+                    "outline": "#757777",
+                    "on-secondary-fixed-variant": "#a50314",
+                    "on-tertiary-container": "#5c4900",
+                    "tertiary-container": "#ffd33a",
+                    "inverse-surface": "#0c0f0f",
+                    "on-tertiary-fixed": "#453600",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-dim": "#7b4000",
+                    "on-error": "#ffefec",
+                    "on-background": "#2d2f2f",
+                    "primary-container": "#fd8b00",
+                    "outline-variant": "#acadad",
+                    "primary-fixed-dim": "#ea8000",
+                    "tertiary-dim": "#614d00",
+                    "surface-container-low": "#f0f1f1",
+                    "surface-container": "#e7e8e8",
+                    "secondary": "#b5161e",
+                    "tertiary": "#6f5900",
+                    "on-tertiary": "#fff2d3",
+                    "surface-tint": "#8c4a00",
+                    "secondary-container": "#ffc3bd",
+                    "secondary-fixed-dim": "#ffafa8",
+                    "error": "#b02500",
+                    "on-secondary": "#ffefed",
+                    "on-tertiary-fixed-variant": "#675200",
+                    "primary-fixed": "#fd8b00",
+                    "on-surface": "#2d2f2f",
+                    "on-error-container": "#520c00",
+                    "error-container": "#f95630",
+                    "tertiary-fixed": "#ffd33a",
+                    "on-secondary-container": "#940010",
+                    "on-secondary-fixed": "#700009",
+                    "on-primary-fixed": "#180800",
+                    "surface-bright": "#f6f6f6",
+                    "surface-variant": "#dbdddd",
+                    "inverse-on-surface": "#9c9d9d",
+                    "secondary-fixed": "#ffc3bd",
+                    "surface-container-high": "#e1e3e3",
+                    "inverse-primary": "#fd8b00",
+                    "error-dim": "#b92902",
+                    "background": "#f6f6f6",
+                    "on-primary-container": "#442100",
+                    "tertiary-fixed-dim": "#efc52b",
+                    "surface-dim": "#d2d5d5",
+                    "secondary-dim": "#a40113",
+                    "on-primary": "#fff0e7",
+                    "on-primary-fixed-variant": "#512800",
+                    "primary": "#8c4a00",
+                    "on-surface-variant": "#5a5c5c",
+                    "surface": "#f6f6f6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-container-lowest font-body text-on-surface leading-relaxed">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl shadow-[0_12px_32px_rgba(45,47,47,0.06)]">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">menu</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold tracking-tight text-2xl italic text-orange-600 dark:text-orange-500">Go69 Pizza</h1>
+</div>
+<button class="bg-primary-fixed text-on-primary-fixed px-5 py-2 rounded-full font-headline font-bold text-sm scale-95 active:scale-90 duration-200 transition-all hover:bg-orange-500">
+                Order Now
+            </button>
+</div>
+</header>
+<main class="pt-[72px] pb-32 overflow-x-hidden">
+<!-- Cinematic Hero -->
+<section class="relative px-6 pt-6 pb-12">
+<div class="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-xl mb-8">
+<img alt="Fresh pizza stretch" class="absolute inset-0 w-full h-full object-cover" data-alt="Close-up of a fresh artisan pizza slice being pulled with long strings of melted mozzarella cheese, warm atmospheric kitchen lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjGpohug4IOtCo8j_eTWrfvsR9cyducGZi_yGzyoYpiW_w_dqYuivQyqWjLHlTLWmnl3_h4CoGG0c2jwqHojFyA43hOcAysk1bnAExxPztdpFvl6o9-BLLUqEwjdTNprOdOWe0HC9CAUvB01aq29QJmGZB56GFo03FdL6fMPrUyqi5tYb8xX28H4glDnZp9y_CP_-dEAXKsnzF_vpw38A3xukIjR2FX1C6jAdMHhzvyaVkEZdrjH5Zlr_ytw3GbWrf1-yR_mYY23Y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-8 left-6 right-6">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-[0.1em] uppercase mb-3 inline-block">AUTHENTIC ITALIAN</span>
+<h2 class="font-headline font-extrabold text-4xl text-white tracking-tight leading-none mb-4">TASTE THAT BRINGS YOU BACK</h2>
+<p class="text-white/90 text-lg font-medium mb-6">Fresh. Hot. Delivered.</p>
+<div class="flex flex-col gap-3">
+<button class="bg-[#25D366] text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+                            Order on WhatsApp
+                        </button>
+<a href="menu.html" class="bg-white/10 backdrop-blur-md border border-white/30 text-white py-4 rounded-full font-bold active:scale-95 transition-transform block text-center">
+                            Explore Menu
+                        </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Our Bestsellers -->
+<section class="mb-12">
+<div class="px-6 flex justify-between items-end mb-6">
+<div>
+<span class="text-primary font-bold text-xs tracking-widest uppercase mb-1 block">Favorites</span>
+<h3 class="font-headline font-bold text-2xl tracking-tight">Our Bestsellers</h3>
+</div>
+<a href="menu.html" class="text-primary font-bold text-sm">View All</a>
+</div>
+<div class="flex overflow-x-auto gap-5 px-6 hide-scrollbar">
+<!-- Farmhouse Pizza -->
+<div class="min-w-[240px] bg-white rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.04)] mb-4">
+<div class="h-40 rounded-t-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Artisan farmhouse pizza with mushrooms, bell peppers, and fresh basil leaves on a rustic wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDB73YuiboWo_WmoOT7nAARGCnpgl3V3patF6PGWfB2sqJValPiaqJSMe07RA3Eh3e2mFTU7AJ2BB3Qq696cH1LwXMqUnzC7jzrjtTTSPUfc4NbIBCZadwBitx8jMJ_eUGXfuAV9vzWElH55sQWoDBG9ZPqNRt6yP61gtL4bbPeBn3OkXR7evYjL_GMI9-Nam4g0sKjcgdLpAI3H8tnKAfm4aUrgvYg4-nb7nyNdry-rNGlW4JcaOZm3eXWUfssFghOQ9iY3RcDC8"/>
+<span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-on-surface-variant px-2 py-1 rounded-full text-[10px] font-bold">VEG</span>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-lg leading-tight mb-1">Farmhouse Pizza</h4>
+<p class="text-on-surface-variant text-sm mb-3">Fresh veggies &amp; golden corn</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold text-lg">₹399</span>
+<button class="bg-primary-fixed text-on-primary-fixed w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Paneer Tikka -->
+<div class="min-w-[240px] bg-white rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.04)] mb-4">
+<div class="h-40 rounded-t-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Paneer Tikka pizza with chunks of marinated cottage cheese and colorful peppers, warm golden lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEkklkBaDZIhmw2WVwaxiaraHrexSlUv8beO8qbNgOB7zqB29Ft7N9aT7Sf4NdUHyK34ymampXPsdeGiZcDIVIRrLPV_N0RFVAaN7ZpgAIIMzuoHwGHN8pkeIorLkqlV8SB362t1hO_d1X9ef0P9IyUPSUoDAeWqIBZVYdusSU00BwdNFmOarUVwuVNGKgd9rZTuiyCgdCTDiyeMCde810wiBa_CAB57K74Dk1rYIae5xQ4r264PbiMeXxXH4ru4sawu6HkrA6uic"/>
+<span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-on-secondary-fixed-variant px-2 py-1 rounded-full text-[10px] font-bold">BESTSELLER</span>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-lg leading-tight mb-1">Paneer Tikka</h4>
+<p class="text-on-surface-variant text-sm mb-3">Tandoori paneer &amp; onions</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold text-lg">₹449</span>
+<button class="bg-primary-fixed text-on-primary-fixed w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Chicken Supreme -->
+<div class="min-w-[240px] bg-white rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.04)] mb-4">
+<div class="h-40 rounded-t-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Meat lovers pizza with spicy chicken, pepperoni and succulent toppings, high contrast food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo4nuksNSqPzBnz14TuWHROW4bmdjyG-kp0ltYaOZlxbDn-CqHFleZXH6oO90aDNE-nan4QiHZ31nZGjXerE3y0wE_mRSRmN3Kfqd32WidM4bpFYav4LL5KJORyxB1rgQefLqxYz-uF415M66wmMpQl29d_aXj03WudgwcWgjKKuEPCOIZmwZejVlOoPRn_es_jStt4yiQ7IcB_vg4PZF_mlJPgoKG_sarBH-dH29CRIofrwDv01L96j9gq_VGQW4EG12BdH0_50o"/>
+<span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-secondary px-2 py-1 rounded-full text-[10px] font-bold">NON-VEG</span>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-lg leading-tight mb-1">Chicken Supreme</h4>
+<p class="text-on-surface-variant text-sm mb-3">Tripple chicken feast</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold text-lg">₹529</span>
+<button class="bg-primary-fixed text-on-primary-fixed w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Choco Lava -->
+<div class="min-w-[240px] bg-white rounded-lg shadow-[0_8px_20px_rgba(0,0,0,0.04)] mb-4">
+<div class="h-40 rounded-t-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Oozing chocolate lava cake with a soft center, dusting of powdered sugar on a dark plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4dbXNum1hZSsZs75_mK4EAIeMBS-6cRWDSK3vBlKevrOkX-n2c3L430-pIo1yCZx33Uunhrc3Bz0p4glf1VcRttWft8EyDip6zg_7vXYVPktS0lQKnj85SnRjGGNyAGCAjQasxPA6EAoC-1XsZj1ZUJuApNidg0A_luxhkzFJ3xT3rsXx2_3niCJK_6vZftzxugvtM-h0BK0_tow7c6mZzKOi0_rSgl9xcPbKrfzOsU26llb5klkypF4p5ct9Vu_p9BaGJblwEyA"/>
+<span class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-tertiary-fixed-dim px-2 py-1 rounded-full text-[10px] font-bold">DESSERT</span>
+</div>
+<div class="p-4">
+<h4 class="font-bold text-lg leading-tight mb-1">Choco Lava</h4>
+<p class="text-on-surface-variant text-sm mb-3">Hot molten chocolate</p>
+<div class="flex justify-between items-center">
+<span class="text-primary font-bold text-lg">₹129</span>
+<button class="bg-primary-fixed text-on-primary-fixed w-8 h-8 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Story -->
+<section class="px-6 py-12 bg-surface-container-low rounded-t-[3rem]">
+<div class="mb-8">
+<span class="text-primary font-bold text-xs tracking-widest uppercase mb-1 block">Our Heritage</span>
+<h3 class="font-headline font-extrabold text-3xl tracking-tight leading-tight">Crafted with Heart &amp; Fresh Herbs</h3>
+</div>
+<div class="flex flex-col gap-6">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
+<img alt="Fresh ingredients" class="w-full h-full object-cover" data-alt="Vibrant fresh vegetables including heirloom tomatoes, basil, and garlic on a light marble surface with soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWU94t0WxxWhVm70CrPlCYEhYbNQHc8YhSU-4LPqkcMJJZTCKZ8AyyRFsh6CwtK_U6JVFEswnzKI0TyzYxKjG4OVAlKc-kxvoVSR4lptKO9E3mcIizaOmS14FIT4cEDM05mzw5Taz5-14D5GVHhuQjfB2zSShkGD8XXqyxbosMtyns_bek1k0QqmeD0QbeyYWVD2lHaEmBVWISYAOxvlQ15f_qevB6ZaZ6_uUXhyr6T4A8z6RJR8i0PWlxL7Yw1LK-NSLAaBg1doo"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white p-6 rounded-lg text-center shadow-sm">
+<p class="text-3xl font-black text-primary mb-1">5k+</p>
+<p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Happy Customers</p>
+</div>
+<div class="bg-white p-6 rounded-lg text-center shadow-sm">
+<p class="text-3xl font-black text-primary mb-1">69</p>
+<p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Secret Spices</p>
+</div>
+</div>
+<p class="text-on-surface-variant italic leading-relaxed text-center px-4">
+                    "We believe pizza is a blank canvas. Our mission is to paint it with the freshest local ingredients and global flavors."
+                </p>
+</div>
+</section>
+<!-- About Us -->
+<section class="px-6 py-12">
+<div class="mb-8">
+<span class="text-primary font-bold text-xs tracking-widest uppercase mb-1 block">Who We Are</span>
+<h3 class="font-headline font-extrabold text-3xl tracking-tight leading-tight">About Us</h3>
+</div>
+<div class="flex flex-col gap-6">
+<p class="text-on-surface-variant leading-relaxed text-base">
+Go69 Pizza was born out of a simple obsession — making the world's best pizza accessible to everyone. Started in a tiny kitchen in 2019, we've grown from a 2-person operation to serving over <strong class="text-on-surface font-bold">5,000+ happy customers</strong> every month.
+</p>
+<div class="grid grid-cols-3 gap-3">
+<div class="bg-primary-fixed/10 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+<p class="text-xs font-bold text-on-surface uppercase tracking-wide">Fresh Daily</p>
+<p class="text-[11px] text-on-surface-variant">Ingredients sourced every morning</p>
+</div>
+<div class="bg-secondary-container/40 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<p class="text-xs font-bold text-on-surface uppercase tracking-wide">Stone Fired</p>
+<p class="text-[11px] text-on-surface-variant">650°C wood-fire ovens</p>
+</div>
+<div class="bg-tertiary-container/40 rounded-xl p-4 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-3xl" style="font-variation-settings: 'FILL' 1;">delivery_dining</span>
+<p class="text-xs font-bold text-on-surface uppercase tracking-wide">Fast Delivery</p>
+<p class="text-[11px] text-on-surface-variant">Hot in 30 mins or less</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 flex gap-4 items-start">
+<div class="w-12 h-12 rounded-full bg-primary-fixed/20 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<p class="text-sm text-on-surface-variant italic leading-relaxed">"We don't just make pizza — we craft memories. Every slice is a promise of quality, warmth, and that feeling of coming home."</p>
+<p class="text-xs font-bold text-on-surface mt-2">— Rahul Sharma, Founder</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Deals Teaser -->
+<section class="px-6 py-12">
+<div class="bg-secondary-container rounded-lg p-8 relative overflow-hidden">
+<!-- Decorative background elements -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<h3 class="font-headline font-bold text-2xl text-on-secondary-container mb-2">QUICK DEALS</h3>
+<p class="text-on-secondary-fixed-variant mb-6 font-medium">Flash offers for the next 2 hours!</p>
+<div class="flex items-center gap-4 bg-white/40 backdrop-blur-sm p-4 rounded-lg mb-4">
+<div class="w-12 h-12 bg-primary-fixed rounded-full flex items-center justify-center text-white shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">timer</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-secondary-container">Buy 1 Get 1 Free</p>
+<a href="offers.html" class="text-xs text-on-secondary-container/80 underline font-bold">Claim on Menu</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full rounded-t-3xl mt-12 bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center px-8 py-12 gap-6">
+<div class="text-lg font-bold text-zinc-900 dark:text-zinc-100">Go69 Pizza</div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="font-['Plus_Jakarta_Sans'] text-sm text-zinc-500 hover:text-orange-500" href="#">Privacy</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm text-zinc-500 hover:text-orange-500" href="#">Terms</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm text-zinc-500 hover:text-orange-500" href="#">Locations</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm text-zinc-500 hover:text-orange-500" href="#">Contact</a>
+</nav>
+<p class="text-xs text-zinc-400 font-['Plus_Jakarta_Sans']">© 2024 Go69 Pizza. The Culinary Editorial.</p>
+</footer>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/85 dark:bg-zinc-900/85 backdrop-blur-2xl z-50 rounded-t-[3rem] shadow-[0_-8px_24px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 rounded-full px-4 py-1 tap-highlight-transparent transition-transform duration-300" href="index.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-bold uppercase tracking-widest mt-0.5">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-orange-500 tap-highlight-transparent transition-transform duration-300" href="menu.html">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-bold uppercase tracking-widest mt-0.5">Menu</span>
+</a>
+<a class="flex flex-col items-center justify-center text-zinc-500 dark:text-zinc-400 hover:text-orange-500 tap-highlight-transparent transition-transform duration-300" href="offers.html">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-bold uppercase tracking-widest mt-0.5">Offers</span>
+</a>
+</nav>
+</body></html>

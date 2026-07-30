@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Our Story | Clinical Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-container": "#7594cb",
+              "surface-variant": "#e0e3e5",
+              "on-primary-fixed": "#001b3e",
+              "on-tertiary-container": "#8694a9",
+              "primary-container": "#002b5c",
+              "secondary-fixed": "#d3e4fe",
+              "surface-container": "#eceef0",
+              "secondary": "#505f76",
+              "tertiary-fixed": "#d4e4fa",
+              "on-secondary-fixed-variant": "#38485d",
+              "on-error": "#ffffff",
+              "on-secondary-container": "#54647a",
+              "on-primary": "#ffffff",
+              "on-error-container": "#93000a",
+              "surface-bright": "#f7f9fb",
+              "secondary-fixed-dim": "#b7c8e1",
+              "error": "#ba1a1a",
+              "on-surface-variant": "#43474f",
+              "background": "#f7f9fb",
+              "surface-tint": "#3f5f92",
+              "primary": "#001736",
+              "inverse-on-surface": "#eff1f3",
+              "surface-container-low": "#f2f4f6",
+              "surface-container-highest": "#e0e3e5",
+              "tertiary-fixed-dim": "#b9c8de",
+              "on-surface": "#191c1e",
+              "on-background": "#191c1e",
+              "outline-variant": "#c4c6d0",
+              "inverse-surface": "#2d3133",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#d8dadc",
+              "on-secondary-fixed": "#0b1c30",
+              "tertiary": "#091828",
+              "on-tertiary-fixed": "#0d1c2d",
+              "error-container": "#ffdad6",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#747780",
+              "surface-container-high": "#e6e8ea",
+              "surface": "#f7f9fb",
+              "primary-fixed-dim": "#aac7ff",
+              "on-tertiary-fixed-variant": "#39485a",
+              "primary-fixed": "#d6e3ff",
+              "on-primary-fixed-variant": "#264779",
+              "inverse-primary": "#aac7ff",
+              "tertiary-container": "#1e2d3e",
+              "secondary-container": "#d0e1fb"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            keyframes: {
+              'fade-in-up': {
+                '0%': { opacity: '0', transform: 'translateY(30px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'fade-in-left': {
+                '0%': { opacity: '0', transform: 'translateX(-30px)' },
+                '100%': { opacity: '1', transform: 'translateX(0)' },
+              },
+              'parallax-bg': {
+                '0%': { transform: 'translateY(0)' },
+                '100%': { transform: 'translateY(-40px)' },
+              },
+              'float': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              'blob-morph': {
+                '0%, 100%': { borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%' },
+                '50%': { borderRadius: '30% 60% 70% 40% / 50% 60% 30% 60%' },
+              },
+              'shimmer': {
+                '0%': { backgroundPosition: '-200% 0' },
+                '100%': { backgroundPosition: '200% 0' },
+              }
+            },
+            animation: {
+              'fade-in-up': 'fade-in-up 1s ease-out forwards',
+              'fade-in-left': 'fade-in-left 1s ease-out forwards',
+              'parallax-scroll': 'parallax-bg linear both',
+              'float': 'float 8s ease-in-out infinite',
+              'blob': 'blob-morph 15s ease-in-out infinite',
+              'shimmer': 'shimmer 3s infinite linear',
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-gradient {
+            background: linear-gradient(135deg, #001736 0%, #002b5c 100%);
+        }
+        .nav-item {
+            transition: transform 0.25s ease, color 0.25s ease, filter 0.25s ease;
+        }
+        .nav-item:hover {
+            transform: translateY(-2px) scale(1.04);
+            color: #001736;
+            filter: brightness(1.07);
+        }
+        .nav-item:active {
+            transform: scale(0.97) rotate(-0.4deg);
+            filter: contrast(0.85);
+        }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .text-outline {
+            -webkit-text-stroke: 1px rgba(0, 23, 54, 0.1);
+            color: transparent;
+        }
+        .text-outline-light {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+            color: transparent;
+        }
+        .timeline-line {
+            background: linear-gradient(to bottom, transparent, #d0e1fb, #ffffff, #d0e1fb, transparent);
+            transform-origin: top;
+            transition: transform 1.5s ease-out;
+        }
+        .parallax-zoom img {
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .parallax-zoom:hover img {
+            transform: scale(1.08);
+        }
+        .leadership-card .details {
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        .leadership-card:hover .details {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .bg-scroll-text {
+            white-space: nowrap;
+            will-change: transform;
+        }
+        .organic-blob {
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .timeline-dot {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .visible .timeline-dot {
+            transform: scale(1.5);
+            background-color: white;
+            box-shadow: 0 0 20px rgba(255,255,255,0.8);
+        }
+        .cta-shimmer {
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-background antialiased overflow-x-hidden">
+<header class="fixed top-0 w-full z-[100] bg-[#f7f9fb]/80 backdrop-blur-xl border-b border-[#505f76]/10 transition-all duration-300">
+<nav class="flex justify-between items-center w-full px-8 py-5 max-w-full">
+<div class="text-xl font-extrabold tracking-tighter text-[#001736] uppercase font-headline">
+            Clinical Precision
+        </div>
+<div class="hidden md:flex space-x-10 items-center">
+<a class="nav-item font-manrope font-bold tracking-tight text-[#001736] border-b-2 border-[#002b5c] pb-1 transition-colors" href="index.html">Home</a>
+<a class="nav-item font-manrope font-bold tracking-tight text-[#505f76] hover:text-[#001736] transition-colors" href="services.html">Services</a>
+<a class="nav-item font-manrope font-bold tracking-tight text-[#505f76] hover:text-[#001736] transition-colors" href="anout.html">About Us</a>
+</div>
+<button class="signature-gradient text-white px-8 py-2.5 rounded-full font-headline font-bold text-sm tracking-wide transition-all active:opacity-80 hover:shadow-lg hover:-translate-y-0.5">
+            Book Appointment
+        </button>
+</nav>
+</header>
+<main class="pt-0">
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center bg-surface overflow-hidden pt-20">
+<!-- Floating Organic Background Shapes -->
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="organic-blob absolute -top-20 -left-20 w-[600px] h-[600px] bg-primary-fixed animate-blob"></div>
+<div class="organic-blob absolute top-1/2 -right-40 w-[500px] h-[500px] bg-secondary-container animate-blob" style="animation-delay: -5s;"></div>
+<div class="bg-scroll-text text-[20vw] font-headline font-extrabold text-outline absolute top-1/4 -left-20 opacity-30 select-none animate-float">PRECISION</div>
+<div class="bg-scroll-text text-[15vw] font-headline font-extrabold text-outline absolute bottom-1/4 -right-20 opacity-20 select-none animate-float" style="animation-delay: -3s;">ARCHITECTS</div>
+</div>
+<div class="max-w-[1400px] mx-auto w-full px-8 md:px-16 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center relative z-10">
+<div class="lg:col-span-7 animate-fade-in-left">
+<div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label text-xs font-bold tracking-widest uppercase mb-8 opacity-0 animate-[fade-in-up_1s_ease-out_0.2s_forwards]">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Redefining Medical Sanctuary
+                </div>
+<h1 class="font-headline text-6xl md:text-8xl font-extrabold text-primary leading-[0.95] tracking-tighter mb-10 opacity-0 animate-[fade-in-up_1s_ease-out_0.4s_forwards]">
+                    Engineering <br/><span class="text-secondary italic">Perfect</span> Clarity
+                </h1>
+<p class="font-body text-xl md:text-2xl text-secondary max-w-xl leading-relaxed mb-12 opacity-0 animate-[fade-in-up_1s_ease-out_0.6s_forwards] font-light">
+                    Clinical Precision represents the nexus of high-performance architecture and diagnostic mastery. We design environments that heal through accuracy.
+                </p>
+<div class="flex flex-wrap gap-6 opacity-0 animate-[fade-in-up_1s_ease-out_0.8s_forwards]">
+<button class="signature-gradient text-on-primary px-10 py-5 rounded-full font-headline font-bold tracking-wide shadow-2xl hover:brightness-110 transition-all hover:-translate-y-1">Discovery Portal</button>
+<button class="group flex items-center gap-3 text-primary font-headline font-bold tracking-wide hover:gap-5 transition-all">
+<span>The Heritage Film</span>
+<span class="material-symbols-outlined rounded-full bg-surface-container-high p-2 group-hover:bg-primary group-hover:text-white transition-all">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="lg:col-span-5 relative mt-12 lg:mt-0 opacity-0 animate-[fade-in-up_1.2s_ease-out_0.4s_forwards]">
+<div class="relative group">
+<div class="absolute -inset-4 bg-primary/5 rounded-[2rem] blur-2xl group-hover:bg-primary/10 transition-colors"></div>
+<div class="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/5] transform lg:rotate-2 hover:rotate-0 transition-transform duration-1000 parallax-element" data-depth="0.05">
+<img alt="Modern facility" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6WPdWkmQw99Wlsb10cnGOqsAuuN4ejxRFpwEkOFVcXVCI2KP9RmUao8XWpRYqHxF6Pnhbl1-N1yRyxNdKLiVRBFVanx-MMHiFnyW9Ojt8p7ikGzEMyDc29ef_84jLUenpRMk5YcT9Ja4q7kAxptMiZNbP4TPW-4jqJASF6rgdH7SSk8Kjesb6w7Dmxx5FIOrYxgjacH6omf3lv70OWj2uTVv_wYPcJQ3tf0ke0u08NxYO87v4CfgpHTSBSnRTjy6wMi0g6iYtYVU"/>
+</div>
+</div>
+<!-- Dynamic Float Badge -->
+<div class="absolute -bottom-10 -left-10 bg-white/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl max-w-[240px] border border-white/20 animate-float parallax-element" data-depth="0.1">
+<div class="flex items-center gap-4 mb-3">
+<span class="material-symbols-outlined text-primary text-3xl">verified</span>
+<span class="text-4xl font-headline font-extrabold text-primary">99.9%</span>
+</div>
+<div class="text-xs font-label text-secondary leading-tight uppercase tracking-widest font-bold">Clinical Accuracy Benchmark</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Vision & Heritage Timeline with Cinematic Background -->
+<section class="relative py-32 bg-primary text-white overflow-hidden min-h-screen">
+<!-- Cinematic Background Video -->
+<div class="absolute inset-0 z-0">
+<video autoplay="" class="w-full h-full object-cover opacity-20 grayscale" loop="" muted="" playsinline="">
+<source src="https://assets.mixkit.co/videos/preview/mixkit-futuristic-digital-data-processing-in-a-server-room-41006-large.mp4" type="video/mp4"/>
+</video>
+<div class="absolute inset-0 bg-gradient-to-b from-primary via-transparent to-primary"></div>
+</div>
+<div class="max-w-7xl mx-auto px-8 md:px-16 relative z-10">
+<div class="text-center mb-48 reveal-on-scroll">
+<span class="font-label text-secondary-fixed-dim tracking-[0.3em] uppercase text-xs font-bold">A Legacy in Motion</span>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold mt-6">Vision &amp; Heritage</h2>
+</div>
+<div class="relative">
+<!-- Center Line (Timeline) -->
+<div class="absolute left-1/2 top-0 bottom-0 w-px timeline-line opacity-30 hidden md:block"></div>
+<!-- Timeline Event 1 -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-16 mb-64 items-center reveal-on-scroll">
+<div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-2 border-secondary-fixed-dim timeline-dot hidden md:block z-20"></div>
+<div class="md:text-right">
+<div class="text-8xl font-headline font-extrabold text-outline-light opacity-30 mb-4">2012</div>
+<h3 class="text-4xl font-headline font-bold mb-4">The Convergence</h3>
+<p class="text-white/70 text-lg leading-relaxed max-w-md md:ml-auto">Founded at the intersection of radiology and premium architecture. Our mission: to create a diagnostic experience that eliminates clinical friction through design.</p>
+</div>
+<div class="relative group parallax-zoom">
+<div class="absolute -inset-2 bg-secondary/20 rounded-2xl scale-95 group-hover:scale-100 transition-transform"></div>
+<img alt="Early Lab" class="rounded-2xl shadow-2xl relative z-10 w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN4ZFsxepdTgWLo487LiFymQnXrUrFuPFVhcp5aBdrAybXt8DM1QkU3OLTWRpDtAZkzv-VClJ9LDybZCgBo_Tf4I-Pe9Na-ALgSo1Clg7dNOfg0Tah5EFyVdvWY-JSYmgKvj7tdREkkjcH12VYbP6Ok05FO9KGu0tpHOfm_bJ-wADYDZqMKdNPRz47pfBrgnM3nEUjMe-iIvmQHZvqoINRZWAcUcSC143QmvaoMXkUByQ9SLdpVoj7j5eqOTfXnF9lfJo8_w1xnu4"/>
+</div>
+</div>
+<!-- Timeline Event 2 -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-16 mb-64 items-center reveal-on-scroll">
+<div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-2 border-secondary-fixed-dim timeline-dot hidden md:block z-20"></div>
+<div class="md:order-2">
+<div class="text-8xl font-headline font-extrabold text-outline-light opacity-30 mb-4">2018</div>
+<h3 class="text-4xl font-headline font-bold mb-4">Tier 1 Elite Expansion</h3>
+<p class="text-white/70 text-lg leading-relaxed max-w-md">The integration of the region's first 7T MRI. We transitioned from a boutique clinic to a global leader in high-fidelity imaging systems.</p>
+</div>
+<div class="md:order-1 relative group parallax-zoom">
+<div class="absolute -inset-2 bg-secondary/20 rounded-2xl scale-95 group-hover:scale-100 transition-transform"></div>
+<img alt="Tech Hub" class="rounded-2xl shadow-2xl relative z-10 w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcI4vKyRRn3vDDS51HgLk4vAm1p-vq7I-JZ07y5Cc8BJmMYtbNCQwPPKXeXDD2CAqUbirgOsab3yxNsYlYqc1bjwm5G3T2ML4MwUFhVXenYCagjIaQbOWdpyvWHWbb_Ij9vvVapjjOzBnbXn7HKsSWpGUvxIbVKfdpG2KlGuhONOAGWSf861ekxByYDvvcpH0Waz4cwOd73H4hJtjAseG36JimWRapWQG6dBfieTkBr2CT6hZ3S0Rgp-SFkKylSZSg8Y-9k9LDxS0"/>
+</div>
+</div>
+<!-- Timeline Event 3 -->
+<div class="relative grid grid-cols-1 md:grid-cols-2 gap-16 items-center reveal-on-scroll">
+<div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-2 border-secondary-fixed-dim timeline-dot hidden md:block z-20"></div>
+<div class="md:text-right">
+<div class="text-8xl font-headline font-extrabold text-outline-light opacity-30 mb-4">2024</div>
+<h3 class="text-4xl font-headline font-bold mb-4">The AI-Human Nexus</h3>
+<p class="text-white/70 text-lg leading-relaxed max-w-md md:ml-auto">A decade in, we lead with proprietary neural networks that support our elite radiologists, delivering 40% faster results with absolute precision.</p>
+</div>
+<div class="relative group parallax-zoom">
+<div class="absolute -inset-2 bg-secondary/20 rounded-2xl scale-95 group-hover:scale-100 transition-transform"></div>
+<img alt="Modern Sanctuary" class="rounded-2xl shadow-2xl relative z-10 w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKiBTkyk9iUCsK0sAjWI5m6uZ9wdG_9BOqgXhPeVFiaL-u-Ohq3e_2CjNKoxzPptwORicJENuMIxJV61-8e8s96eeX8b14co8svPcYiP0vKOxTISUedzm1Agp7ULaUvXntGBMoWnqi1IejVYrhzqqvm3rFTKzS1_HIe8O18uPuzRalTL_58-ANb2ALB7jG4KeGCAVDtNgF9HGzM8oAPe5XkJI8cQsRSz3l8FpXJNiIm8837Zy-E6engYp8WQXfcy_Vf5We5N048kw"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Leadership Section with Parallax Cards -->
+<section class="py-32 bg-surface px-8 md:px-16 overflow-hidden relative">
+<div class="organic-blob absolute top-1/4 left-1/3 w-[800px] h-[800px] bg-secondary/10 animate-blob"></div>
+<div class="max-w-[1400px] mx-auto relative z-10">
+<div class="mb-24 reveal-on-scroll">
+<span class="font-label text-primary tracking-widest uppercase text-xs font-bold">The Minds Behind the Mission</span>
+<h2 class="font-headline text-5xl font-extrabold text-primary mt-6">Executive Leadership</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Dr. Julian Vane -->
+<div class="group leadership-card reveal-on-scroll relative rounded-3xl overflow-hidden aspect-[3/4.5] shadow-sm hover:shadow-2xl transition-all duration-700 bg-surface-container parallax-element" data-depth="0.04">
+<img alt="Dr. Julian Vane" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTUH3HTtEzi7Xb7kYajHwebtuRzzPCKzbdb6ZeOBOptroXUQZPXHhtVTCI0ZUX9LZVv3X2DWh3GS5aBWBrlOGM8Rh0gjaxcqVDIQKfKzltvr4c1C5YrvXL7Ji-Ik0A-O6Dz4j0lsMS1GYBKu8NS7Ca2ytdTZ0TPXxGZbU-q-NzWyKlhMD_VS6ENZsSCEdQ6LxLK1gIcq6vltIl-acAyWsd2y7S3L0mtSlKANXOA5cI-J-W09xCmfq40q4OgBJt7P3k4Sn_hy6dm_c"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 right-0 p-8 z-10">
+<h4 class="font-headline font-bold text-2xl text-white mb-1">Dr. Julian Vane</h4>
+<p class="text-white/70 text-sm font-label uppercase tracking-widest mb-6">Chief Medical Officer</p>
+<div class="details space-y-4">
+<p class="text-white/80 text-sm leading-relaxed border-t border-white/10 pt-4">Expert in musculoskeletal imaging with over 25 years of practice leadership.</p>
+<button class="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest hover:gap-4 transition-all">
+                                View Profile <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sarah Chen -->
+<div class="group leadership-card reveal-on-scroll relative rounded-3xl overflow-hidden aspect-[3/4.5] shadow-sm hover:shadow-2xl transition-all duration-700 bg-surface-container parallax-element" data-depth="0.06">
+<img alt="Sarah Chen" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAInLvsn-NokQhBzyKiSqdW87Eva4jiXVYtSXaR9k21sL8CARF6Aeyt84p957dc44-5328eQiqGLK9cFl0wH8HGdgsmy4OrFs_oEMF925KEKHXj8XTGeR9Ix5QRX9g8OA8l4WQovj2GLhR3Kwhr1udWp1phXvDxoOyE8yzdoVWe9weQtMwNgYYXcpSIQZL0h7MnXMtWIKUzkrmpIPUXOmODqEoWkmsoHCPvY0RDghcsGSvo2znKtofcUQYEkk_fQnBvKMgkV0TROtU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 right-0 p-8 z-10">
+<h4 class="font-headline font-bold text-2xl text-white mb-1">Sarah Chen</h4>
+<p class="text-white/70 text-sm font-label uppercase tracking-widest mb-6">Director of Operations</p>
+<div class="details space-y-4">
+<p class="text-white/80 text-sm leading-relaxed border-t border-white/10 pt-4">Architecting efficiency in complex medical ecosystems and diagnostic workflows.</p>
+<button class="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest hover:gap-4 transition-all">
+                                View Profile <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Marcus Thorne -->
+<div class="group leadership-card reveal-on-scroll relative rounded-3xl overflow-hidden aspect-[3/4.5] shadow-sm hover:shadow-2xl transition-all duration-700 bg-surface-container parallax-element" data-depth="0.04">
+<img alt="Marcus Thorne" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi4gsG4jyIanQj7HCvHanmL6c_NUk5-A1oCUlO-WkaYkFXVbMTyV3fsbajJCqoiAzMqWIYW_fT_YJgQ_IWXARzpc0aFnznQXPjQiqszJIg-0WZmKMD0_9_a7bIjEh-jlvUdY-mvvkV4AfWBtS75iTyfpQJ_TkHf5u2Gn0-OsmNzpTK3AlRIU51HnXD7sEpqhXUnGNkpiuoVTsx9_KzkmnMNFT4eNFQ74Bbkoi1L1xInKh4RqPVs8a0ckTcvdLzum-fPWHf1S2XAk0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 right-0 p-8 z-10">
+<h4 class="font-headline font-bold text-2xl text-white mb-1">Marcus Thorne</h4>
+<p class="text-white/70 text-sm font-label uppercase tracking-widest mb-6">Clinical Strategy</p>
+<div class="details space-y-4">
+<p class="text-white/80 text-sm leading-relaxed border-t border-white/10 pt-4">Former Head of Radiology, focusing on the human side of medical precision.</p>
+<button class="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest hover:gap-4 transition-all">
+                                View Profile <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Elena Rodriguez -->
+<div class="group leadership-card reveal-on-scroll relative rounded-3xl overflow-hidden aspect-[3/4.5] shadow-sm hover:shadow-2xl transition-all duration-700 bg-surface-container parallax-element" data-depth="0.08">
+<img alt="Elena Rodriguez" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKzwYM8UHc_QmsKP3VmjtF6vtRGjWgcm3mKLJWtPTn_1nylInZK_t-Aa90wUi0SlDAaILS6ATLfwyUzGJxoln2SoPJUDsMmlrKvxvqaaW0JoL73nt5eZ751tPUw_AhHdbe344Y1KuRwNOphpzevd5F3157F4qsAYk0_Ouw5EdmIhdkmwA2AUrFcxo_x2Dr-y455KlSm4_7Jvify3zbyxiZwWBWDibK-D-LOmTIG2N5uVDaMF8muqKuM5txRQa0e_s7U4sFjl8cSeI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 right-0 p-8 z-10">
+<h4 class="font-headline font-bold text-2xl text-white mb-1">Elena Rodriguez</h4>
+<p class="text-white/70 text-sm font-label uppercase tracking-widest mb-6">CTO &amp; Ethics Lead</p>
+<div class="details space-y-4">
+<p class="text-white/80 text-sm leading-relaxed border-t border-white/10 pt-4">Spearheading the integration of ethical AI and deep data diagnostic systems.</p>
+<button class="flex items-center gap-2 text-white font-bold text-xs uppercase tracking-widest hover:gap-4 transition-all">
+                                View Profile <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Parallax Photography Showcase -->
+<section class="relative h-[80vh] overflow-hidden group">
+<div class="absolute inset-0 scale-110 transition-transform duration-[2s] group-hover:scale-100 parallax-element" data-depth="0.1">
+<img alt="Lab Interior" class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6WPdWkmQw99Wlsb10cnGOqsAuuN4ejxRFpwEkOFVcXVCI2KP9RmUao8XWpRYqHxF6Pnhbl1-N1yRyxNdKLiVRBFVanx-MMHiFnyW9Ojt8p7ikGzEMyDc29ef_84jLUenpRMk5YcT9Ja4q7kAxptMiZNbP4TPW-4jqJASF6rgdH7SSk8Kjesb6w7Dmxx5FIOrYxgjacH6omf3lv70OWj2uTVv_wYPcJQ3tf0ke0u08NxYO87v4CfgpHTSBSnRTjy6wMi0g6iYtYVU"/>
+</div>
+<div class="absolute inset-0 bg-primary/40 backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-1000"></div>
+<div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-8">
+<h2 class="text-white font-headline text-5xl md:text-7xl font-extrabold tracking-tighter max-w-4xl mb-8 reveal-on-scroll">The Architectural Sanctuary of Modern Medicine.</h2>
+<button class="bg-white text-primary px-12 py-5 rounded-full font-headline font-extrabold text-sm uppercase tracking-widest hover:bg-secondary-fixed transition-all hover:scale-105">Tour Our Facilities</button>
+</div>
+</section>
+<!-- Final CTA Section: Ready for a Clearer Perspective? -->
+<section class="py-32 bg-surface px-8 relative overflow-hidden">
+<div class="organic-blob absolute bottom-0 right-0 w-[600px] h-[600px] bg-primary/5 animate-blob"></div>
+<div class="max-w-6xl mx-auto bg-primary rounded-[3rem] p-16 md:p-32 text-center relative overflow-hidden shadow-2xl reveal-on-scroll">
+<!-- Animated Light Burst -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-secondary-container/20 blur-[150px] rounded-full -translate-y-1/2 animate-blob"></div>
+<div class="relative z-10">
+<span class="text-secondary-fixed-dim font-bold tracking-[0.4em] uppercase text-xs mb-8 block">Ready for a Clearer Perspective?</span>
+<h2 class="font-headline text-5xl md:text-7xl font-extrabold text-white mb-10 leading-tight">Begin Your Journey <br/>to Absolute Certainty.</h2>
+<div class="flex flex-col sm:flex-row gap-6 justify-center mt-12">
+<button class="group relative bg-white text-primary px-12 py-5 rounded-full font-headline font-bold hover:shadow-2xl transition-all hover:scale-105 active:scale-95 overflow-hidden">
+<span class="relative z-10">Book Online</span>
+<div class="absolute inset-0 cta-shimmer animate-shimmer"></div>
+</button>
+<button class="group border border-white/20 text-white px-12 py-5 rounded-full font-headline font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                        Find Location
+                        <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="w-full bg-[#001736] px-12 py-20 text-[#f7f9fb] font-inter text-sm relative z-10">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center">
+<div class="mb-12 md:mb-0">
+<div class="text-2xl font-bold text-white mb-6 uppercase font-headline tracking-tighter">Clinical Precision</div>
+<p class="max-w-xs text-[#505f76] leading-relaxed text-base font-light">
+                Architectural sanctuaries delivering world-class diagnostic precision since 2012.
+            </p>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-12 md:gap-20">
+<div class="space-y-4">
+<h4 class="font-bold text-white uppercase text-xs tracking-widest">Connect</h4>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">Instagram</a>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">LinkedIn</a>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-white uppercase text-xs tracking-widest">About</h4>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">Our Labs</a>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">Heritage</a>
+</div>
+<div class="space-y-4">
+<h4 class="font-bold text-white uppercase text-xs tracking-widest">Legal</h4>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">Privacy</a>
+<a class="block text-[#505f76] hover:text-white transition-colors" href="#">Terms</a>
+</div>
+<div class="flex gap-4 pt-4">
+<div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="share">share</span>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-white/5 flex justify-between items-center text-[#505f76]">
+<p>© 2024 Clinical Precision. Designed for Excellence.</p>
+<div class="flex gap-8">
+<span class="cursor-pointer hover:text-white transition-colors">English (US)</span>
+</div>
+</div>
+</footer>
+<script>
+    // Intersection Observer for Reveal on Scroll and Timeline
+    const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Timeline line grow animation logic
+                if (entry.target.querySelector('.timeline-dot')) {
+                   // Dynamic handling handled via CSS .visible class
+                }
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+
+    // High-end Mouse Parallax for Elements
+    document.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        const moveX = (clientX - centerX) / centerX;
+        const moveY = (clientY - centerY) / centerY;
+
+        // Parallax for Background Text
+        const scrollTexts = document.querySelectorAll('.bg-scroll-text');
+        scrollTexts.forEach((text, i) => {
+            const factor = (i + 1) * 40;
+            text.style.transform = `translate(${moveX * factor}px, ${moveY * factor}px)`;
+        });
+
+        // Universal Parallax for specific marked elements
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        parallaxElements.forEach(el => {
+            const depth = parseFloat(el.getAttribute('data-depth')) || 0.05;
+            const x = moveX * (window.innerWidth * depth);
+            const y = moveY * (window.innerHeight * depth);
+            el.style.transform = `translate3d(${x}px, ${y}px, 0) ${el.classList.contains('lg:rotate-2') ? 'rotate(2deg)' : ''}`;
+        });
+    });
+
+    // Scroll progress for timeline line growth
+    window.addEventListener('scroll', () => {
+        const line = document.querySelector('.timeline-line');
+        if (line) {
+            const rect = line.parentElement.getBoundingClientRect();
+            const viewHeight = window.innerHeight;
+            
+            // Calculate how much of the timeline container is in view
+            let progress = (viewHeight - rect.top) / (rect.height + viewHeight);
+            progress = Math.max(0, Math.min(1, progress));
+            
+            line.style.transform = `scaleY(${progress})`;
+            line.style.opacity = 0.2 + (progress * 0.6);
+        }
+    });
+
+    // Smooth scroll for nav links or page navigation if external file
+    document.querySelectorAll('nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const target = this.getAttribute('href');
+            if(!target || target === '#') {
+                e.preventDefault();
+                return;
+            }
+            const isExternalPage = target.endsWith('.html') || target.endsWith('.htm') || target.startsWith('http');
+            if (isExternalPage) {
+                // micro-penalty effect before navigation
+                if (this.classList.contains('nav-item')) {
+                    this.classList.add('animate-[pulse_0.35s_ease-out]');
+                    setTimeout(() => this.classList.remove('animate-[pulse_0.35s_ease-out]'), 300);
+                }
+                return;
+            }
+            e.preventDefault();
+            const section = document.querySelector(target);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+</body></html>

@@ -1,0 +1,632 @@
+ <!DOCTYPE html>
+
+<html class="light scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CLINICAL PRECISION | Ultra-Premium Diagnostics</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- GSAP for animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed": "#d6e3ff",
+              "on-secondary-fixed": "#0b1c30",
+              "error": "#ba1a1a",
+              "secondary-fixed-dim": "#b7c8e1",
+              "secondary-fixed": "#d3e4fe",
+              "on-error": "#ffffff",
+              "surface": "#f7f9fb",
+              "on-surface-variant": "#43474f",
+              "outline-variant": "#c4c6d0",
+              "secondary": "#505f76",
+              "primary-container": "#002b5c",
+              "surface-container-highest": "#e0e3e5",
+              "on-secondary-fixed-variant": "#38485d",
+              "on-error-container": "#93000a",
+              "on-primary-fixed-variant": "#264779",
+              "primary": "#001736",
+              "on-tertiary-fixed-variant": "#39485a",
+              "outline": "#747780",
+              "on-background": "#191c1e",
+              "tertiary": "#091828",
+              "surface-container": "#eceef0",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed-dim": "#b9c8de",
+              "tertiary-container": "#1e2d3e",
+              "on-surface": "#191c1e",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#eff1f3",
+              "surface-dim": "#d8dadc",
+              "surface-container-high": "#e6e8ea",
+              "surface-bright": "#f7f9fb",
+              "inverse-primary": "#aac7ff",
+              "error-container": "#ffdad6",
+              "tertiary-fixed": "#d4e4fa",
+              "primary-fixed-dim": "#aac7ff",
+              "on-tertiary-container": "#8694a9",
+              "on-tertiary-fixed": "#0d1c2d",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "background": "#f7f9fb",
+              "on-secondary-container": "#54647a",
+              "secondary-container": "#d0e1fb",
+              "on-primary-container": "#7594cb",
+              "surface-variant": "#e0e3e5",
+              "surface-tint": "#3f5f92",
+              "on-primary-fixed": "#001b3e",
+              "surface-container-low": "#f2f4f6",
+              "inverse-surface": "#2d3133"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .signature-texture {
+            background: linear-gradient(135deg, #001736 0%, #002b5c 100%);
+            background-size: 200% 200%;
+        }
+        .glass-header {
+            background: rgba(247, 249, 251, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+        .nav-link-underline {
+            position: relative;
+        }
+        .nav-link-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background-color: currentColor;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nav-link-underline:hover::after {
+            width: 100%;
+        }
+        .parallax-bg {
+            will-change: transform;
+        }
+        .reveal-mask {
+            clip-path: inset(0 0 100% 0);
+        }
+        .floating-motif {
+            pointer-events: none;
+            opacity: 0.05;
+            mix-blend-mode: multiply;
+        }
+        .stagger-text-item {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .perspective-container {
+            perspective: 2000px;
+        }
+        .depth-card {
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .depth-card:hover {
+            transform: translateZ(30px);
+            box-shadow: 0 50px 100px -20px rgba(0,23,54,0.15);
+        }
+        .video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .video-container video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: grayscale(1) brightness(1.2) contrast(0.9);
+            opacity: 0.15;
+        }
+        .premium-hover {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        .heading-reveal {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        }
+        .heading-reveal span {
+            display: inline-block;
+            transform: translateY(110%);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .heading-reveal.active span {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden">
+<!-- Floating Decorative Motifs -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="absolute top-[15%] left-[10%] floating-motif" data-speed="0.02">
+<svg height="200" viewbox="0 0 100 100" width="200"><path class="text-primary" d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="currentColor" stroke-width="0.5"></path></svg>
+</div>
+<div class="absolute top-[65%] right-[5%] floating-motif" data-speed="0.03">
+<svg height="400" viewbox="0 0 100 100" width="400"><circle class="text-primary" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.2"></circle></svg>
+</div>
+<div class="absolute top-[40%] left-[80%] floating-motif" data-speed="0.015">
+<svg height="150" viewbox="0 0 100 100" width="150"><path class="text-primary" d="M0 50 L100 50 M50 0 L50 100" fill="none" stroke="currentColor" stroke-width="0.5"></path></svg>
+</div>
+</div>
+<nav class="fixed top-0 w-full z-[100] glass-header border-b border-outline-variant/5 transition-all duration-700">
+<div class="flex justify-between items-center w-full px-12 py-6 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-extrabold tracking-tighter text-primary font-headline cursor-pointer hover:opacity-80 transition-opacity">
+            CLINICAL<span class="font-light text-secondary">PRECISION</span>
+</div>
+<div class="hidden md:flex gap-10 items-center">
+<a class="font-headline font-bold tracking-tight text-xs uppercase text-primary border-b-2 border-primary pb-1" href="index.html">Home</a>
+<a class="nav-link-underline font-headline font-semibold tracking-tight text-xs uppercase text-secondary hover:text-primary transition-colors" href="services.html">Services</a>
+<a class="nav-link-underline font-headline font-semibold tracking-tight text-xs uppercase text-secondary hover:text-primary transition-colors" href="anout.html">About Us</a>
+</div>
+<div class="flex items-center gap-6">
+<button class="hidden lg:flex items-center gap-2 group bg-primary text-on-primary px-8 py-3 rounded-full font-headline font-bold text-xs tracking-widest uppercase signature-texture hover:shadow-[0_20px_40px_rgba(0,23,54,0.2)] transition-all duration-500 active:scale-95">
+                Reserve Suite
+                <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="calendar_today">calendar_today</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center cursor-pointer hover:bg-primary hover:text-white transition-all duration-300">
+<span class="material-symbols-outlined text-xl" data-icon="person_search">person_search</span>
+</div>
+</div>
+</div>
+</nav>
+<main class="relative z-10">
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center overflow-hidden px-12 pt-20">
+<!-- Hero Background Video -->
+<div class="video-container">
+<video autoplay="" loop="" muted="" playsinline="">
+<source src="https://assets.mixkit.co/videos/preview/mixkit-modern-laboratory-with-advanced-equipment-41484-large.mp4" type="video/mp4"/>
+</video>
+</div>
+<div class="grid lg:grid-cols-12 gap-16 items-center w-full max-w-screen-2xl mx-auto">
+<!-- Left Content -->
+<div class="lg:col-span-7">
+<div class="overflow-hidden mb-6">
+<span class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary-fixed/30 text-primary text-[10px] font-extrabold tracking-[0.2em] uppercase stagger-text-item" id="hero-tag">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                        Architectural Precision in Medicine
+                    </span>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl font-extrabold text-primary tracking-tighter leading-[0.95] mb-10" id="hero-title">
+<div class="heading-reveal overflow-hidden"><span class="stagger-text-item">The Sanctuary</span></div>
+<div class="heading-reveal overflow-hidden"><span class="stagger-text-item text-on-primary-container italic">of Absolute</span></div>
+<div class="heading-reveal overflow-hidden"><span class="stagger-text-item">Diagnostics.</span></div>
+</h1>
+<p class="text-secondary text-xl max-w-xl mb-12 leading-relaxed stagger-text-item font-light" id="hero-desc">
+                    Where avant-garde architecture meets robotic pathology. A healthcare environment redefined for clinical certainty and human comfort.
+                </p>
+<div class="flex flex-wrap gap-16 items-center stagger-text-item" id="hero-stats">
+<div class="group cursor-default">
+<div class="text-4xl font-extrabold text-primary font-headline mb-1">45<span class="text-xl font-medium">yrs</span></div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Clinical Legacy</div>
+</div>
+<div class="group cursor-default">
+<div class="text-4xl font-extrabold text-primary font-headline mb-1">99.9<span class="text-xl font-medium">%</span></div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Precision Rate</div>
+</div>
+<div class="group cursor-default">
+<div class="text-4xl font-extrabold text-primary font-headline mb-1">24<span class="text-xl font-medium">h</span></div>
+<div class="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Molecular Turnaround</div>
+</div>
+</div>
+</div>
+<!-- Right Content: Floating Booking Form -->
+<div class="lg:col-span-5 relative perspective-container">
+<div class="depth-card bg-white/95 backdrop-blur-xl p-10 md:p-12 rounded-3xl shadow-[0_40px_100px_rgba(0,23,54,0.08)] relative z-20 border border-white" id="hero-form">
+<div class="mb-10">
+<h3 class="text-3xl font-headline font-extrabold text-primary mb-3">Concierge Access</h3>
+<p class="text-sm text-secondary font-medium">Secure your private diagnostic window.</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.15em] text-secondary/60 px-1">Patient Identity</label>
+<input class="w-full bg-surface-container-low/50 border-b border-outline-variant/30 focus:border-primary px-0 py-4 text-sm transition-all placeholder:text-outline/50 outline-none" placeholder="Full Legal Name" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.15em] text-secondary/60 px-1">Priority Contact</label>
+<input class="w-full bg-surface-container-low/50 border-b border-outline-variant/30 focus:border-primary px-0 py-4 text-sm transition-all placeholder:text-outline/50 outline-none" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] font-bold uppercase tracking-[0.15em] text-secondary/60 px-1">Specialized Suite</label>
+<select class="w-full bg-transparent border-b border-outline-variant/30 focus:border-primary px-0 py-4 text-sm transition-all outline-none appearance-none cursor-pointer">
+<option>Comprehensive Molecular Panel</option>
+<option>Executive MRI Imaging</option>
+<option>Advanced Cardiac Assessment</option>
+<option>Whole Genome Sequencing</option>
+</select>
+</div>
+<button class="w-full signature-texture text-on-primary py-6 rounded-2xl font-headline font-extrabold text-xs tracking-[0.2em] uppercase hover:shadow-2xl hover:-translate-y-1 transition-all mt-8 active:scale-95">
+                            Validate Schedule
+                        </button>
+</form>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary-fixed/20 rounded-full blur-3xl -z-10"></div>
+<div class="absolute -bottom-10 -left-10 w-60 h-60 bg-secondary-fixed/20 rounded-full blur-3xl -z-10"></div>
+</div>
+</div>
+</section>
+<!-- Detailed Trust Section -->
+<section class="py-32 relative overflow-hidden">
+<div class="max-w-screen-2xl mx-auto px-12">
+<div class="grid md:grid-cols-3 gap-16 border-t border-outline-variant/10 pt-20">
+<div class="reveal-content space-y-6 premium-hover p-8 rounded-3xl bg-transparent hover:bg-white/40">
+<div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-all duration-500 shadow-sm">
+<span class="material-symbols-outlined text-3xl" data-icon="architecture">architecture</span>
+</div>
+<h4 class="text-2xl font-headline font-extrabold text-primary">Healing Environments</h4>
+<p class="text-secondary text-sm leading-relaxed font-light">Our facilities are architecturally optimized to reduce patient cortisol levels, featuring natural circadian lighting and acoustic dampening for total tranquility.</p>
+</div>
+<div class="reveal-content space-y-6 premium-hover p-8 rounded-3xl bg-transparent hover:bg-white/40">
+<div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-all duration-500 shadow-sm">
+<span class="material-symbols-outlined text-3xl" data-icon="precision_manufacturing">precision_manufacturing</span>
+</div>
+<h4 class="text-2xl font-headline font-extrabold text-primary">Robotic Precision</h4>
+<p class="text-secondary text-sm leading-relaxed font-light">Eliminating human variability through fully automated sample processing and AI-assisted radiological interpretation with unmatched fidelity.</p>
+</div>
+<div class="reveal-content space-y-6 premium-hover p-8 rounded-3xl bg-transparent hover:bg-white/40">
+<div class="w-16 h-16 bg-surface-container-highest rounded-2xl flex items-center justify-center text-primary group hover:bg-primary hover:text-white transition-all duration-500 shadow-sm">
+<span class="material-symbols-outlined text-3xl" data-icon="encrypted">encrypted</span>
+</div>
+<h4 class="text-2xl font-headline font-extrabold text-primary">Data Sovereignty</h4>
+<p class="text-secondary text-sm leading-relaxed font-light">Your genetic and medical data is secured with enterprise-grade encryption and stored on air-gapped private servers for absolute privacy.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Section with Mask Reveal -->
+<section class="py-40 bg-primary overflow-hidden">
+<div class="max-w-screen-2xl mx-auto px-12">
+<div class="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
+<div class="max-w-3xl">
+<h2 class="reveal-mask-trigger heading-reveal text-5xl md:text-7xl font-headline font-extrabold text-white tracking-tighter mb-8 leading-tight">
+<span class="block">Unrivaled Diagnostic</span>
+<span class="block italic text-primary-fixed">Infrastructure.</span>
+</h2>
+<p class="text-on-primary-container text-xl font-light opacity-80 max-w-xl reveal-content">Where clinical engineering reaches its zenith. Discover our specialized wings of medical discovery.</p>
+</div>
+<div class="flex flex-col items-end gap-6 reveal-content">
+<button class="group bg-white text-primary px-10 py-4 rounded-full font-headline font-extrabold text-xs tracking-widest uppercase hover:bg-secondary-fixed transition-all duration-500 flex items-center gap-3 active:scale-95">
+                        Explore Portfolio
+                        <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform" data-icon="north_east">north_east</span>
+</button>
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white cursor-pointer hover:bg-white/10 transition-colors"><span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span></div>
+<div class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white cursor-pointer hover:bg-white/10 transition-colors"><span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span></div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<!-- Large Feature Card -->
+<div class="md:col-span-2 relative h-[700px] rounded-[40px] overflow-hidden group perspective-container reveal-content">
+<img alt="MRI Facility" class="reveal-mask absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[2000ms] brightness-75 parallax-bg" id="service-img-1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANofKvsYMmlC1uv0-IWHoWwBnF2H03bF4cDoLfE2IaZWFbar62bNJYs1XlFV1-13LWC3VBhsNz7XDPXAlMNp19_ZoPlefDllMidGsbHXO2KLQPB6Mcb6yslAls1h1RrT9ZjMpl1xW24RtSk3prbiCacQkUBJ-WiOsvsseCGEtGA3LuxHpHZslCfNLNiakR8PdUSOWdD8d1Yg8Mp7yjTAspef2sa7zx8oMogOjIQmQkXxO2LxKTk31LQv5Z8LN_4LfO1ct901njDsU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-16 z-10 w-full">
+<div class="flex justify-between items-end">
+<div class="space-y-4">
+<span class="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase block">Division 01</span>
+<h3 class="text-4xl font-headline font-extrabold text-white">Quantum Imaging &amp; <br/>Radiology</h3>
+<p class="text-white/60 text-base max-w-md font-light">Featuring the nation's first Helium-free 7T MRI scanner for cellular-level visualization.</p>
+</div>
+<span class="material-symbols-outlined text-white text-6xl opacity-20" data-icon="radiology">radiology</span>
+</div>
+</div>
+</div>
+<!-- Vertical Cards Column -->
+<div class="flex flex-col gap-10">
+<div class="flex-1 bg-surface-container-low rounded-[40px] p-12 relative overflow-hidden group cursor-pointer border border-white/5 hover:border-white/20 transition-all duration-700 reveal-content premium-hover">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-primary/10 rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
+<div class="relative z-10 h-full flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="dna">dna</span>
+<div>
+<h3 class="text-2xl font-headline font-extrabold text-primary mb-4">Genomic Profiling</h3>
+<p class="text-secondary text-sm font-light leading-relaxed">Full exome sequencing with clinical annotation from Harvard-trained geneticists.</p>
+<a class="mt-8 flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all" href="#">Dossier <span class="material-symbols-outlined text-sm" data-icon="arrow_outward">arrow_outward</span></a>
+</div>
+</div>
+</div>
+<div class="flex-1 bg-white/5 backdrop-blur-md rounded-[40px] p-12 relative overflow-hidden group cursor-pointer border border-white/10 hover:bg-white/10 transition-all duration-700 reveal-content premium-hover">
+<div class="relative z-10 h-full flex flex-col justify-between">
+<span class="material-symbols-outlined text-white text-5xl" data-icon="cardiology">cardiology</span>
+<div class="text-white">
+<h3 class="text-2xl font-headline font-extrabold mb-4">Cardiovascular Excellence</h3>
+<p class="text-white/60 text-sm font-light leading-relaxed">Advanced hemodynamic monitoring and 4D echocardiography for proactive heart care.</p>
+<a class="mt-8 flex items-center gap-2 font-bold text-xs uppercase tracking-widest group-hover:gap-4 transition-all" href="#">Dossier <span class="material-symbols-outlined text-sm" data-icon="arrow_outward">arrow_outward</span></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Accreditations / Logos -->
+<section class="py-24 bg-surface border-y border-outline-variant/5">
+<div class="max-w-screen-2xl mx-auto px-12">
+<div class="flex flex-wrap justify-between items-center gap-16 opacity-30 reveal-content">
+<div class="flex items-center gap-4 filter contrast-125 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default">
+<span class="material-symbols-outlined text-5xl" data-icon="verified">verified</span>
+<span class="font-headline font-extrabold text-xl tracking-tighter">ISO 9001:2015</span>
+</div>
+<div class="flex items-center gap-4 filter grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default">
+<span class="material-symbols-outlined text-5xl" data-icon="security">security</span>
+<span class="font-headline font-extrabold text-xl tracking-tighter">HIPAA COMPLIANT</span>
+</div>
+<div class="flex items-center gap-4 filter grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default">
+<span class="material-symbols-outlined text-5xl" data-icon="verified_user">verified_user</span>
+<span class="font-headline font-extrabold text-xl tracking-tighter">CAP ACCREDITED</span>
+</div>
+<div class="flex items-center gap-4 filter grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default">
+<span class="material-symbols-outlined text-5xl" data-icon="workspace_premium">workspace_premium</span>
+<span class="font-headline font-extrabold text-xl tracking-tighter">JCI GOLD SEAL</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Architectural Philosophy Section -->
+<section class="py-40 bg-white relative overflow-hidden">
+<div class="grid lg:grid-cols-2 gap-24 items-center max-w-screen-2xl mx-auto px-12">
+<div class="relative rounded-[60px] overflow-hidden h-[800px] reveal-mask-trigger reveal-content">
+<img alt="Luxury Interior" class="reveal-mask absolute inset-0 w-full h-full object-cover parallax-bg scale-125" id="arch-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9FDEJl5aihHQvVWHTGTeMKVRwruCa_7rRqXQqEqQ1hSnn31_xnJ88v2lVAIeEvjtEuKA0TkiwkH-TgE4_uaWIj8KgAPk3tQKOuzA0X2Xdtq08ZBYaWQ-9EdgFuPbRFrbvZ9lP076iQqTU9dzGGcSNK62-YUPgyzA0qoDM2TUF8XjFtgOZ9WBauhuTBcpCeKCb21o6Ndkr8EPIXAVsHBdFy84ni0F9H4dZcjBTY14YkgeNd8n824f758n22_HSQiZxdmhT-zmys3o"/>
+<div class="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[60px]"></div>
+</div>
+<div class="space-y-12">
+<div class="overflow-hidden">
+<span class="inline-block text-[10px] font-bold tracking-[0.4em] uppercase text-primary/50 stagger-arch">The Design Ethos</span>
+</div>
+<h2 class="heading-reveal text-5xl md:text-7xl font-headline font-extrabold text-primary tracking-tighter leading-tight stagger-arch">
+<span class="block">Where Wellness</span>
+<span class="block text-secondary-fixed-dim italic">Meets Concrete.</span>
+</h2>
+<p class="text-secondary text-xl font-light leading-relaxed stagger-arch">
+                    Clinical Precision is not just a laboratory; it is a manifestation of the "Third Space" theory. We believe that an environment of extreme beauty fosters extreme accuracy. Every angle is calculated, every light temperature is calibrated, and every texture is chosen to inspire confidence.
+                </p>
+<div class="grid grid-cols-2 gap-12 pt-8 stagger-arch">
+<div class="premium-hover p-4 rounded-xl">
+<div class="text-3xl font-extrabold text-primary mb-2">32,000<span class="text-sm">ft²</span></div>
+<p class="text-xs font-bold uppercase tracking-widest text-secondary">Sanctuary Space</p>
+</div>
+<div class="premium-hover p-4 rounded-xl">
+<div class="text-3xl font-extrabold text-primary mb-2">12<span class="text-sm">suites</span></div>
+<p class="text-xs font-bold uppercase tracking-widest text-secondary">Private Diagnostics</p>
+</div>
+</div>
+<button class="stagger-arch bg-surface-container-highest text-primary px-12 py-5 rounded-full font-headline font-extrabold text-xs tracking-widest uppercase hover:bg-primary hover:text-white transition-all duration-500 shadow-xl shadow-black/5 active:scale-95">
+                    Request Virtual Tour
+                </button>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-primary py-24 px-12 border-t border-white/5 relative z-10">
+<div class="max-w-screen-2xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-16 mb-24">
+<div class="md:col-span-5 space-y-10">
+<div class="text-3xl font-extrabold text-white tracking-tighter font-headline">CLINICAL<span class="font-light opacity-50">PRECISION</span></div>
+<p class="text-white/40 text-sm font-light leading-relaxed max-w-sm">
+                    Established 1979. Pioneers of the architectural sanctuary approach to high-fidelity clinical diagnostics. Global leaders in molecular pathology.
+                </p>
+<div class="flex gap-6">
+<a class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-primary transition-all duration-500" href="#"><span class="material-symbols-outlined text-sm" data-icon="alternate_email">alternate_email</span></a>
+<a class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-primary transition-all duration-500" href="#"><span class="material-symbols-outlined text-sm" data-icon="distance">distance</span></a>
+<a class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-white hover:text-primary transition-all duration-500" href="#"><span class="material-symbols-outlined text-sm" data-icon="language">language</span></a>
+</div>
+</div>
+<div class="md:col-span-2 space-y-8">
+<h5 class="text-white font-bold text-xs uppercase tracking-[0.2em]">Divisions</h5>
+<ul class="space-y-4 text-white/50 text-xs font-medium">
+<li><a class="hover:text-white transition-colors" href="#">Radiology Wing</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Molecular Lab</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Cardiac Suite</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Neuro Hub</a></li>
+</ul>
+</div>
+<div class="md:col-span-2 space-y-8">
+<h5 class="text-white font-bold text-xs uppercase tracking-[0.2em]">Patient Care</h5>
+<ul class="space-y-4 text-white/50 text-xs font-medium">
+<li><a class="hover:text-white transition-colors" href="#">Concierge Portal</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Digital Records</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Private Suites</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Genetic Ethics</a></li>
+</ul>
+</div>
+<div class="md:col-span-3 space-y-8">
+<h5 class="text-white font-bold text-xs uppercase tracking-[0.2em]">Contact Headquarters</h5>
+<div class="space-y-6 text-white text-xs font-light leading-relaxed">
+<p class="opacity-50">8800 Medical Plaza Dr.<br/>San Francisco, CA 94111</p>
+<p class="font-bold">+1 (800) PRECISION</p>
+<div class="pt-4">
+<span class="inline-block px-4 py-2 border border-white/20 rounded-full opacity-60">Status: Fully Operational</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.3em] text-white/20">
+<div>© 2024 Clinical Precision Diagnostic Centers International.</div>
+<div class="flex gap-12">
+<a class="hover:text-white transition-colors" href="#">Privacy Codex</a>
+<a class="hover:text-white transition-colors" href="#">Legal Compliance</a>
+<a class="hover:text-white transition-colors" href="#">Ethical Guidelines</a>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Initial Load Animations
+    const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1.5 }});
+    
+    tl.to(".stagger-text-item", {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        delay: 0.5,
+        onComplete: () => {
+            document.querySelectorAll('#hero-title .heading-reveal').forEach(el => el.classList.add('active'));
+        }
+    })
+    .from("#hero-form", {
+        opacity: 0,
+        x: 60,
+        rotationY: 15,
+        duration: 2
+    }, "-=1.2");
+
+    // Parallax Effect for Background Images and Floating Motifs
+    gsap.to(".parallax-bg", {
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true
+        },
+        y: -100,
+        ease: "none"
+    });
+
+    document.querySelectorAll('.floating-motif').forEach(motif => {
+        const speed = motif.getAttribute('data-speed') || 0.02;
+        gsap.to(motif, {
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: true
+            },
+            y: (i, target) => -window.innerHeight * speed * 20,
+            x: (i, target) => (Math.random() - 0.5) * 50,
+            ease: "none"
+        });
+    });
+
+    // Heading Reveal Observer
+    const headingObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.heading-reveal').forEach(h => headingObserver.observe(h));
+
+    // Mask Reveal for Images
+    document.querySelectorAll(".reveal-mask-trigger").forEach(trigger => {
+        const mask = trigger.querySelector(".reveal-mask");
+        gsap.to(mask, {
+            scrollTrigger: {
+                trigger: trigger,
+                start: "top 75%",
+                toggleActions: "play none none none"
+            },
+            clipPath: "inset(0 0 0% 0)",
+            duration: 1.8,
+            ease: "expo.inOut"
+        });
+    });
+
+    // Advanced Scroll Triggered Content Fade Reveal
+    document.querySelectorAll(".reveal-content").forEach(el => {
+        gsap.from(el, {
+            scrollTrigger: {
+                trigger: el,
+                start: "top 85%",
+                toggleActions: "play none none none"
+            },
+            opacity: 0,
+            y: 40,
+            duration: 1.4,
+            ease: "power3.out"
+        });
+    });
+
+    // Stagger Arch Section
+    gsap.from(".stagger-arch", {
+        scrollTrigger: {
+            trigger: ".stagger-arch",
+            start: "top 80%"
+        },
+        opacity: 0,
+        y: 30,
+        stagger: 0.15,
+        duration: 1.2,
+        ease: "power2.out"
+    });
+
+    // Navbar transparency & shrink effect
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 50) {
+            nav.classList.add('py-4', 'shadow-2xl', 'shadow-primary/5', 'bg-white/90');
+            nav.classList.remove('py-6', 'bg-transparent');
+        } else {
+            nav.classList.remove('py-4', 'shadow-2xl', 'shadow-primary/5', 'bg-white/90');
+            nav.classList.add('py-6');
+        }
+    });
+
+    // Depth Card Mouse Interaction (Parallax Tilt)
+    const card = document.querySelector('.depth-card');
+    if (card) {
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth < 1024) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 80;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 80;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(30px)`;
+        });
+        
+        document.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+        });
+        
+        document.addEventListener('mouseleave', () => {
+            card.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = `rotateY(0deg) rotateX(0deg) translateZ(0)`;
+        });
+    }
+
+    // Smooth hover for stats
+    document.querySelectorAll('.group.cursor-default').forEach(item => {
+        item.classList.add('premium-hover');
+    });
+</script>
+</body></html>

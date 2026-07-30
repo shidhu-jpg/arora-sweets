@@ -1,0 +1,13 @@
+# System files
+$RECYCLE.BIN/
+System Volume Information/
+Thumbs.db
+.DS_Store
+
+# Ignore everything except HTML files and necessary folders
+/*
+!/.gitignore
+!/index.html
+!/services.html
+!/anout.html
+!/README.md

@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Om Sweets | Authentic Flavors &amp; Grand Banquets</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#fcf9f8",
+                        "secondary": "#51606b",
+                        "primary-fixed": "#ffdbcc",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f0",
+                        "primary-container": "#ff9762",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#b2b39c",
+                        "on-secondary-fixed-variant": "#3a4953",
+                        "tertiary": "#5e604d",
+                        "secondary-fixed": "#d5e5f1",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#d2e2ee",
+                        "inverse-primary": "#ffb693",
+                        "secondary-fixed-dim": "#b9c9d5",
+                        "surface-variant": "#e4e2e1",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#474836",
+                        "surface-container-high": "#eae7e7",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#762e00",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#55656f",
+                        "on-secondary-fixed": "#0e1d26",
+                        "inverse-surface": "#303030",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-highest": "#e4e2e1",
+                        "on-background": "#1b1c1c",
+                        "surface-container-low": "#f6f3f2",
+                        "surface-container": "#f0eded",
+                        "on-tertiary-container": "#444534",
+                        "primary-fixed-dim": "#ffb693",
+                        "surface-tint": "#a04100",
+                        "surface": "#fcf9f8",
+                        "tertiary-fixed-dim": "#c8c8b0",
+                        "on-primary-fixed-variant": "#7a3000",
+                        "on-tertiary-fixed": "#1b1d0e",
+                        "outline-variant": "#dbc2b0",
+                        "on-surface-variant": "#554336",
+                        "tertiary-fixed": "#e4e4cc",
+                        "surface-bright": "#fcf9f8",
+                        "outline": "#887364",
+                        "on-primary-fixed": "#351000",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#a04100"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif", "serif"],
+                        "body": ["Manrope", "sans-serif"],
+                        "label": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* ── Nav ── */
+        .glass-nav {
+            background: rgba(252, 249, 248, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .cta-gradient {
+            background: linear-gradient(135deg, #a04100 0%, #ff9762 100%);
+        }
+
+        /* ── HERO SLIDER ── */
+        .hero-slider {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+        }
+
+        /* Each slide is absolutely stacked */
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            pointer-events: none;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Gradient slide background — animates on active */
+        .slide-bg {
+            position: absolute;
+            inset: 0;
+            background-size: 200% 200%;
+            animation: none;
+        }
+
+        .hero-slide.active .slide-bg {
+            animation: gradientDrift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes gradientDrift {
+            0%   { background-position: 0% 50%;   }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* ── MOBILE MENU ── */
+        .mobile-drawer {
+            position: fixed;
+            inset: 0;
+            z-index: 60;
+            display: none;
+        }
+
+        .mobile-drawer.open { display: block; }
+
+        .mobile-drawer-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .mobile-drawer-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 280px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 5rem 2rem 2rem;
+            gap: 1.5rem;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-drawer.open .mobile-drawer-panel {
+            transform: translateX(0);
+        }
+
+        /* ── HERO BRAND OVERLAY (Om Sweets at top of banner) ── */
+        .hero-brand-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 5rem;
+            pointer-events: none;
+        }
+
+        @media (max-width: 640px) {
+            .hero-brand-overlay { padding-top: 4.5rem; }
+        }
+
+        .hero-om-symbol {
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            color: rgba(255, 185, 90, 0.65);
+            text-shadow: 0 0 24px rgba(255, 140, 40, 0.6);
+            animation: omPulse 3.5s ease-in-out infinite;
+            line-height: 1;
+        }
+
+        @keyframes omPulse {
+            0%, 100% { opacity: 0.55; transform: scale(1);    }
+            50%       { opacity: 1;   transform: scale(1.12); }
+        }
+
+        .hero-brand-name {
+            font-family: 'Noto Serif', serif;
+            font-size: clamp(1.8rem, 4vw, 4.5rem);
+            font-weight: 700;
+            background: linear-gradient(180deg,
+                #fff8e0 0%,
+                #ffd07a 35%,
+                #ff9040 65%,
+                #c45000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+            line-height: 1;
+            filter: drop-shadow(0 2px 24px rgba(255, 150, 50, 0.45));
+            animation: brandGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes brandGlow {
+            0%   { filter: drop-shadow(0 2px 18px rgba(255, 140, 40, 0.35)); }
+            100% { filter: drop-shadow(0 4px 40px rgba(255, 185, 80, 0.75)); }
+        }
+
+        .hero-divider-line {
+            height: 1px;
+            width: 70px;
+            background: linear-gradient(to right, transparent, rgba(255, 195, 100, 0.55));
+        }
+
+        .hero-divider-line.flip {
+            background: linear-gradient(to left, transparent, rgba(255, 195, 100, 0.55));
+        }
+
+        /* Dark gradient overlay */
+        .hero-gradient {
+            background: linear-gradient(to right,
+                rgba(20, 13, 5, 0.80) 0%,
+                rgba(20, 13, 5, 0.30) 70%,
+                transparent 100%);
+        }
+
+        /* Slide content text animations */
+        .slide-content .slide-tag,
+        .slide-content h1,
+        .slide-content p,
+        .slide-content .slide-btns {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .hero-slide.active .slide-content .slide-tag    { opacity: 1; transform: none; transition-delay: 0.2s; }
+        .hero-slide.active .slide-content h1            { opacity: 1; transform: none; transition-delay: 0.4s; }
+        .hero-slide.active .slide-content p             { opacity: 1; transform: none; transition-delay: 0.6s; }
+        .hero-slide.active .slide-content .slide-btns  { opacity: 1; transform: none; transition-delay: 0.8s; }
+
+        /* Dot indicators */
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s, width 0.4s;
+        }
+
+        .slider-dot.active {
+            background: #ff9762;
+            width: 32px;
+            border-radius: 5px;
+        }
+
+        /* Progress bar at very bottom */
+        .slider-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: #ff9762;
+            width: 0%;
+            transition: width linear;
+            z-index: 20;
+        }
+
+        /* ── BRAND NAME shimmer ── */
+        @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .brand-shimmer {
+            background: linear-gradient(90deg,
+                #a04100 0%,
+                #ff9762 40%,
+                #ffd700 50%,
+                #ff9762 60%,
+                #a04100 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-left.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-right.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* stagger children */
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal-stagger.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s;    }
+        .reveal-stagger.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.15s; }
+        .reveal-stagger.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.30s; }
+        .reveal-stagger.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.45s; }
+
+        /* ── 3D CARD HOVER ── */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: box-shadow 0.4s ease;
+            will-change: transform;
+        }
+
+        .card-3d:hover {
+            box-shadow: 0 20px 60px rgba(160, 65, 0, 0.18);
+        }
+
+        /* ── ABOUT image 3D float ── */
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0px) rotate(-1deg); }
+            50%       { transform: translateY(-10px) rotate(0deg); }
+        }
+
+        .float-img {
+            animation: floatY 6s ease-in-out infinite;
+        }
+
+        /* ── COUNTER ── */
+        .counter-badge {
+            animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes badgePop {
+            0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+        }
+
+        /* ── CTA SECTION orbs ── */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1);    }
+            33%       { transform: translate(20px, -15px) scale(1.05); }
+            66%       { transform: translate(-10px, 10px) scale(0.97); }
+        }
+
+        .orb-1 { animation: orbFloat 8s ease-in-out infinite; }
+        .orb-2 { animation: orbFloat 10s ease-in-out infinite reverse; }
+
+        /* ── CTA BUTTON GLOW ── */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, #ff9762, #ffd700, #a04100);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-glow:hover::after { opacity: 1; }
+
+        /* ── MENU SECTION tag badge pulse ── */
+        @keyframes pulseBadge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(160,65,0,0.3); }
+            50%       { box-shadow: 0 0 0 8px rgba(160,65,0,0); }
+        }
+
+        .pulse-badge { animation: pulseBadge 2.5s ease-in-out infinite; }
+
+        /* ── FOOTER hover line ── */
+        footer a { transition: color 0.2s, letter-spacing 0.2s; }
+        footer a:hover { letter-spacing: 0.15em; }
+
+        /* ── Scroll-down arrow ── */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0);    opacity: 1;   }
+            50%       { transform: translateY(8px);  opacity: 0.6; }
+        }
+
+        .scroll-arrow { animation: bounce 1.8s ease-in-out infinite; }
+
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body">
+
+    <!-- TopNavBar -->
+    <header class="fixed top-0 w-full z-50 glass-nav shadow-sm">
+        <nav class="flex justify-between items-center px-5 md:px-8 py-4 max-w-7xl mx-auto">
+            <div class="text-xl md:text-2xl font-serif font-bold brand-shimmer">Om Sweets</div>
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a class="text-primary border-b-2 border-primary pb-1 font-medium tracking-wide"
+                    href="index.html">Home</a>
+                <a class="text-secondary hover:text-primary transition-colors font-medium tracking-wide"
+                    href="menu.html">Menu</a>
+                <a class="text-secondary hover:text-primary transition-colors font-medium tracking-wide"
+                    href="banquet.html">Banquet</a>
+                <a class="text-secondary hover:text-primary transition-colors font-medium tracking-wide"
+                    href="contactus.html">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.location='contactus.html'"
+                    class="hidden sm:block cta-gradient text-on-primary px-6 md:px-8 py-2.5 rounded-md font-bold text-sm tracking-wide active:scale-95 duration-150 shadow-md btn-glow">
+                    Book Now
+                </button>
+                <!-- Hamburger — mobile only -->
+                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md text-on-surface hover:bg-surface-container transition-colors" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="mobile-drawer-overlay" id="mobileDrawerOverlay"></div>
+        <div class="mobile-drawer-panel">
+            <button id="mobileMenuClose" class="absolute top-4 right-4 p-2 rounded-full hover:bg-surface-container transition-colors" aria-label="Close menu">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <div class="text-xl font-serif font-bold brand-shimmer mb-2">Om Sweets</div>
+            <a href="index.html" class="text-primary border-b-2 border-primary pb-2 font-bold text-lg">Home</a>
+            <a href="menu.html" class="text-secondary hover:text-primary transition-colors font-medium text-lg py-1">Menu</a>
+            <a href="banquet.html" class="text-secondary hover:text-primary transition-colors font-medium text-lg py-1">Banquet</a>
+            <a href="contactus.html" class="text-secondary hover:text-primary transition-colors font-medium text-lg py-1">Contact</a>
+            <button onclick="window.location='contactus.html'"
+                class="cta-gradient text-on-primary px-8 py-3 rounded-md font-bold mt-2 shadow-md">
+                Book Now
+            </button>
+        </div>
+    </div>
+
+    <main>
+        <!-- ═══════════════════ HERO SLIDER ═══════════════════ -->
+        <section class="hero-slider" id="heroSlider" aria-label="Featured banner">
+
+            <!-- OM SWEETS BRAND TITLE — always visible at top of banner -->
+            <div class="hero-brand-overlay">
+                <!-- top rule -->
+                <div class="flex items-center gap-4 mb-3">
+                    <div class="hero-divider-line"></div>
+                    <span style="color:rgba(255,205,120,0.6); font-size:0.68rem; letter-spacing:0.38em; font-family:'Manrope',sans-serif; text-transform:uppercase;">Since 1994</span>
+                    <div class="hero-divider-line flip"></div>
+                </div>
+                <!-- brand name row -->
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <span class="hero-om-symbol">ॐ</span>
+                    <h2 class="hero-brand-name">Om Sweets</h2>
+                    <span class="hero-om-symbol">ॐ</span>
+                </div>
+                <!-- tagline rule -->
+                <div class="flex items-center gap-4 mt-3">
+                    <div class="hero-divider-line" style="width:56px;"></div>
+                    <span style="color:rgba(255,210,130,0.5); font-size:0.62rem; letter-spacing:0.45em; font-family:'Manrope',sans-serif; text-transform:uppercase;">Authentic &nbsp;·&nbsp; Heritage &nbsp;·&nbsp; Premium</span>
+                    <div class="hero-divider-line flip" style="width:56px;"></div>
+                </div>
+            </div>
+
+            <!-- SLIDE 1 — Saffron / Heritage -->
+            <div class="hero-slide active" data-slide="0">
+                <div class="slide-bg" style="background: linear-gradient(135deg, #1a0700 0%, #4a1600 30%, #8b3a0f 60%, #c4581a 80%, #e07030 100%);"></div>
+                <div class="absolute inset-0 hero-gradient"></div>
+                <div class="slide-content relative h-full max-w-7xl mx-auto px-6 md:px-8 flex flex-col justify-end items-start pb-16 lg:pb-24">
+                    <span class="slide-tag text-primary-container font-label uppercase tracking-[0.2em] mb-4 text-sm font-extrabold">
+                        Est. 1994 • Heritage Flavors
+                    </span>
+                    <h1 class="font-headline text-3xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl text-white max-w-3xl leading-tight mb-5 md:mb-8">
+                        Crafting <span class="italic">Sweet</span> Memories for Generations
+                    </h1>
+                    <p class="text-white/80 text-base md:text-xl max-w-xl mb-6 md:mb-10 leading-relaxed font-light hidden sm:block">
+                        Experience the artisanal mastery of authentic Indian confections and the grandeur of our luxury banquet spaces.
+                    </p>
+                    <div class="slide-btns flex flex-col sm:flex-row gap-4">
+                        <button onclick="window.location='menu.html'"
+                            class="cta-gradient text-on-primary px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg shadow-lg btn-glow">
+                            Explore Our Menu
+                        </button>
+                        <button onclick="window.location='banquet.html'"
+                            class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg hover:bg-white/20 transition-all">
+                            Tour The Banquet
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2 — Royal Banquet -->
+            <div class="hero-slide" data-slide="1">
+                <div class="slide-bg" style="background: linear-gradient(135deg, #0c0a1a 0%, #1e1040 30%, #3c2272 60%, #6b3fa0 80%, #9b5fc8 100%);"></div>
+                <div class="absolute inset-0 hero-gradient"></div>
+                <div class="slide-content relative h-full max-w-7xl mx-auto px-6 md:px-8 flex flex-col justify-end items-start pb-16 lg:pb-24">
+                    <span class="slide-tag text-primary-container font-label uppercase tracking-[0.2em] mb-4 text-sm font-extrabold">
+                        Events &amp; Celebrations
+                    </span>
+                    <h1 class="font-headline text-3xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl text-white max-w-3xl leading-tight mb-5 md:mb-8">
+                        Your Dream <span class="italic">Celebration</span> Awaits
+                    </h1>
+                    <p class="text-white/80 text-base md:text-xl max-w-xl mb-6 md:mb-10 leading-relaxed font-light hidden sm:block">
+                        From intimate gatherings to grand weddings — our luxury banquet hall accommodates up to 500 guests with bespoke décor and catering.
+                    </p>
+                    <div class="slide-btns flex flex-col sm:flex-row gap-4">
+                        <button onclick="window.location='banquet.html'"
+                            class="cta-gradient text-on-primary px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg shadow-lg btn-glow">
+                            Explore Banquet
+                        </button>
+                        <button onclick="window.location='contactus.html'"
+                            class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg hover:bg-white/20 transition-all">
+                            Book a Visit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3 — Emerald / Flavors -->
+            <div class="hero-slide" data-slide="2">
+                <div class="slide-bg" style="background: linear-gradient(135deg, #050f08 0%, #0c2818 30%, #1a5c40 60%, #2d8a5e 80%, #3daa76 100%);"></div>
+                <div class="absolute inset-0 hero-gradient"></div>
+                <div class="slide-content relative h-full max-w-7xl mx-auto px-6 md:px-8 flex flex-col justify-end items-start pb-16 lg:pb-24">
+                    <span class="slide-tag text-primary-container font-label uppercase tracking-[0.2em] mb-4 text-sm font-extrabold">
+                        100+ Varieties Daily
+                    </span>
+                    <h1 class="font-headline text-3xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl text-white max-w-3xl leading-tight mb-5 md:mb-8">
+                        Authentic <span class="italic">Flavors</span>, Crafted Every Morning
+                    </h1>
+                    <p class="text-white/80 text-base md:text-xl max-w-xl mb-6 md:mb-10 leading-relaxed font-light hidden sm:block">
+                        Over a hundred varieties of traditional Indian confections — made fresh daily with the finest ingredients and timeless family recipes.
+                    </p>
+                    <div class="slide-btns flex flex-col sm:flex-row gap-4">
+                        <button onclick="window.location='menu.html'"
+                            class="cta-gradient text-on-primary px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg shadow-lg btn-glow">
+                            View Full Menu
+                        </button>
+                        <button onclick="window.location='contactus.html'"
+                            class="bg-white/10 backdrop-blur-md text-white border border-white/20 px-7 md:px-10 py-3 md:py-4 rounded-md font-bold text-base md:text-lg hover:bg-white/20 transition-all">
+                            Order Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dot indicators -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3 z-20" id="sliderDots">
+                <button class="slider-dot active" data-dot="0" aria-label="Go to slide 1"></button>
+                <button class="slider-dot" data-dot="1" aria-label="Go to slide 2"></button>
+                <button class="slider-dot" data-dot="2" aria-label="Go to slide 3"></button>
+            </div>
+
+            <!-- Scroll hint -->
+            <div class="absolute bottom-8 right-8 flex flex-col items-center gap-2 z-20 opacity-60">
+                <span class="text-white text-xs uppercase tracking-[0.2em]">Scroll</span>
+                <span class="material-symbols-outlined text-white scroll-arrow">expand_more</span>
+            </div>
+
+            <!-- Auto-play progress bar -->
+            <div class="slider-progress" id="sliderProgress"></div>
+        </section>
+
+        <!-- ═══════════════════ ABOUT SECTION ═══════════════════ -->
+        <section class="py-16 md:py-24 bg-surface">
+            <div class="max-w-7xl mx-auto px-5 md:px-8 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <div class="relative reveal-left" id="aboutImg">
+                    <div class="bg-surface-container-low absolute -top-8 -left-8 w-64 h-64 -z-10 rounded-xl"></div>
+                    <img class="float-img rounded-xl shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4Wdcw545mE8OzgGkCVFnh4-j6zeGia34r8jjVBMGDyn0Y-lCMMH92w4gMD7oh48ilAjzI8gnB723d34RK1iLnb7rC-JVPO0YC8-OSginsLZZU9K9DgFA35SeQ0LQna49E-dklmyg-G0Cd2HX_ulNGISw8KB0slRaqbcKa7q0N1F7i31QSS4M2rjVAIisKyYKETbi2wOH9dyVb_XkSfKYVIqCMydWoL0fSq_V9j1cwLyah5OUcffPI3QYP9mMrIWpNFgq2Udqg4kKq"
+                        alt="Warm interior of a high-end Indian restaurant" />
+                    <div id="counterBadge"
+                        class="absolute -bottom-6 -right-6 bg-primary p-8 rounded-xl shadow-xl z-20 hidden lg:block opacity-0">
+                        <p class="text-on-primary font-headline text-2xl"><span id="counterNum">0</span>+ Years</p>
+                        <p class="text-primary-fixed text-sm uppercase tracking-widest mt-1">of Culinary Excellence</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-6 reveal-right" id="aboutText">
+                    <span class="text-primary font-label uppercase tracking-widest text-sm font-bold">Our Story</span>
+                    <h2 class="font-headline text-3xl md:text-5xl text-on-surface leading-tight">Authentic Flavors,
+                        Contemporary Elegance</h2>
+                    <p class="text-secondary text-lg leading-relaxed">
+                        At omSweets, we believe food is more than sustenance; it's a celebration. From the precise
+                        temperature of our ghee-soaked Ladoos to the meticulously planned layout of our banquet hall,
+                        every detail is handled with heritage expertise.
+                    </p>
+                    <p class="text-secondary text-lg leading-relaxed">
+                        Whether you're stopping by for an afternoon snack or hosting the wedding of your dreams, our
+                        commitment to quality remains unwavering. We merge ancient family recipes with modern
+                        hospitality to create a truly unique destination.
+                    </p>
+                    <div class="mt-4 flex items-center gap-4 text-primary font-bold">
+                        <span class="material-symbols-outlined">verified</span>
+                        <span>FSSAI Certified Quality Ingredients</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════ MENU PREVIEW ═══════════════════ -->
+        <section class="py-16 md:py-24 bg-surface-container-low">
+            <div class="max-w-7xl mx-auto px-5 md:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 reveal" id="menuHeader">
+                    <div>
+                        <span class="text-primary font-label uppercase tracking-widest text-sm font-bold">The Signature Collection</span>
+                        <h2 class="font-headline text-3xl md:text-5xl mt-4">Sweet &amp; Savory Masterpieces</h2>
+                    </div>
+                    <a class="flex items-center gap-2 text-primary font-bold group border-b border-primary/20 pb-2 hover:border-primary transition-all"
+                        href="menu.html">
+                        View Full Menu
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </a>
+                </div>
+
+                <!-- Bento-style Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 reveal-stagger" id="menuGrid">
+                    <!-- Feature Item -->
+                    <div class="md:col-span-2 bg-white p-8 rounded-xl shadow-sm flex flex-col justify-between group card-3d">
+                        <div class="overflow-hidden rounded-xl mb-6">
+                            <img class="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVvkCNBa7hlI3_6_5mGwelAQ46iBvQhjOATz9ZQ9FQXHIlm0xDIDcPsnpHyDbQ6P5s_MPW2-8KDu4SrpyyN4ZeVQ3Y0MovIcFqQRoQ8MdTfenmWqJr6J4aBC6pccUEKGZ_rIzuWKiVTTJkdo63Q3UVOh4eTEhzTBz8QBJAaqONAPWocWIACm_p0BC1R9C9Jvo_ao8RTvmJrA5aJgiEfGLwBgDyvTsYjoBdDEWBC_PEchsNW66P8f8TPbXFhp1MXLkjWVRg5GU1MSdo"
+                                alt="Colorful assorted Indian sweets on a dark slate" />
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="font-headline text-2xl">Traditional Thali</h3>
+                                <span class="text-primary font-bold">₹450</span>
+                            </div>
+                            <p class="text-secondary mb-6">A complete sensory experience featuring five signature
+                                curries, house-made sweets, and artisanal bread.</p>
+                            <span
+                                class="pulse-badge inline-block bg-surface-container-highest px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">Popular</span>
+                        </div>
+                    </div>
+                    <!-- Small Item 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col group card-3d">
+                        <img class="rounded-lg w-full aspect-square object-cover mb-4 group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuB86G0Bv149ZZ91_UGFIiSTXJsCWuFq_PP57SkClfkfiEGR_v5Qf3coNGEBKdT4b9EKM9dEqrNlwEI6nmK-rNd3BlUCzIMNI4KcMZzMJ-dBVSDa6_O4o2bZHzC5pO5fvvPGNHedLO-u2lxHY-EWXQ4GW4o7Katr37nrYbS3guFo_kTEEiuG9SzdyqfamDo4F7fAT6V2bjPSb25iXW8kanwLA7JCIJu0X83lyII4Yt66qVND5PS1fwyyPS02B8FpT8-vflKgFHO-x4Nb"
+                            alt="Crispy golden Samosas with chutneys" />
+                        <h4 class="font-headline text-xl mb-1">Crispy Samosa</h4>
+                        <p class="text-secondary text-sm mb-4">Hand-rolled pastry with spiced potato filling.</p>
+                        <span class="text-primary font-bold mt-auto">₹60</span>
+                    </div>
+                    <!-- Small Item 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm flex flex-col group card-3d">
+                        <img class="rounded-lg w-full aspect-square object-cover mb-4 group-hover:scale-105 transition-transform duration-500"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQGKT389F36-W_wckm1fLfDM20IGNWVq4bwdjj-WxYQvH_Y6zdKR5pUGHRsyUFZG4QG-2b0StD0AHSOITy_0ePFZpuIDE3BJ4h068x8AiduvUXp95EwQcI1P_zXC1Yv6puWESSXiMIUO2fDIxM6NTc82Q9kPBcX9Cb7sKcoxlmHh5kziv-r3LHyTTa2HQIQG2rxAfkV-XTxstlletet8XqOKlv-pZuDbIaE_CppHhK7U5TNmkxRj57MafTF1hBo1gezZQhwPuPha3N"
+                            alt="Gulab Jamuns in rose-scented syrup" />
+                        <h4 class="font-headline text-xl mb-1">Gulab Jamun</h4>
+                        <p class="text-secondary text-sm mb-4">Soft milk-solid dumplings in rose syrup.</p>
+                        <span class="text-primary font-bold mt-auto">₹80</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════ BANQUET SECTION ═══════════════════ -->
+        <section class="py-16 md:py-24 bg-surface">
+            <div class="max-w-7xl mx-auto px-5 md:px-8">
+                <div class="relative rounded-2xl overflow-hidden min-h-[500px] md:min-h-[600px] flex items-end md:items-center reveal" id="banquetSection">
+                    <img class="absolute inset-0 w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuACR2URwKUbirlXD3z-9aK6UXhBBWO_9FA5iuD2kX2njx-vpfglLHoKGI_rMUWKd8hYN8V5a-ktj8hlSq8AfBZ35LlVuCeeZ1cDmmC9XJvXayaf-ybbzFBOal_F2JYZsoXTVqZ9WWTkgWJgsKJpDOYR6VfaHe5C8XFlQ6zTrh_SwS4J8O7eBJs3pX3a3ptDFkA-zwrhdvJMxy2s4-ljR0NbnXhEh_4rpRb_2Dq-HbJXVoc1qX_pmsGnWHGLkwFRRHQgPPiIzNzIFnhg"
+                        alt="Grand luxury banquet hall for weddings" />
+                    <div class="absolute inset-0 bg-black/50"></div>
+                    <div class="relative z-10 w-full md:max-w-2xl md:ml-auto md:mr-12 bg-white/95 backdrop-blur-md p-7 md:p-12 rounded-none md:rounded-xl shadow-2xl">
+                        <span class="text-primary font-label uppercase tracking-widest text-sm font-bold">Events &amp; Celebrations</span>
+                        <h2 class="font-headline text-2xl md:text-4xl mt-4 mb-4 md:mb-6 leading-tight">Your Dream Event, Our Perfect Stage</h2>
+                        <p class="text-secondary text-lg mb-8 leading-relaxed">
+                            From intimate corporate meetings to grand wedding receptions, our state-of-the-art banquet
+                            facilities accommodate up to 500 guests with bespoke catering and decor services.
+                        </p>
+                        <ul class="space-y-4 mb-10">
+                            <li class="flex items-center gap-3 text-secondary">
+                                <span class="material-symbols-outlined text-primary">check_circle</span>
+                                High-Speed Wi-Fi &amp; AV Systems
+                            </li>
+                            <li class="flex items-center gap-3 text-secondary">
+                                <span class="material-symbols-outlined text-primary">check_circle</span>
+                                Customizable Multi-Cuisine Menu
+                            </li>
+                            <li class="flex items-center gap-3 text-secondary">
+                                <span class="material-symbols-outlined text-primary">check_circle</span>
+                                Dedicated Event Coordinator
+                            </li>
+                        </ul>
+                        <a class="inline-block cta-gradient text-on-primary px-10 py-4 rounded-md font-bold text-center w-full btn-glow"
+                            href="banquet.html">
+                            View Banquet Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════ CTA SECTION ═══════════════════ -->
+        <section class="py-16 md:py-20 bg-primary-fixed relative overflow-hidden">
+            <!-- Floating decorative orbs -->
+            <div class="orb orb-1 w-64 h-64 bg-primary -top-16 -left-16"></div>
+            <div class="orb orb-2 w-80 h-80 bg-primary-container bottom-0 right-0"></div>
+
+            <div class="max-w-4xl mx-auto px-8 text-center relative z-10 reveal" id="ctaSection">
+                <h2 class="font-headline text-4xl mb-6 text-on-primary-fixed">Ready to taste the tradition?</h2>
+                <p class="text-on-primary-fixed-variant text-lg mb-10">Join us for an unforgettable dining experience or
+                    start planning your next big event today.</p>
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-6">
+                    <button onclick="window.location='contactus.html'"
+                        class="bg-primary text-on-primary px-10 md:px-12 py-4 rounded-md font-bold shadow-md hover:bg-surface-tint transition-all btn-glow w-full sm:w-auto">
+                        Call to Reserve
+                    </button>
+                    <button onclick="window.location='contactus.html'"
+                        class="border-2 border-primary text-primary px-10 md:px-12 py-4 rounded-md font-bold hover:bg-primary hover:text-white transition-all w-full sm:w-auto">
+                        Get Directions
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-100 dark:bg-stone-950 w-full mt-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 md:px-12 py-12 md:py-16 w-full max-w-7xl mx-auto">
+            <div>
+                <div class="text-xl font-serif text-stone-800 dark:text-stone-200 mb-6 font-bold brand-shimmer">omSweets</div>
+                <p class="text-stone-500 dark:text-stone-400 text-sm leading-relaxed max-w-xs">
+                    Preserving the rich heritage of Indian taste with premium ingredients and unmatched hospitality
+                    since 1994.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-primary font-label uppercase tracking-widest text-xs font-extrabold mb-6">Quick Links</h4>
+                <ul class="space-y-4">
+                    <li><a class="text-stone-500 dark:text-stone-400 hover:text-primary underline-offset-4 hover:underline transition-all text-sm uppercase tracking-widest"
+                            href="contactus.html">Location</a></li>
+                    <li><a class="text-stone-500 dark:text-stone-400 hover:text-primary underline-offset-4 hover:underline transition-all text-sm uppercase tracking-widest"
+                            href="contactus.html">Contact Us</a></li>
+                    <li><a class="text-stone-500 dark:text-stone-400 hover:text-primary underline-offset-4 hover:underline transition-all text-sm uppercase tracking-widest"
+                            href="#">Privacy Policy</a></li>
+                    <li><a class="text-stone-500 dark:text-stone-400 hover:text-primary underline-offset-4 hover:underline transition-all text-sm uppercase tracking-widest"
+                            href="#">Terms of Service</a></li>
+                    <li><a class="text-stone-500 dark:text-stone-400 hover:text-primary underline-offset-4 hover:underline transition-all text-sm uppercase tracking-widest"
+                            href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+            <div id="contact">
+                <h4 class="text-primary font-label uppercase tracking-widest text-xs font-extrabold mb-6">Contact Us</h4>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 text-stone-500 dark:text-stone-400 text-sm">
+                        <span class="material-symbols-outlined text-primary">location_on</span>
+                        123 Heritage Lane, Civil Lines, India
+                    </div>
+                    <div class="flex items-center gap-3 text-stone-500 dark:text-stone-400 text-sm">
+                        <span class="material-symbols-outlined text-primary">phone</span>
+                        +91 98765 43210
+                    </div>
+                    <div class="flex items-center gap-3 text-stone-500 dark:text-stone-400 text-sm">
+                        <span class="material-symbols-outlined text-primary">mail</span>
+                        hello@omsaisweets.com
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-stone-200 dark:border-stone-800 px-12 py-8 flex justify-center items-center">
+            <p class="text-stone-500 dark:text-stone-400 text-xs uppercase tracking-[0.2em]">
+                © 2025 omSweets &amp; Banquets. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════════════════
+         JAVASCRIPT
+    ════════════════════════════════════════════════════ -->
+    <script>
+    (() => {
+        'use strict';
+
+        /* ──────────────────────────────────────────
+           1. HERO SLIDER
+        ────────────────────────────────────────── */
+        const SLIDE_DURATION = 5500; // ms per slide
+        const slides   = document.querySelectorAll('.hero-slide');
+        const dots     = document.querySelectorAll('.slider-dot');
+        const progress = document.getElementById('sliderProgress');
+        let current = 0;
+        let timer   = null;
+        let progressTimer = null;
+        let startTime = null;
+        let touchStartX = 0;
+
+        function goTo(index) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (index + slides.length) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+            resetProgress();
+        }
+
+        function next() { goTo(current + 1); }
+        function prev() { goTo(current - 1); }
+
+        function resetProgress() {
+            clearInterval(timer);
+            clearInterval(progressTimer);
+            progress.style.transition = 'none';
+            progress.style.width = '0%';
+
+            // Force reflow
+            void progress.offsetWidth;
+
+            progress.style.transition = `width ${SLIDE_DURATION}ms linear`;
+            progress.style.width = '100%';
+
+            timer = setInterval(next, SLIDE_DURATION);
+        }
+
+        // Dot buttons
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => goTo(parseInt(dot.dataset.dot)));
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowRight') next();
+            if (e.key === 'ArrowLeft')  prev();
+        });
+
+        // Touch / swipe support
+        const sliderEl = document.getElementById('heroSlider');
+        sliderEl.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        sliderEl.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) diff > 0 ? next() : prev();
+        }, { passive: true });
+
+        // Start
+        resetProgress();
+
+        /* ──────────────────────────────────────────
+           2. SCROLL REVEAL (IntersectionObserver)
+        ────────────────────────────────────────── */
+        const revealSelectors = '.reveal, .reveal-left, .reveal-right, .reveal-stagger';
+        const revealEls = document.querySelectorAll(revealSelectors);
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        /* ──────────────────────────────────────────
+           3. COUNTER ANIMATION (30+ badge)
+        ────────────────────────────────────────── */
+        const badge      = document.getElementById('counterBadge');
+        const counterNum = document.getElementById('counterNum');
+        let counted      = false;
+
+        if (badge && counterNum) {
+            const counterObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !counted) {
+                        counted = true;
+                        badge.style.opacity  = '1';
+                        badge.classList.add('counter-badge');
+                        let start = 0;
+                        const end = 30;
+                        const dur = 1200;
+                        const step = dur / end;
+                        const interval = setInterval(() => {
+                            start++;
+                            counterNum.textContent = start;
+                            if (start >= end) clearInterval(interval);
+                        }, step);
+                        counterObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            counterObserver.observe(badge);
+        }
+
+        /* ──────────────────────────────────────────
+           4. MOBILE HAMBURGER MENU
+        ────────────────────────────────────────── */
+        const mobileDrawer  = document.getElementById('mobileDrawer');
+        const mobileBtn     = document.getElementById('mobileMenuBtn');
+        const mobileClose   = document.getElementById('mobileMenuClose');
+        const mobileOverlay = document.getElementById('mobileDrawerOverlay');
+
+        function openMobileMenu()  { mobileDrawer.classList.add('open');  document.body.style.overflow = 'hidden'; }
+        function closeMobileMenu() { mobileDrawer.classList.remove('open'); document.body.style.overflow = ''; }
+
+        if (mobileBtn)     mobileBtn.addEventListener('click', openMobileMenu);
+        if (mobileClose)   mobileClose.addEventListener('click', closeMobileMenu);
+        if (mobileOverlay) mobileOverlay.addEventListener('click', closeMobileMenu);
+
+        /* ──────────────────────────────────────────
+           5. 3D CARD TILT on hover
+        ────────────────────────────────────────── */
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect   = card.getBoundingClientRect();
+                const x      = e.clientX - rect.left;
+                const y      = e.clientY - rect.top;
+                const cx     = rect.width  / 2;
+                const cy     = rect.height / 2;
+                const rotateX = ((y - cy) / cy) * -8;
+                const rotateY = ((x - cx) / cx) *  8;
+                card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) scale(1)';
+                card.style.transition = 'transform 0.5s ease';
+            });
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'transform 0.1s ease';
+            });
+        });
+
+    })();
+    </script>
+</body>
+
+</html>

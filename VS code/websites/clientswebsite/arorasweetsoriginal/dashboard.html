@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Owner Dashboard — Arora Sweets</title>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin-auth.js"></script>
+</head>
+<body>
+
+  <!-- ── Login Overlay ── -->
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-box">
+      <div class="login-logo">🍬 Arora Sweets</div>
+      <h2>Owner Dashboard</h2>
+      <p>Enter your admin credentials to view live orders</p>
+      <div class="login-form">
+        <input type="email" id="loginEmail" placeholder="Admin Email" autocomplete="email" />
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
+        <button id="loginBtn">Sign In</button>
+        <div id="loginError" class="login-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ── -->
+  <div id="dashboardRoot" class="dashboard-root hidden">
+
+    <!-- Header -->
+    <header class="dash-header">
+      <div class="dash-header-left">
+        <div class="dash-logo">🍬 Arora Sweets</div>
+        <div class="dash-title">Owner Dashboard</div>
+      </div>
+      <div class="dash-header-right">
+        <div class="dash-live-indicator"><span class="live-dot"></span> Live</div>
+        <div class="dash-refresh" id="lastRefreshed">Loading…</div>
+        <button class="dash-logout" id="logoutBtn">Logout</button>
+      </div>
+    </header>
+
+    <!-- Tab Bar -->
+    <div class="dash-tabs">
+      <button class="dash-tab active" data-tab="orders">📦 Orders</button>
+      <button class="dash-tab" data-tab="offers">🏷️ Offers & Deals</button>
+    </div>
+
+    <!-- ══════════════════ ORDERS PANEL ══════════════════ -->
+    <div id="ordersPanel">
+
+      <!-- Stats -->
+      <div class="dash-stats">
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statTotalToday">0</div>
+            <div class="stat-label">Orders Today</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statRevenue">₹0</div>
+            <div class="stat-label">Revenue Today</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card-pending">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statPending">0</div>
+            <div class="stat-label">Active Orders</div>
+          </div>
+        </div>
+        <div class="stat-card stat-card-done">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <div class="stat-value" id="statCompleted">0</div>
+            <div class="stat-label">Completed Today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="dash-filters">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-status="all">All Orders</button>
+          <button class="filter-tab" data-status="new">🔴 New</button>
+          <button class="filter-tab" data-status="confirmed">🔵 Confirmed</button>
+          <button class="filter-tab" data-status="preparing">🟣 Preparing</button>
+          <button class="filter-tab" data-status="ready">🟢 Ready</button>
+          <button class="filter-tab" data-status="delivered">⚫ Delivered</button>
+          <button class="filter-tab" data-status="cancelled">🔴 Cancelled</button>
+        </div>
+        <div class="filter-controls">
+          <select id="filterLocation" class="filter-select">
+            <option value="all">All Locations</option>
+          </select>
+          <select id="filterDate" class="filter-select">
+            <option value="today">Today</option>
+            <option value="yesterday">Yesterday</option>
+            <option value="week">This Week</option>
+            <option value="all">All Time</option>
+          </select>
+          <input type="text" id="filterSearch" class="filter-search" placeholder="Search order or name…" />
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="dash-orders-container">
+        <div id="ordersLoading" class="orders-loading">Connecting to Firebase…</div>
+        <div id="ordersEmpty" class="orders-empty hidden">No orders found for this filter.</div>
+        <div id="ordersTable" class="orders-table hidden">
+          <div class="orders-table-header">
+            <div class="col-order">Order</div>
+            <div class="col-customer">Customer</div>
+            <div class="col-location">Location</div>
+            <div class="col-items">Items</div>
+            <div class="col-total">Total</div>
+            <div class="col-type">Type</div>
+            <div class="col-time">Time</div>
+            <div class="col-status">Status</div>
+            <div class="col-actions">Actions</div>
+          </div>
+          <div id="ordersList" class="orders-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /ordersPanel -->
+
+    <!-- ══════════════════ OFFERS PANEL ══════════════════ -->
+    <div id="offersPanel" class="hidden">
+
+      <!-- Active Offers Bar -->
+      <div class="offers-active-bar" id="offersActiveBar" style="display:none">
+        <div class="offers-active-bar-inner" id="offersActiveBadges"></div>
+      </div>
+
+      <!-- Templates Section -->
+      <div class="offers-section-wrap">
+        <div class="offers-section-header">
+          <div>
+            <h2 class="offers-section-title">⚡ Quick-Start Offer Templates</h2>
+            <p class="offers-section-sub">Pick a template, customise in one click, and it goes live on your homepage instantly.</p>
+          </div>
+          <button class="btn-create-offer" id="btnCreateCustom">+ Create Custom Offer</button>
+        </div>
+
+        <div class="templates-grid">
+
+          <div class="template-card" style="--tc:#f59e0b">
+            <div class="tc-emoji">🕐</div>
+            <div class="tc-badge">10% OFF</div>
+            <h3 class="tc-name">Happy Hours</h3>
+            <p class="tc-desc">10% off on orders placed between 2 PM – 6 PM today. Great for afternoon slowdowns.</p>
+            <button class="tc-activate" data-tpl="happy">Activate →</button>
+          </div>
+
+          <div class="template-card" style="--tc:#8b5cf6">
+            <div class="tc-emoji">🎉</div>
+            <div class="tc-badge">15% OFF</div>
+            <h3 class="tc-name">Weekend Bonanza</h3>
+            <p class="tc-desc">15% off all weekend orders. Runs Saturday & Sunday to boost weekend sales.</p>
+            <button class="tc-activate" data-tpl="weekend">Activate →</button>
+          </div>
+
+          <div class="template-card" style="--tc:#ef4444">
+            <div class="tc-emoji">⚡</div>
+            <div class="tc-badge">20% OFF</div>
+            <h3 class="tc-name">Flash Sale</h3>
+            <p class="tc-desc">20% off for the next 24 hours. Creates urgency and spikes orders fast.</p>
+            <button class="tc-activate" data-tpl="flash">Activate →</button>
+          </div>
+
+          <div class="template-card" style="--tc:#10b981">
+            <div class="tc-emoji">🛒</div>
+            <div class="tc-badge">20% OFF</div>
+            <h3 class="tc-name">Big Order Bonus</h3>
+            <p class="tc-desc">20% off orders above ₹1000. Encourages customers to buy more in one go.</p>
+            <button class="tc-activate" data-tpl="bulk">Activate →</button>
+          </div>
+
+          <div class="template-card" style="--tc:#3b82f6">
+            <div class="tc-emoji">👋</div>
+            <div class="tc-badge">₹50 OFF</div>
+            <h3 class="tc-name">Welcome Discount</h3>
+            <p class="tc-desc">₹50 flat off for first-time customers. Converts new visitors into buyers.</p>
+            <button class="tc-activate" data-tpl="welcome">Activate →</button>
+          </div>
+
+          <div class="template-card" style="--tc:#C9973B">
+            <div class="tc-emoji">🎊</div>
+            <div class="tc-badge">15% OFF</div>
+            <h3 class="tc-name">Festival Special</h3>
+            <p class="tc-desc">15% off for 3 days around a festival. Shows on homepage to attract seasonal buyers.</p>
+            <button class="tc-activate" data-tpl="festival">Activate →</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Active Offers List -->
+      <div class="offers-section-wrap">
+        <div class="offers-section-header">
+          <h2 class="offers-section-title">📋 Active & Scheduled Offers</h2>
+        </div>
+        <div id="activeOffersLoading" class="orders-loading" style="padding:30px 0">Loading offers…</div>
+        <div id="activeOffersEmpty" class="orders-empty hidden" style="padding:30px 0">
+          No offers yet. Activate a template above or create a custom offer.
+        </div>
+        <div id="activeOffersList" class="active-offers-list hidden"></div>
+      </div>
+
+    </div><!-- /offersPanel -->
+
+  </div><!-- /dashboardRoot -->
+
+  <!-- ── Order Detail Modal ── -->
+  <div id="orderModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- ── Offer Create / Edit Modal ── -->
+  <div id="offerModal" class="modal-overlay hidden">
+    <div class="modal-box modal-box-offer">
+      <button class="modal-close" id="offerModalClose">&times;</button>
+      <h2 class="offer-modal-title" id="offerModalTitle">Create Offer</h2>
+      <p class="offer-modal-sub">Fill in the details — the coupon code will appear on your homepage and customers can use it at checkout.</p>
+
+      <form id="offerForm" class="offer-form" onsubmit="return false">
+        <div class="offer-form-row">
+          <div class="offer-form-group">
+            <label>Emoji</label>
+            <input type="text" id="ofEmo" value="🎉" maxlength="4" style="font-size:22px;text-align:center;width:70px" />
+          </div>
+          <div class="offer-form-group" style="flex:1">
+            <label>Offer Title <span class="req">*</span></label>
+            <input type="text" id="ofTitle" placeholder="e.g. Weekend Special" />
+          </div>
+        </div>
+        <div class="offer-form-group">
+          <label>Description (shown on homepage)</label>
+          <textarea id="ofDesc" rows="2" placeholder="e.g. Get 15% off on all orders this weekend!"></textarea>
+        </div>
+        <div class="offer-form-row">
+          <div class="offer-form-group">
+            <label>Discount Type <span class="req">*</span></label>
+            <select id="ofType">
+              <option value="percent">Percentage (%)</option>
+              <option value="flat">Flat Amount (₹)</option>
+            </select>
+          </div>
+          <div class="offer-form-group">
+            <label>Discount Value <span class="req">*</span></label>
+            <input type="number" id="ofValue" min="1" max="99" placeholder="e.g. 15" />
+          </div>
+        </div>
+        <div class="offer-form-row">
+          <div class="offer-form-group">
+            <label>Coupon Code <span class="req">*</span></label>
+            <input type="text" id="ofCode" placeholder="e.g. WEEKEND15" style="text-transform:uppercase" />
+            <small style="color:var(--muted);font-size:11px">Customers enter this at checkout</small>
+          </div>
+          <div class="offer-form-group">
+            <label>Valid For</label>
+            <select id="ofDuration">
+              <option value="4">4 hours (Happy Hours)</option>
+              <option value="8">8 hours</option>
+              <option value="24" selected>24 hours (Flash Sale)</option>
+              <option value="48">48 hours (Weekend)</option>
+              <option value="72">3 days (Festival)</option>
+              <option value="168">7 days</option>
+              <option value="720">30 days</option>
+            </select>
+          </div>
+        </div>
+        <div class="offer-form-check">
+          <label class="check-label">
+            <input type="checkbox" id="ofHomepage" checked />
+            <span>Show this offer on the homepage</span>
+          </label>
+        </div>
+        <div class="offer-form-actions">
+          <button type="button" class="offer-save-btn" id="offerSaveBtn">Save & Activate Offer</button>
+          <button type="button" class="offer-cancel-btn" id="offerCancelBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+
+    /* ── Config ── */
+    const FB_URL    = (typeof ARORA_FB !== 'undefined') ? ARORA_FB.dbUrl    : '';
+    const WA_NUMBER = '919934492744';
+
+    /* ── State ── */
+    let allOrders   = [];
+    let allOffers   = [];
+    let currentFilter     = { status: 'all', location: 'all', date: 'today', search: '' };
+    let refreshInterval   = null;
+    let previousOrderIds  = new Set();
+    let editingOfferId    = null;
+
+    /* ─────────────────────────────────────────
+       OFFER TEMPLATES
+    ───────────────────────────────────────── */
+    const TEMPLATES = {
+      happy: {
+        emoji:'🕐', title:'Happy Hours Deal',
+        desc:'Order between 2 PM – 6 PM and save 10% instantly!',
+        type:'percent', value:10, code:'HAPPY10', hours:4,
+      },
+      weekend: {
+        emoji:'🎉', title:'Weekend Bonanza',
+        desc:'Enjoy 15% off on all sweets every weekend!',
+        type:'percent', value:15, code:'WEEKEND15', hours:48,
+      },
+      flash: {
+        emoji:'⚡', title:'⚡ Flash Sale — 20% Off!',
+        desc:'Limited time! 20% off on all orders for the next 24 hours.',
+        type:'percent', value:20, code:'FLASH20', hours:24,
+      },
+      bulk: {
+        emoji:'🛒', title:'Big Order Bonus',
+        desc:'Order sweets worth ₹1000 or more and get 20% off instantly!',
+        type:'percent', value:20, code:'BULK20', hours:168,
+      },
+      welcome: {
+        emoji:'👋', title:'Welcome Discount',
+        desc:"First-time customer? Get ₹50 off on your first purchase!",
+        type:'flat', value:50, code:'WELCOME50', hours:720,
+      },
+      festival: {
+        emoji:'🎊', title:'Festival Special',
+        desc:'Celebrate the festival with 15% off on all our sweets!',
+        type:'percent', value:15, code:'FESTIVAL15', hours:72,
+      },
+    };
+
+    /* ─────────────────────────────────────────
+       LOGIN
+    ───────────────────────────────────────── */
+    document.getElementById('loginBtn').addEventListener('click', doLogin);
+    document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+    function doLogin() {
+      var email = document.getElementById('loginEmail').value.trim();
+      var password = document.getElementById('loginPassword').value;
+      var errorEl = document.getElementById('loginError');
+
+      if (!email || !password) {
+        errorEl.textContent = 'Please enter both email and password.';
+        return;
+      }
+
+      errorEl.textContent = 'Signing in…';
+
+      if (window._aroraAdminAuth && window._aroraAdminAuth.login) {
+        window._aroraAdminAuth.login(email, password).then(function (result) {
+          if (result.success) {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('dashboardRoot').classList.remove('hidden');
+            errorEl.textContent = '';
+            startDashboard();
+          } else {
+            errorEl.textContent = result.error || 'Login failed. Please try again.';
+          }
+        }).catch(function (err) {
+          errorEl.textContent = 'Login error: ' + err.message;
+        });
+      } else {
+        errorEl.textContent = 'Authentication not configured. Please set up Firebase Auth.';
+      }
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      clearInterval(refreshInterval);
+      if (window._aroraAdminAuth && window._aroraAdminAuth.logout) {
+        window._aroraAdminAuth.logout();
+      }
+      document.getElementById('dashboardRoot').classList.add('hidden');
+      document.getElementById('loginOverlay').classList.remove('hidden');
+      document.getElementById('loginEmail').value = '';
+      document.getElementById('loginPassword').value = '';
+      allOrders = []; allOffers = [];
+    });
+
+    /* ─────────────────────────────────────────
+       TAB NAVIGATION
+    ───────────────────────────────────────── */
+    document.querySelectorAll('.dash-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = tab.dataset.tab;
+        document.getElementById('ordersPanel').classList.toggle('hidden', panel !== 'orders');
+        document.getElementById('offersPanel').classList.toggle('hidden', panel !== 'offers');
+        if (panel === 'offers') loadOffers();
+      });
+    });
+
+    /* ─────────────────────────────────────────
+       START
+    ───────────────────────────────────────── */
+    function startDashboard() {
+      loadOrders();
+      refreshInterval = setInterval(loadOrders, 30000);
+    }
+
+    /* ─────────────────────────────────────────
+       FIREBASE — ORDERS
+    ───────────────────────────────────────── */
+    async function loadOrders() {
+      if (!FB_URL) {
+        document.getElementById('ordersLoading').textContent = 'Firebase not configured.';
+        return;
+      }
+      try {
+        const res  = await fetch(`${FB_URL}orders.json`);
+        const data = await res.json();
+        const incoming = data ? Object.entries(data).map(([k,v]) => ({...v, _fbKey:k})) : [];
+        incoming.sort((a,b) => (b.timestamp||0)-(a.timestamp||0));
+
+        if (previousOrderIds.size > 0) {
+          incoming.forEach(o => {
+            if (!previousOrderIds.has(o.id) && o.status === 'new') notifyNewOrder(o);
+          });
+        }
+        previousOrderIds = new Set(incoming.map(o => o.id));
+        allOrders = incoming;
+        updateStats(); updateLocationFilter(); renderOrders();
+        document.getElementById('lastRefreshed').textContent =
+          'Updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+      } catch (err) {
+        document.getElementById('lastRefreshed').textContent = '⚠ Refresh failed';
+      }
+    }
+
+    function notifyNewOrder(order) {
+      if (Notification.permission === 'granted') {
+        new Notification('New Order — Arora Sweets', {
+          body: `${order.id} • ${order.customer?.name||'Customer'} • ₹${order.total}`,
+        });
+      } else if (Notification.permission === 'default') Notification.requestPermission();
+    }
+
+    /* ─────────────────────────────────────────
+       STATS
+    ───────────────────────────────────────── */
+    function updateStats() {
+      const now = new Date(); const s = new Date(now); s.setHours(0,0,0,0);
+      const today   = allOrders.filter(o => (o.timestamp||0) >= s.getTime());
+      const active  = today.filter(o => ['new','confirmed','preparing','ready'].includes(o.status));
+      const done    = today.filter(o => o.status === 'delivered');
+      const rev     = today.filter(o => o.status !== 'cancelled').reduce((a,o) => a+(o.total||0), 0);
+      document.getElementById('statTotalToday').textContent = today.length;
+      document.getElementById('statRevenue').textContent    = '₹' + rev.toLocaleString('en-IN');
+      document.getElementById('statPending').textContent    = active.length;
+      document.getElementById('statCompleted').textContent  = done.length;
+    }
+
+    function updateLocationFilter() {
+      const locs = [...new Set(allOrders.map(o => o.location||o.customer?.city||'').filter(Boolean))].sort();
+      const sel = document.getElementById('filterLocation');
+      const cur = sel.value;
+      sel.innerHTML = '<option value="all">All Locations</option>';
+      locs.forEach(l => { const o=document.createElement('option'); o.value=o.textContent=l; sel.appendChild(o); });
+      if (locs.includes(cur)) sel.value = cur;
+    }
+
+    /* ─────────────────────────────────────────
+       FILTER + RENDER ORDERS
+    ───────────────────────────────────────── */
+    function getFiltered() {
+      let list = allOrders;
+      if (currentFilter.status !== 'all') list = list.filter(o => o.status === currentFilter.status);
+      if (currentFilter.location !== 'all') list = list.filter(o => (o.location||o.customer?.city||'') === currentFilter.location);
+      const now = new Date();
+      if (currentFilter.date === 'today') {
+        const s=new Date(now); s.setHours(0,0,0,0);
+        list = list.filter(o => (o.timestamp||0) >= s.getTime());
+      } else if (currentFilter.date === 'yesterday') {
+        const s=new Date(now); s.setHours(0,0,0,0); s.setDate(s.getDate()-1);
+        const e=new Date(now); e.setHours(0,0,0,0);
+        list = list.filter(o => (o.timestamp||0) >= s.getTime() && (o.timestamp||0) < e.getTime());
+      } else if (currentFilter.date === 'week') {
+        const s=new Date(now); s.setDate(s.getDate()-7); s.setHours(0,0,0,0);
+        list = list.filter(o => (o.timestamp||0) >= s.getTime());
+      }
+      if (currentFilter.search) {
+        const q = currentFilter.search.toLowerCase();
+        list = list.filter(o => (o.id||'').toLowerCase().includes(q)||(o.customer?.name||'').toLowerCase().includes(q)||(o.customer?.phone||'').includes(q));
+      }
+      return list;
+    }
+
+    function renderOrders() {
+      const f = getFiltered();
+      const loading = document.getElementById('ordersLoading');
+      const empty   = document.getElementById('ordersEmpty');
+      const table   = document.getElementById('ordersTable');
+      const list    = document.getElementById('ordersList');
+      loading.classList.add('hidden');
+      if (!f.length) { empty.classList.remove('hidden'); table.classList.add('hidden'); return; }
+      empty.classList.add('hidden'); table.classList.remove('hidden');
+      list.innerHTML = f.map(orderRowHTML).join('');
+      list.querySelectorAll('.order-row').forEach(row => {
+        const id = row.dataset.orderId;
+        row.querySelector('.btn-detail')?.addEventListener('click', e => { e.stopPropagation(); openModal(id); });
+        row.querySelector('.btn-whatsapp')?.addEventListener('click', e => { e.stopPropagation(); sendWhatsApp(id); });
+        row.querySelector('.status-select')?.addEventListener('change', e => { e.stopPropagation(); updateStatus(id, e.target.value); });
+      });
+    }
+
+    /* ─────────────────────────────────────────
+       STATUS DEFS
+    ───────────────────────────────────────── */
+    const STATUS = {
+      new:       {label:'New',       color:'#f59e0b'},
+      confirmed: {label:'Confirmed', color:'#3b82f6'},
+      preparing: {label:'Preparing', color:'#8b5cf6'},
+      ready:     {label:'Ready',     color:'#10b981'},
+      delivered: {label:'Delivered', color:'#6b7280'},
+      cancelled: {label:'Cancelled', color:'#ef4444'},
+    };
+    function statusBadge(s) {
+      const x = STATUS[s]||{label:s,color:'#6b7280'};
+      return `<span class="status-badge" style="background:${x.color}22;color:${x.color};border:1px solid ${x.color}44">${x.label}</span>`;
+    }
+    function statusOptions(cur) {
+      return Object.entries(STATUS).map(([v,s]) => `<option value="${v}" ${cur===v?'selected':''}>${s.label}</option>`).join('');
+    }
+
+    /* ─────────────────────────────────────────
+       ORDER ROW
+    ───────────────────────────────────────── */
+    function orderRowHTML(o) {
+      const t    = new Date(o.timestamp||Date.now());
+      const time = t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+      const date = t.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
+      const loc  = esc(o.location||o.customer?.city||'—');
+      const items= o.items||[];
+      const prev = items.slice(0,2).map(i=>`${i.name} ×${i.qty}`).join(', ')+(items.length>2?` +${items.length-2} more`:'');
+      return `
+        <div class="order-row ${o.status==='new'?'order-new':''}" data-order-id="${esc(o.id)}">
+          <div class="col-order"><div class="order-id">${esc(o.id)}</div></div>
+          <div class="col-customer"><div class="customer-name">${esc(o.customer?.name||'—')}</div><div class="customer-phone">${esc(o.customer?.phone||'')}</div></div>
+          <div class="col-location"><div class="location-badge">${loc}</div></div>
+          <div class="col-items"><div class="items-preview">${esc(prev||'—')}</div></div>
+          <div class="col-total"><div class="order-total">₹${o.total||0}</div></div>
+          <div class="col-type"><span class="type-badge type-${o.orderType||'delivery'}">${o.orderType==='pickup'?'🏪 Pickup':'🚴 Delivery'}</span></div>
+          <div class="col-time"><div class="order-time">${time}</div><div class="order-date">${date}</div></div>
+          <div class="col-status"><select class="status-select">${statusOptions(o.status)}</select></div>
+          <div class="col-actions">
+            <button class="btn-icon btn-detail" title="View Details">👁</button>
+            <button class="btn-icon btn-whatsapp" title="WhatsApp">💬</button>
+          </div>
+        </div>`;
+    }
+
+    async function updateStatus(orderId, newStatus) {
+      const o = allOrders.find(x => x.id === orderId);
+      if (!o||!FB_URL) return;
+      try {
+        await fetch(`${FB_URL}orders/${o._fbKey}.json`,
+          {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})});
+        o.status = newStatus; updateStats(); renderOrders();
+      } catch { alert('Failed to update status. Check connection.'); }
+    }
+
+    /* ─────────────────────────────────────────
+       ORDER MODAL
+    ───────────────────────────────────────── */
+    function openModal(orderId) {
+      const o = allOrders.find(x => x.id === orderId);
+      if (!o) return;
+      const t   = new Date(o.timestamp||Date.now());
+      const loc = o.location||o.customer?.city||'—';
+      const items = o.items||[];
+      document.getElementById('modalContent').innerHTML = `
+        <div class="modal-header">
+          <div>
+            <div class="modal-order-id">${esc(o.id)}</div>
+            <div class="modal-time">${t.toLocaleString('en-IN')} &nbsp;·&nbsp; ${o.orderType==='pickup'?'🏪 Pickup':'🚴 Delivery'}</div>
+          </div>
+          ${statusBadge(o.status)}
+        </div>
+        <div class="modal-grid">
+          <div class="modal-section">
+            <div class="modal-section-title">Customer</div>
+            <div class="modal-field"><strong>Name:</strong> ${esc(o.customer?.name||'—')}</div>
+            <div class="modal-field"><strong>Phone:</strong> ${esc(o.customer?.phone||'—')}</div>
+            ${o.customer?.email?`<div class="modal-field"><strong>Email:</strong> ${esc(o.customer.email)}</div>`:''}
+          </div>
+          <div class="modal-section">
+            <div class="modal-section-title">${o.orderType==='pickup'?'Pickup':'Delivery Address'}</div>
+            ${o.orderType==='pickup'?`<div class="modal-field">Supriya Road, Bettiah</div><div class="modal-field" style="color:var(--success);font-size:12px">Store Pickup</div>`:`
+              <div class="modal-field">${esc(o.customer?.address||'—')}</div>
+              <div class="modal-field">${esc(o.customer?.city||'')}${o.customer?.pincode?' – '+esc(o.customer.pincode):''}</div>
+              ${o.customer?.landmark?`<div class="modal-field" style="color:var(--muted)">Near: ${esc(o.customer.landmark)}</div>`:''}`}
+            <div class="modal-field" style="margin-top:8px"><strong>📍 Location:</strong> ${esc(loc)}</div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-title">Items (${items.length})</div>
+          <div class="modal-items-table">
+            <div class="modal-items-header"><span>Item</span><span style="text-align:center">Qty</span><span style="text-align:right">Rate</span><span style="text-align:right">Amount</span></div>
+            ${items.map(i=>`<div class="modal-item-row"><span>${esc(i.name)}</span><span style="text-align:center">×${i.qty}</span><span style="text-align:right">₹${i.price}</span><span style="text-align:right">₹${i.price*i.qty}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="modal-bill">
+          <div class="modal-bill-row"><span>Item Total</span><span>₹${o.subtotal||0}</span></div>
+          ${(o.discount||0)>0?`<div class="modal-bill-row discount"><span>Discount${o.coupon?' ('+esc(o.coupon)+')':''}</span><span>−₹${o.discount}</span></div>`:''}
+          <div class="modal-bill-row"><span>${o.orderType==='pickup'?'Pickup':'Delivery Fee'}</span><span>${(o.deliveryFee||0)===0?'FREE':'₹'+o.deliveryFee}</span></div>
+          <div class="modal-bill-row"><span>GST (5%)</span><span>₹${o.tax||0}</span></div>
+          <div class="modal-bill-row total-row"><span>Total Paid</span><span>₹${o.total}</span></div>
+          <div class="modal-bill-row"><span>Payment</span><span class="pay-method">${(o.paymentMethod||'cod').toUpperCase()}</span></div>
+        </div>
+        ${o.specialInstructions?`<div class="modal-section"><div class="modal-section-title">Special Instructions</div><div class="modal-instructions">"${esc(o.specialInstructions)}"</div></div>`:''}
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-whatsapp" id="modalWaBtn">💬 Notify via WhatsApp</button>
+          <div class="modal-status-change">
+            <span>Update status:</span>
+            <select class="status-select-modal" id="modalStatusSel">${statusOptions(o.status)}</select>
+          </div>
+        </div>`;
+      document.getElementById('modalWaBtn').onclick      = () => sendWhatsApp(o.id);
+      document.getElementById('modalStatusSel').onchange = e => { updateStatus(o.id,e.target.value); document.getElementById('orderModal').classList.add('hidden'); };
+      document.getElementById('orderModal').classList.remove('hidden');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', () => document.getElementById('orderModal').classList.add('hidden'));
+    document.getElementById('orderModal').addEventListener('click', e => { if (e.target===document.getElementById('orderModal')) document.getElementById('orderModal').classList.add('hidden'); });
+
+    /* ─────────────────────────────────────────
+       WHATSAPP
+    ───────────────────────────────────────── */
+    function sendWhatsApp(orderId) {
+      const o = allOrders.find(x => x.id === orderId); if (!o) return;
+      const loc = o.location||o.customer?.city||'—';
+      const items = (o.items||[]).map(i=>`• ${i.name} × ${i.qty}  =  ₹${i.price*i.qty}`).join('\n');
+      const msg =
+        `🍬 *NEW ORDER — ${o.id}*\n\n`+
+        `👤 Name: ${o.customer?.name||'—'}\n📱 Phone: ${o.customer?.phone||'—'}\n📍 Location: ${loc}\n`+
+        `🚴 Type: ${o.orderType==='pickup'?'Store Pickup':'Home Delivery'}\n`+
+        (o.orderType!=='pickup'?`🏠 Address: ${o.customer?.address||'—'}, ${o.customer?.city||''}\n`:'')+
+        `\n*Items:*\n${items}\n\n💰 Total: ₹${o.total}\n💳 Payment: ${(o.paymentMethod||'cod').toUpperCase()}`+
+        (o.specialInstructions?`\n📝 Note: ${o.specialInstructions}`:'');
+      window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg),'_blank');
+    }
+
+    /* ─────────────────────────────────────────
+       FILTER BINDINGS
+    ───────────────────────────────────────── */
+    document.getElementById('filterTabs').addEventListener('click', e => {
+      const tab = e.target.closest('.filter-tab'); if (!tab) return;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active'); currentFilter.status = tab.dataset.status; renderOrders();
+    });
+    document.getElementById('filterLocation').addEventListener('change', e => { currentFilter.location=e.target.value; renderOrders(); });
+    document.getElementById('filterDate').addEventListener('change', e => { currentFilter.date=e.target.value; updateStats(); renderOrders(); });
+    let st; document.getElementById('filterSearch').addEventListener('input', e => { clearTimeout(st); st=setTimeout(()=>{currentFilter.search=e.target.value.trim();renderOrders();},280); });
+
+    /* ═══════════════════════════════════════════
+       OFFERS — FIREBASE LOAD
+    ═══════════════════════════════════════════ */
+    async function loadOffers() {
+      document.getElementById('activeOffersLoading').classList.remove('hidden');
+      document.getElementById('activeOffersList').classList.add('hidden');
+      document.getElementById('activeOffersEmpty').classList.add('hidden');
+      if (!FB_URL) { document.getElementById('activeOffersLoading').textContent='Firebase not configured.'; return; }
+      try {
+        const res  = await fetch(`${FB_URL}offers.json`);
+        const data = await res.json();
+        allOffers  = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
+        allOffers.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+        renderOffers();
+        updateActiveOffersBar();
+      } catch (err) {
+        document.getElementById('activeOffersLoading').textContent = '⚠ Failed to load offers.';
+      }
+    }
+
+    function renderOffers() {
+      const loading = document.getElementById('activeOffersLoading');
+      const empty   = document.getElementById('activeOffersEmpty');
+      const list    = document.getElementById('activeOffersList');
+      loading.classList.add('hidden');
+      if (!allOffers.length) { empty.classList.remove('hidden'); list.classList.add('hidden'); return; }
+      empty.classList.add('hidden'); list.classList.remove('hidden');
+      list.innerHTML = allOffers.map(offerRowHTML).join('');
+      list.querySelectorAll('.offer-row').forEach(row => {
+        const id = row.dataset.offerId;
+        row.querySelector('.btn-offer-toggle')?.addEventListener('click', () => toggleOffer(id));
+        row.querySelector('.btn-offer-delete')?.addEventListener('click', () => deleteOffer(id));
+      });
+    }
+
+    function updateActiveOffersBar() {
+      const bar    = document.getElementById('offersActiveBar');
+      const badges = document.getElementById('offersActiveBadges');
+      const now    = Date.now();
+      const active = allOffers.filter(o => o.isActive && (o.endTime||0) > now);
+      if (!active.length) { bar.style.display='none'; return; }
+      bar.style.display='block';
+      badges.innerHTML = `<span class="oab-label">🟢 Live on homepage:</span> ` +
+        active.map(o=>`<span class="oab-chip">${o.emoji||'🏷️'} ${esc(o.title)} &nbsp;—&nbsp; <strong>${esc(o.couponCode)}</strong></span>`).join('');
+    }
+
+    function offerRowHTML(o) {
+      const now     = Date.now();
+      const expired = (o.endTime||0) <= now;
+      const active  = o.isActive && !expired;
+      const remaining = o.endTime ? formatCountdown(o.endTime - now) : '—';
+      const discLabel = o.type==='percent' ? `${o.value}% OFF` : `₹${o.value} OFF`;
+      return `
+        <div class="offer-row ${active?'offer-row-active':''} ${expired?'offer-row-expired':''}" data-offer-id="${esc(o.id||o._fbKey)}">
+          <div class="offer-row-main">
+            <div class="offer-row-emoji">${o.emoji||'🏷️'}</div>
+            <div class="offer-row-info">
+              <div class="offer-row-title">${esc(o.title)}</div>
+              <div class="offer-row-desc">${esc(o.description||'')}</div>
+            </div>
+          </div>
+          <div class="offer-row-meta">
+            <div class="offer-row-badge">${discLabel}</div>
+            <div class="offer-row-code">🎟 ${esc(o.couponCode||'—')}</div>
+            <div class="offer-row-time ${expired?'expired-text':''}">${expired?'⛔ Expired':active?'⏱ '+remaining:'⏸ Paused'}</div>
+            <div class="offer-row-hp">${o.showOnHomepage?'🌐 Homepage':'🔒 Hidden'}</div>
+          </div>
+          <div class="offer-row-actions">
+            <button class="btn-offer-toggle ${active?'btn-pause':'btn-resume'}">${active?'Pause':'Resume'}</button>
+            <button class="btn-offer-delete">Delete</button>
+          </div>
+        </div>`;
+    }
+
+    function formatCountdown(ms) {
+      if (ms <= 0) return 'Expired';
+      const h = Math.floor(ms/3600000);
+      const m = Math.floor((ms%3600000)/60000);
+      if (h >= 24) return Math.floor(h/24)+'d '+h%24+'h left';
+      if (h > 0) return h+'h '+m+'m left';
+      return m+'m left';
+    }
+
+    /* ─────────────────────────────────────────
+       OFFER CRUD
+    ───────────────────────────────────────── */
+    async function saveOffer(offerData) {
+      if (!FB_URL) return;
+      const id = offerData.id || ('offer_' + Date.now());
+      await fetch(`${FB_URL}offers/${id}.json`, {
+        method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...offerData,id}),
+      });
+      await loadOffers();
+    }
+
+    async function toggleOffer(offerId) {
+      const o = allOffers.find(x => (x.id||x._fbKey) === offerId); if (!o||!FB_URL) return;
+      const now = Date.now();
+      const newActive = !(o.isActive && (o.endTime||0) > now);
+      await fetch(`${FB_URL}offers/${o._fbKey}.json`,
+        {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({isActive:newActive})});
+      await loadOffers();
+    }
+
+    async function deleteOffer(offerId) {
+      const o = allOffers.find(x => (x.id||x._fbKey) === offerId); if (!o||!FB_URL) return;
+      if (!confirm(`Delete offer "${o.title}"? It will be removed from the homepage.`)) return;
+      await fetch(`${FB_URL}offers/${o._fbKey}.json`, {method:'DELETE'});
+      await loadOffers();
+    }
+
+    /* ─────────────────────────────────────────
+       OFFER MODAL — OPEN
+    ───────────────────────────────────────── */
+    function openOfferModal(prefill) {
+      const p = prefill || {};
+      document.getElementById('offerModalTitle').textContent = 'Create Offer';
+      document.getElementById('ofEmo').value      = p.emoji  || '🎉';
+      document.getElementById('ofTitle').value    = p.title  || '';
+      document.getElementById('ofDesc').value     = p.desc   || '';
+      document.getElementById('ofType').value     = p.type   || 'percent';
+      document.getElementById('ofValue').value    = p.value  || '';
+      document.getElementById('ofCode').value     = (p.code  || '').toUpperCase();
+      document.getElementById('ofDuration').value = String(p.hours || 24);
+      document.getElementById('ofHomepage').checked = p.homepage !== false;
+      document.getElementById('offerModal').classList.remove('hidden');
+      document.getElementById('ofTitle').focus();
+    }
+
+    document.getElementById('offerModalClose').addEventListener('click', ()  => document.getElementById('offerModal').classList.add('hidden'));
+    document.getElementById('offerCancelBtn').addEventListener('click', ()   => document.getElementById('offerModal').classList.add('hidden'));
+    document.getElementById('offerModal').addEventListener('click', e => { if (e.target===document.getElementById('offerModal')) document.getElementById('offerModal').classList.add('hidden'); });
+
+    /* ─────────────────────────────────────────
+       OFFER MODAL — SAVE
+    ───────────────────────────────────────── */
+    document.getElementById('offerSaveBtn').addEventListener('click', async () => {
+      const title = document.getElementById('ofTitle').value.trim();
+      const value = parseFloat(document.getElementById('ofValue').value);
+      const code  = document.getElementById('ofCode').value.trim().toUpperCase();
+      if (!title) { alert('Please enter an offer title.'); return; }
+      if (!value || value <= 0) { alert('Please enter a valid discount value.'); return; }
+      if (!code) { alert('Please enter a coupon code.'); return; }
+
+      const hours    = parseInt(document.getElementById('ofDuration').value) || 24;
+      const now      = Date.now();
+      const endTime  = now + hours * 3600000;
+
+      const offerData = {
+        emoji:          document.getElementById('ofEmo').value.trim() || '🎉',
+        title,
+        description:    document.getElementById('ofDesc').value.trim(),
+        type:           document.getElementById('ofType').value,
+        value,
+        couponCode:     code,
+        startTime:      now,
+        endTime,
+        isActive:       true,
+        showOnHomepage: document.getElementById('ofHomepage').checked,
+        createdAt:      now,
+      };
+
+      const btn = document.getElementById('offerSaveBtn');
+      btn.textContent = 'Saving…'; btn.disabled = true;
+      try {
+        await saveOffer(offerData);
+        document.getElementById('offerModal').classList.add('hidden');
+      } catch { alert('Failed to save offer. Check connection.'); }
+      btn.textContent = 'Save & Activate Offer'; btn.disabled = false;
+    });
+
+    /* ─────────────────────────────────────────
+       TEMPLATE BUTTONS
+    ───────────────────────────────────────── */
+    document.querySelectorAll('.tc-activate').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tpl = TEMPLATES[btn.dataset.tpl];
+        if (tpl) openOfferModal({ emoji:tpl.emoji, title:tpl.title, desc:tpl.desc, type:tpl.type, value:tpl.value, code:tpl.code, hours:tpl.hours });
+      });
+    });
+
+    document.getElementById('btnCreateCustom').addEventListener('click', () => openOfferModal());
+
+    /* ─────────────────────────────────────────
+       UTILITY
+    ───────────────────────────────────────── */
+    function esc(s) {
+      return String(s||'').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');
+    }
+
+  })();
+  </script>
+</body>
+</html>

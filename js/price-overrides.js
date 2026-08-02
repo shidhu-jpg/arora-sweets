@@ -54,6 +54,26 @@
     patch(document.querySelectorAll('.sweet-card'));
   }
 
+  /* Remove cards for items deleted in the admin panel. Must run before
+     main.js reads #menuDataSource (menu.html rebuilds category lists from
+     it on every click), otherwise deleted items keep showing up. */
+  function removeDeleted(data) {
+    var deleted = (data && Array.isArray(data.deleted)) ? data.deleted : [];
+    if (!deleted.length) return;
+    var deletedSet = {};
+    deleted.forEach(function (n) { deletedSet[n] = true; });
+
+    function remove(els) {
+      els.forEach(function (el) {
+        var nameEl = el.querySelector('h3');
+        if (!nameEl) return;
+        if (deletedSet[nameEl.textContent.trim()]) el.remove();
+      });
+    }
+    remove(document.querySelectorAll('#menuDataSource .menu-card'));
+    remove(document.querySelectorAll('.sweet-card'));
+  }
+
   /* Re-wire homepage "Add" buttons after async Firebase update.
      main.js captures price in a closure at run-time, so if Firebase
      data arrives later we recreate the buttons with the fresh price. */
@@ -94,6 +114,7 @@
     var raw = localStorage.getItem(DATA_KEY) || localStorage.getItem(OLD_KEY);
     if (raw) cached = JSON.parse(raw);
   } catch (e) {}
+  removeDeleted(cached);
   applyToDom(cached);
 
   /* ── Step 2: fetch fresh prices from Firebase ── */
@@ -115,6 +136,7 @@
       localStorage.removeItem(OLD_KEY); /* clean up old key */
 
       /* Patch hidden menuDataSource (menu page reads from here on category click) */
+      removeDeleted(fresh);
       applyToDom(fresh);
 
       /* Re-patch homepage buttons with fresh data (main.js has already run by now) */

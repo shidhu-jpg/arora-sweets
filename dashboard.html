@@ -231,7 +231,7 @@
     <div class="modal-box modal-box-offer">
       <button class="modal-close" id="offerModalClose">&times;</button>
       <h2 class="offer-modal-title" id="offerModalTitle">Create Offer</h2>
-      <p class="offer-modal-sub">Fill in the details — the coupon code will appear on your homepage and customers can use it at checkout.</p>
+      <p class="offer-modal-sub">Fill in the details — this creates a promotional banner on your homepage. Checkout does not accept coupon codes, so the code below is for reference only and is not applied automatically.</p>
 
       <form id="offerForm" class="offer-form" onsubmit="return false">
         <div class="offer-form-row">
@@ -265,7 +265,7 @@
           <div class="offer-form-group">
             <label>Coupon Code <span class="req">*</span></label>
             <input type="text" id="ofCode" placeholder="e.g. WEEKEND15" style="text-transform:uppercase" />
-            <small style="color:var(--muted);font-size:11px">Customers enter this at checkout</small>
+            <small style="color:var(--muted);font-size:11px">Reference only — not accepted at checkout</small>
           </div>
           <div class="offer-form-group">
             <label>Valid For</label>
@@ -310,6 +310,9 @@
     let refreshInterval   = null;
     let previousOrderIds  = new Set();
     let editingOfferId    = null;
+    /* orderId -> {status, ts}: a status change not yet confirmed by a fetch
+       that started after it, so a slower in-flight refresh doesn't revert it */
+    let pendingStatusOverrides = new Map();
 
     /* ─────────────────────────────────────────
        OFFER TEMPLATES
@@ -401,11 +404,22 @@
         document.getElementById('ordersLoading').textContent = 'Firebase not configured.';
         return;
       }
+      const fetchStartedAt = Date.now();
       try {
         const res  = await fetch(`${FB_URL}orders.json?auth=${FB_SECRET}`);
         const data = await res.json();
         const incoming = data ? Object.entries(data).map(([k,v]) => ({...v, _fbKey:k})) : [];
         incoming.sort((a,b) => (b.timestamp||0)-(a.timestamp||0));
+
+        /* This fetch was already in flight when a status was changed locally
+           (fetchStartedAt < ov.ts), so its snapshot predates that change —
+           keep the local status instead of reverting it on screen. */
+        incoming.forEach(o => {
+          const ov = pendingStatusOverrides.get(o.id);
+          if (!ov) return;
+          if (fetchStartedAt < ov.ts) o.status = ov.status;
+          else pendingStatusOverrides.delete(o.id);
+        });
 
         if (previousOrderIds.size > 0) {
           incoming.forEach(o => {
@@ -427,7 +441,11 @@
         new Notification('New Order — Arora Sweets', {
           body: `${order.id} • ${order.customer?.name||'Customer'} • ₹${order.total}`,
         });
-      } else if (Notification.permission === 'default') Notification.requestPermission();
+      } else if (Notification.permission === 'default') {
+        Notification.requestPermission().then(perm => {
+          if (perm === 'granted') notifyNewOrder(order);
+        });
+      }
     }
 
     /* ─────────────────────────────────────────
@@ -550,6 +568,7 @@
       try {
         await fetch(`${FB_URL}orders/${o._fbKey}.json?auth=${FB_SECRET}`,
           {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})});
+        pendingStatusOverrides.set(orderId, { status: newStatus, ts: Date.now() });
         o.status = newStatus; updateStats(); renderOrders();
       } catch { alert('Failed to update status. Check connection.'); }
     }

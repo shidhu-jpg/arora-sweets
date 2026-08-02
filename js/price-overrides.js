@@ -27,19 +27,30 @@
     });
   }
 
-  /* Patch all .price spans in menu and homepage cards */
+  /* Patch .price spans and item names in menu and homepage cards */
   function applyToDom(data) {
     var prices = getPrices(data);
     var units  = (data && data.units && typeof data.units === 'object') ? data.units : {};
-    if (!Object.keys(prices).length) return;
+    var names  = (data && data.names && typeof data.names === 'object') ? data.names : {};
+    if (!Object.keys(prices).length && !Object.keys(names).length) return;
 
     function patch(els) {
       els.forEach(function (el) {
         var nameEl = el.querySelector('h3');
         if (!nameEl) return;
-        var name = nameEl.textContent.trim();
-        var key  = fbKey(name);
-        var ov   = prices[key];
+        /* The item's ORIGINAL name is its stable Firebase key. Cache it on
+           first patch so re-running this (cached pass, then fresh-fetch
+           pass) keeps deriving the same key even after we've renamed the
+           on-screen text below — otherwise the second pass would compute
+           the key from the already-renamed text and lose the override. */
+        var origName = el.dataset.origName || nameEl.textContent.trim();
+        el.dataset.origName = origName;
+        var key = fbKey(origName);
+
+        var newName = names[key];
+        if (newName && nameEl.textContent.trim() !== newName) nameEl.textContent = newName;
+
+        var ov = prices[key];
         if (!ov || ov.numeric === undefined) return;
         var priceEl = el.querySelector('.price');
         if (!priceEl) return;
@@ -52,6 +63,66 @@
     }
     patch(document.querySelectorAll('#menuDataSource .menu-card'));
     patch(document.querySelectorAll('.sweet-card'));
+  }
+
+  /* Create/remove menu-card elements for items added or deleted via the
+     admin panel's "Add Item" modal (data.custom). Without this, new items
+     saved in admin.html never appear on the live site because applyToDom()
+     only patches EXISTING cards, never creates new ones. Cards are tagged
+     with data-custom-id so repeated calls (cached pass + fresh-fetch pass)
+     stay idempotent, and stale ones (deleted in admin) get removed. */
+  function renderCustomItems(data) {
+    var dataSource = document.getElementById('menuDataSource');
+    if (!dataSource) return;
+    var customItems = (data && Array.isArray(data.custom)) ? data.custom : [];
+    var validIds = {};
+
+    customItems.forEach(function (ci) {
+      if (!ci || !ci.name || !ci.cat || !ci.id) return;
+      var id = String(ci.id);
+      validIds[id] = true;
+      if (dataSource.querySelector('.menu-card[data-custom-id="' + id + '"]')) return;
+
+      var card = document.createElement('div');
+      card.className = 'menu-card';
+      card.dataset.category = ci.cat;
+      card.dataset.customId = id;
+
+      var body = document.createElement('div');
+      body.className = 'menu-card-body';
+      var h3 = document.createElement('h3');
+      h3.textContent = ci.name; /* baseline identity name — applyToDom() overlays any rename/price edit */
+      var p = document.createElement('p');
+      p.textContent = ci.desc || '';
+      var price = document.createElement('span');
+      price.className = 'price';
+      price.textContent = buildDisplay(ci.numeric, ci.unit);
+
+      body.appendChild(h3); body.appendChild(p); body.appendChild(price);
+      card.appendChild(body);
+      dataSource.appendChild(card);
+    });
+
+    /* Remove custom cards whose id no longer exists in data.custom (deleted in admin) */
+    dataSource.querySelectorAll('.menu-card[data-custom-id]').forEach(function (card) {
+      if (!validIds[card.dataset.customId]) card.remove();
+    });
+
+    refreshCategoryCounts();
+  }
+
+  /* Keep the "N items" badges on menu.html's category landing tiles in sync
+     after custom items are injected/removed above. */
+  function refreshCategoryCounts() {
+    var counts = {};
+    document.querySelectorAll('#menuDataSource .menu-card').forEach(function (card) {
+      var cat = card.dataset.category;
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    document.querySelectorAll('.menu-cat-count[data-cat]').forEach(function (el) {
+      var n = counts[el.dataset.cat] || 0;
+      el.textContent = n + ' item' + (n !== 1 ? 's' : '');
+    });
   }
 
   /* Remove cards for items deleted in the admin panel. Must run before
@@ -83,9 +154,12 @@
     document.querySelectorAll('.sweet-card').forEach(function (card) {
       var nameEl = card.querySelector('h3');
       if (!nameEl) return;
-      var name = nameEl.textContent.trim();
-      var key  = fbKey(name);
-      var ov   = prices[key];
+      /* applyToDom() already ran and may have renamed this card's h3 text —
+         use the cached original name (its stable Firebase key), not the
+         possibly-already-renamed current text. */
+      var origName = card.dataset.origName || nameEl.textContent.trim();
+      var key = fbKey(origName);
+      var ov  = prices[key];
       if (!ov || !window._aroraCartAdd) return;
 
       var priceEl = card.querySelector('.price');
@@ -96,6 +170,7 @@
           : (ov.display || ('₹ ' + ov.numeric));
       }
 
+      var currentName = nameEl.textContent.trim(); /* reflects any rename */
       var oldBtn = card.querySelector('.menu-add-btn');
       if (!oldBtn) return;
       var newBtn = document.createElement('button');
@@ -103,7 +178,7 @@
       newBtn.textContent = '+ Add';
       (function (n, p) {
         newBtn.addEventListener('click', function () { window._aroraCartAdd(n, p, newBtn); });
-      }(name, ov.numeric));
+      }(currentName, ov.numeric));
       oldBtn.parentNode.replaceChild(newBtn, oldBtn);
     });
   }
@@ -115,6 +190,7 @@
     if (raw) cached = JSON.parse(raw);
   } catch (e) {}
   removeDeleted(cached);
+  renderCustomItems(cached);
   applyToDom(cached);
 
   /* ── Step 2: fetch fresh prices from Firebase ── */
@@ -137,6 +213,7 @@
 
       /* Patch hidden menuDataSource (menu page reads from here on category click) */
       removeDeleted(fresh);
+      renderCustomItems(fresh);
       applyToDom(fresh);
 
       /* Re-patch homepage buttons with fresh data (main.js has already run by now) */

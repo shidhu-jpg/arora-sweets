@@ -243,10 +243,6 @@
               <div class="offer-card-emoji">${o.emoji||'🏷️'}</div>
               <h3 class="offer-card-title">${String(o.title||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</h3>
               <p class="offer-card-desc">${String(o.description||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-              <div class="offer-card-code">
-                <span class="offer-code-label">Use code</span>
-                <span class="offer-code-val">${String(o.couponCode||'').replace(/&/g,'&amp;')}</span>
-              </div>
               <div class="offer-card-countdown">⏱ ${cd}</div>
               <a href="menu.html" class="offer-card-cta">Order Now →</a>
             </div>`;

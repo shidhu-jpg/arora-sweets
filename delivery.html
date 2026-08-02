@@ -486,8 +486,11 @@
 
       /* Fire-and-forget Firebase save (runs in background, doesn't block WhatsApp) */
       if (typeof ARORA_FB !== 'undefined' && ARORA_FB.dbUrl) {
+        /* No auth token: the Realtime Database rules allow unauthenticated
+           clients to create a brand-new order (this ID won't exist yet),
+           but not to modify or delete an existing one. */
         fetch(
-          ARORA_FB.dbUrl + 'orders/' + orderId + '.json?auth=' + ARORA_FB.secret,
+          ARORA_FB.dbUrl + 'orders/' + orderId + '.json',
           { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderData) }
         ).catch(e => console.warn('Firebase save failed:', e));
       }

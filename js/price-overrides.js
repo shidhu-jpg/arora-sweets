@@ -196,8 +196,10 @@
   /* ── Step 2: fetch fresh prices from Firebase ── */
   if (!config.dbUrl) return;
 
-  var authSuffix = config.secret ? '?auth=' + encodeURIComponent(config.secret) : '';
-  fetch(config.dbUrl.replace(/\/$/, '') + '/prices.json' + authSuffix)
+  /* Prices are publicly readable per the Realtime Database rules — no
+     auth token needed (and none should be shipped here; see js/owner-auth.js
+     for how the owner-only admin/dashboard pages authenticate writes). */
+  fetch(config.dbUrl.replace(/\/$/, '') + '/prices.json')
     .then(function (r) { return r.json(); })
     .then(function (fresh) {
       if (!fresh || typeof fresh !== 'object') {

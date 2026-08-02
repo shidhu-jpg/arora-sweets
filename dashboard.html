@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" />
   <link rel="stylesheet" href="css/dashboard.css" />
   <script src="js/firebase-config.js"></script>
+  <script src="js/owner-auth.js"></script>
 </head>
 <body>
 
@@ -18,9 +19,10 @@
     <div class="login-box">
       <div class="login-logo">🍬 Arora Sweets</div>
       <h2>Owner Dashboard</h2>
-      <p>Enter your admin password to view live orders</p>
+      <p>Sign in to view live orders</p>
       <div class="login-form">
-        <input type="password" id="loginPassword" placeholder="Admin Password" autocomplete="current-password" />
+        <input type="email" id="loginEmail" placeholder="Owner email" autocomplete="username" />
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" />
         <button id="loginBtn">Enter Dashboard</button>
         <div id="loginError" class="login-error"></div>
       </div>
@@ -298,10 +300,14 @@
   (function () {
 
     /* ── Config ── */
-    const ADMIN_PASSWORD = 'AroraAdmin2024';
     const FB_URL    = (typeof ARORA_FB !== 'undefined') ? ARORA_FB.dbUrl    : '';
-    const FB_SECRET = (typeof ARORA_FB !== 'undefined') ? ARORA_FB.secret   : '';
     const WA_NUMBER = '919934492744';
+
+    /* Owner-only reads/writes (orders, offers) need a signed-in ID token. */
+    async function authedUrl(path) {
+      const token = await OwnerAuth.getIdToken();
+      return `${FB_URL}${path}?auth=${encodeURIComponent(token)}`;
+    }
 
     /* ── State ── */
     let allOrders   = [];
@@ -355,18 +361,36 @@
     ───────────────────────────────────────── */
     document.getElementById('loginBtn').addEventListener('click', doLogin);
     document.getElementById('loginPassword').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('loginEmail').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
-    function doLogin() {
-      if (document.getElementById('loginPassword').value === ADMIN_PASSWORD) {
-        document.getElementById('loginOverlay').classList.add('hidden');
-        document.getElementById('dashboardRoot').classList.remove('hidden');
-        startDashboard();
-      } else {
-        document.getElementById('loginError').textContent = 'Incorrect password. Try again.';
+    async function doLogin() {
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn      = document.getElementById('loginBtn');
+      document.getElementById('loginError').textContent = '';
+      btn.disabled = true; btn.textContent = 'Signing in…';
+      try {
+        await OwnerAuth.login(email, password);
+        enterDashboard();
+      } catch (err) {
+        document.getElementById('loginError').textContent = err.message || 'Sign in failed.';
+        document.getElementById('loginPassword').value = '';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Enter Dashboard';
       }
     }
 
+    function enterDashboard() {
+      document.getElementById('loginOverlay').classList.add('hidden');
+      document.getElementById('dashboardRoot').classList.remove('hidden');
+      startDashboard();
+    }
+
+    /* Stay signed in across reloads within the browser session, same as admin.html */
+    if (OwnerAuth.isLoggedIn()) enterDashboard();
+
     document.getElementById('logoutBtn').addEventListener('click', () => {
+      OwnerAuth.logout();
       clearInterval(refreshInterval);
       document.getElementById('dashboardRoot').classList.add('hidden');
       document.getElementById('loginOverlay').classList.remove('hidden');
@@ -406,7 +430,7 @@
       }
       const fetchStartedAt = Date.now();
       try {
-        const res  = await fetch(`${FB_URL}orders.json?auth=${FB_SECRET}`);
+        const res  = await fetch(await authedUrl('orders.json'));
         const data = await res.json();
         const incoming = data ? Object.entries(data).map(([k,v]) => ({...v, _fbKey:k})) : [];
         incoming.sort((a,b) => (b.timestamp||0)-(a.timestamp||0));
@@ -566,7 +590,7 @@
       const o = allOrders.find(x => x.id === orderId);
       if (!o||!FB_URL) return;
       try {
-        await fetch(`${FB_URL}orders/${o._fbKey}.json?auth=${FB_SECRET}`,
+        await fetch(await authedUrl(`orders/${o._fbKey}.json`),
           {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})});
         pendingStatusOverrides.set(orderId, { status: newStatus, ts: Date.now() });
         o.status = newStatus; updateStats(); renderOrders();
@@ -675,7 +699,7 @@
       document.getElementById('activeOffersEmpty').classList.add('hidden');
       if (!FB_URL) { document.getElementById('activeOffersLoading').textContent='Firebase not configured.'; return; }
       try {
-        const res  = await fetch(`${FB_URL}offers.json?auth=${FB_SECRET}`);
+        const res  = await fetch(await authedUrl('offers.json'));
         const data = await res.json();
         allOffers  = data ? Object.entries(data).map(([k,v])=>({...v,_fbKey:k})) : [];
         allOffers.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
@@ -755,7 +779,7 @@
     async function saveOffer(offerData) {
       if (!FB_URL) return;
       const id = offerData.id || ('offer_' + Date.now());
-      await fetch(`${FB_URL}offers/${id}.json?auth=${FB_SECRET}`, {
+      await fetch(await authedUrl(`offers/${id}.json`), {
         method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({...offerData,id}),
       });
       await loadOffers();
@@ -765,7 +789,7 @@
       const o = allOffers.find(x => (x.id||x._fbKey) === offerId); if (!o||!FB_URL) return;
       const now = Date.now();
       const newActive = !(o.isActive && (o.endTime||0) > now);
-      await fetch(`${FB_URL}offers/${o._fbKey}.json?auth=${FB_SECRET}`,
+      await fetch(await authedUrl(`offers/${o._fbKey}.json`),
         {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({isActive:newActive})});
       await loadOffers();
     }
@@ -773,7 +797,7 @@
     async function deleteOffer(offerId) {
       const o = allOffers.find(x => (x.id||x._fbKey) === offerId); if (!o||!FB_URL) return;
       if (!confirm(`Delete offer "${o.title}"? It will be removed from the homepage.`)) return;
-      await fetch(`${FB_URL}offers/${o._fbKey}.json?auth=${FB_SECRET}`, {method:'DELETE'});
+      await fetch(await authedUrl(`offers/${o._fbKey}.json`), {method:'DELETE'});
       await loadOffers();
     }
 

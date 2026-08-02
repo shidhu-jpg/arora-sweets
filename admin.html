@@ -187,7 +187,10 @@
     <p class="login-subtitle">Owner Portal</p>
     <form id="loginForm">
       <div class="login-field">
-        <input type="password" id="passwordInput" placeholder="Enter admin password" autocomplete="current-password" />
+        <input type="email" id="emailInput" placeholder="Owner email" autocomplete="username" />
+      </div>
+      <div class="login-field">
+        <input type="password" id="passwordInput" placeholder="Password" autocomplete="current-password" />
       </div>
       <button type="submit" class="login-btn">Sign In</button>
       <p class="login-error" id="loginError"></p>
@@ -242,9 +245,12 @@
         <li>In the left sidebar click <strong>Build → Realtime Database → Create Database</strong></li>
         <li>Choose any location and select <strong>Start in test mode</strong> → Enable</li>
         <li>Copy the Database URL shown at the top (looks like <code>https://arora-sweets-default-rtdb.firebaseio.com</code>)</li>
-        <li>Go to <strong>Project Settings (gear icon) → Service Accounts → Database Secrets</strong> → click <strong>Show</strong> → copy the secret</li>
-        <li>Open the file <code>js/firebase-config.js</code> and paste the URL into <code>dbUrl</code> and the secret into <code>secret</code></li>
-        <li>Save the file, deploy/upload your site, then refresh this page</li>
+        <li>Go to <strong>Project Settings (gear icon) → General</strong> → copy the <strong>Web API Key</strong></li>
+        <li>Open the file <code>js/firebase-config.js</code> and paste the URL into <code>dbUrl</code> and the key into <code>apiKey</code></li>
+        <li>Go to <strong>Build → Authentication → Sign-in method</strong> and enable <strong>Email/Password</strong></li>
+        <li>Go to <strong>Build → Authentication → Users → Add user</strong> and create the owner's login (email + password)</li>
+        <li>Go to <strong>Build → Realtime Database → Rules</strong> and set rules that restrict writes to that owner account (see project README/notes for the exact rules JSON)</li>
+        <li>Save the file, deploy/upload your site, then refresh this page and sign in with the owner email/password</li>
       </ol>
     </div>
 
@@ -526,11 +532,10 @@
 </div>
 
 <script src="js/firebase-config.js"></script>
+<script src="js/owner-auth.js"></script>
 <script>
 (function () {
   /* ── Config ── */
-  var ADMIN_PASSWORD = 'AroraAdmin2024';
-  var SESSION_KEY    = 'aroraAdminSession';
   var DATA_KEY       = 'aroraAdminData';
   var fb             = (typeof ARORA_FB !== 'undefined') ? ARORA_FB : {};
 
@@ -561,35 +566,41 @@
   var pendingNewItems = []; /* [{ id, name, desc, cat, numeric, unit }] */
 
   /* ── Auth ── */
-  function isLoggedIn() { return sessionStorage.getItem(SESSION_KEY) === '1'; }
+  function isLoggedIn() { return OwnerAuth.isLoggedIn(); }
 
-  document.getElementById('loginForm').addEventListener('submit', function (e) {
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-    if (document.getElementById('passwordInput').value === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, '1');
+    var email    = document.getElementById('emailInput').value.trim();
+    var password = document.getElementById('passwordInput').value;
+    var btn      = document.querySelector('#loginForm .login-btn');
+    document.getElementById('loginError').textContent = '';
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    try {
+      await OwnerAuth.login(email, password);
       showAdmin();
-    } else {
-      document.getElementById('loginError').textContent = 'Incorrect password.';
+    } catch (err) {
+      document.getElementById('loginError').textContent = err.message || 'Sign in failed.';
       document.getElementById('passwordInput').value = '';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Sign In';
     }
   });
 
   document.getElementById('logoutBtn').addEventListener('click', function () {
-    sessionStorage.removeItem(SESSION_KEY);
+    OwnerAuth.logout();
     location.reload();
   });
 
   /* ── Firebase helpers ── */
   function fbConfigured() { return !!(fb.dbUrl && fb.dbUrl.trim()); }
 
-  function fbUrl(write) {
-    var url = fb.dbUrl.replace(/\/$/, '') + '/prices.json';
-    if (fb.secret) url += '?auth=' + encodeURIComponent(fb.secret);
-    return url;
+  function fbUrl() {
+    return fb.dbUrl.replace(/\/$/, '') + '/prices.json';
   }
 
   async function fetchFromFirebase() {
-    var r = await fetch(fbUrl(false));
+    /* Publicly readable per the Realtime Database rules — no token needed */
+    var r = await fetch(fbUrl());
     if (!r.ok) throw new Error('Firebase read failed: ' + r.status);
     var d = await r.json();
     if (d && typeof d === 'object' && !Array.isArray(d)) {
@@ -600,7 +611,8 @@
   }
 
   async function saveToFirebase(data) {
-    var r = await fetch(fbUrl(true), {
+    var token = await OwnerAuth.getIdToken();
+    var r = await fetch(fbUrl() + '?auth=' + encodeURIComponent(token), {
       method: 'PUT', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
@@ -977,7 +989,8 @@
     if (!confirm('Reset ALL prices, units, names and custom items? This cannot be undone.')) return;
     if (fbConfigured()) {
       try {
-        await fetch(fbUrl(true), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
+        var token = await OwnerAuth.getIdToken();
+        await fetch(fbUrl() + '?auth=' + encodeURIComponent(token), { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: 'null' });
       } catch (e) { showToast('Firebase error — could not reset remotely.'); return; }
     }
     localStorage.removeItem(DATA_KEY);
@@ -1167,8 +1180,14 @@
      DASHBOARD — SHARED STATE & CONFIG
   ══════════════════════════════════════════ */
   var dbUrl    = fb.dbUrl    ? fb.dbUrl.replace(/\/$/, '') : '';
-  var dbSecret = fb.secret   || '';
   var waNum    = '919934492744';
+
+  /* Owner-only reads/writes (orders, offers) need a signed-in ID token —
+     unlike prices, which are publicly readable. */
+  async function dAuthedUrl(path) {
+    var token = await OwnerAuth.getIdToken();
+    return dbUrl + path + '?auth=' + encodeURIComponent(token);
+  }
   var dAllOrders  = [];
   var dAllOffers  = [];
   var dPrevIds    = new Set();
@@ -1201,7 +1220,7 @@
   async function dLoadOrders() {
     if (!dbUrl) { document.getElementById('dOrdersLoading').textContent = 'Firebase not configured in js/firebase-config.js'; return; }
     try {
-      var res  = await fetch(dbUrl + '/orders.json?auth=' + dbSecret);
+      var res  = await fetch(await dAuthedUrl('/orders.json'));
       var data = await res.json();
       var inc  = data ? Object.entries(data).map(function (e) { return Object.assign({}, e[1], { _fbKey: e[0] }); }) : [];
       inc.sort(function (a,b) { return (b.timestamp||0)-(a.timestamp||0); });
@@ -1336,7 +1355,7 @@
     var o = dAllOrders.find(function (x) { return x.id===orderId; });
     if (!o||!dbUrl) return;
     try {
-      await fetch(dbUrl+'/orders/'+o._fbKey+'.json?auth='+dbSecret,
+      await fetch(await dAuthedUrl('/orders/'+o._fbKey+'.json'),
         {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:newStatus})});
       o.status = newStatus; dUpdateStats(); dRenderOrders();
     } catch (e) { showToast('Failed to update status.'); }
@@ -1452,7 +1471,7 @@
     document.getElementById('aolEmpty').classList.add('hidden');
     if (!dbUrl) { document.getElementById('aolLoading').textContent='Firebase not configured.'; return; }
     try {
-      var res  = await fetch(dbUrl+'/offers.json?auth='+dbSecret);
+      var res  = await fetch(await dAuthedUrl('/offers.json'));
       var data = await res.json();
       dAllOffers = data ? Object.entries(data).map(function (e) { return Object.assign({},e[1],{_fbKey:e[0]}); }) : [];
       dAllOffers.sort(function (a,b) { return (b.createdAt||0)-(a.createdAt||0); });
@@ -1515,7 +1534,7 @@
 
   async function dSaveOffer(offerData) {
     var id = offerData.id||('offer_'+Date.now());
-    await fetch(dbUrl+'/offers/'+id+'.json?auth='+dbSecret,
+    await fetch(await dAuthedUrl('/offers/'+id+'.json'),
       {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},offerData,{id:id}))});
     await dLoadOffers();
   }
@@ -1523,7 +1542,7 @@
   async function dToggleOffer(offerId) {
     var o = dAllOffers.find(function (x) { return (x.id||x._fbKey)===offerId; }); if (!o||!dbUrl) return;
     var newA = !(o.isActive&&(o.endTime||0)>Date.now());
-    await fetch(dbUrl+'/offers/'+o._fbKey+'.json?auth='+dbSecret,
+    await fetch(await dAuthedUrl('/offers/'+o._fbKey+'.json'),
       {method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({isActive:newA})});
     await dLoadOffers();
   }
@@ -1531,7 +1550,7 @@
   async function dDeleteOffer(offerId) {
     var o = dAllOffers.find(function (x) { return (x.id||x._fbKey)===offerId; }); if (!o||!dbUrl) return;
     if (!confirm('Delete offer "'+o.title+'"? It will be removed from the homepage.')) return;
-    await fetch(dbUrl+'/offers/'+o._fbKey+'.json?auth='+dbSecret,{method:'DELETE'});
+    await fetch(await dAuthedUrl('/offers/'+o._fbKey+'.json'),{method:'DELETE'});
     await dLoadOffers();
   }
 

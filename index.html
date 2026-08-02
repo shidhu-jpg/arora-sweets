@@ -222,7 +222,7 @@
   <script>
   (function () {
     if (typeof ARORA_FB === 'undefined' || !ARORA_FB.dbUrl) return;
-    fetch(ARORA_FB.dbUrl + 'offers.json?auth=' + ARORA_FB.secret)
+    fetch(ARORA_FB.dbUrl + 'offers.json') /* publicly readable per Realtime Database rules */
       .then(r => r.json())
       .then(data => {
         if (!data) return;
